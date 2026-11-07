@@ -8,6 +8,8 @@ import '../../core/widgets/status_badge.dart';
 import '../../data/app_state.dart';
 import '../../data/models/bill.dart';
 import '../../data/models/customer.dart';
+import '../../core/localization/language_provider.dart';
+import '../../core/localization/language_selector_button.dart';
 
 class BillsListScreen extends ConsumerStatefulWidget {
   const BillsListScreen({super.key});
@@ -91,6 +93,7 @@ class _BillsListScreenState extends ConsumerState<BillsListScreen> with SingleTi
             tooltip: 'Add Bill',
             onPressed: () => context.push('/bills/new'),
           ),
+          const LanguageSelectorButton(),
           const SizedBox(width: 8),
         ],
         bottom: TabBar(

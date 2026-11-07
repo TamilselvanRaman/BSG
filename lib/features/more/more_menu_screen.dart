@@ -4,10 +4,15 @@ import 'package:go_router/go_router.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_spacing.dart';
 import '../../core/responsive/responsive_container.dart';
+import '../../core/localization/language_provider.dart';
+import '../../core/localization/language_selector_button.dart';
+import '../../core/widgets/business_branch_dialog.dart';
+import '../../core/widgets/global_search_dialog.dart';
 import '../../data/app_state.dart';
 import '../../data/models/customer.dart';
 import '../seller_loads/create_seller_load_dialog.dart';
 import '../goods_entries/widgets/add_commodity_dialog.dart';
+import '../auth/login_screen.dart';
 
 class MoreMenuScreen extends ConsumerWidget {
   const MoreMenuScreen({super.key});
@@ -17,25 +22,35 @@ class MoreMenuScreen extends ConsumerWidget {
     final customers = ref.watch(customersProvider);
     final sellerLoads = ref.watch(sellerLoadsProvider);
     final payments = ref.watch(paymentsProvider);
+    final selectedBranch = ref.watch(selectedBranchProvider);
+    final staffUser = ref.watch(currentStaffUserProvider);
 
     final buyersCount = customers.where((c) => c.customerType != CustomerType.seller).length;
     final sellersCount = customers.where((c) => c.customerType == CustomerType.seller).length + sellerLoads.length;
     final advancesCount = payments.length;
+    final unsoldBagsCount = sellerLoads.fold<double>(0.0, (s, l) => s + l.unsoldBags).toInt();
 
     return Scaffold(
       backgroundColor: const Color(0xFFF4F6F8),
       appBar: AppBar(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.more_horiz_rounded, color: AppColors.primaryGreen, size: 24),
-            SizedBox(width: 8),
+            const Icon(Icons.more_horiz_rounded, color: AppColors.primaryGreen, size: 24),
+            const SizedBox(width: 8),
             Text(
-              'More',
-              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
+              ref.tr('more'),
+              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 20),
             ),
           ],
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search_rounded, color: Color(0xFF334155)),
+            tooltip: 'Search lots, bills, merchants',
+            onPressed: () => GlobalSearchDialog.show(context),
+          ),
+          const LanguageSelectorButton(),
+          const SizedBox(width: 4),
           IconButton(
             icon: const Icon(Icons.settings_outlined),
             tooltip: 'App Settings',
@@ -51,60 +66,67 @@ class MoreMenuScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Shop Header Card
-              Container(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF1B5E20), Color(0xFF2E7D32)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
+              // Shop Header Card (Tap to switch Branch/Yard)
+              InkWell(
+                onTap: () => BusinessBranchDialog.show(context),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.all(AppSpacing.md),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF1B5E20), Color(0xFF2E7D32)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primaryGreen.withValues(alpha: 0.25),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.primaryGreen.withValues(alpha: 0.25),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.15),
-                        shape: BoxShape.circle,
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.15),
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(Icons.storefront_rounded, color: Colors.white, size: 28),
                       ),
-                      child: const Icon(Icons.storefront_rounded, color: Colors.white, size: 28),
-                    ),
-                    const SizedBox(width: AppSpacing.md),
-                    const Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'BSG Agro Goods Mandi',
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
-                          ),
-                          SizedBox(height: 2),
-                          Text(
-                            'Thennampalayam Vegetable Market, Tiruppur',
-                            style: TextStyle(color: Color(0xFFC8E6C9), fontSize: 11, fontWeight: FontWeight.w500),
-                          ),
-                        ],
+                      const SizedBox(width: AppSpacing.md),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              selectedBranch.name,
+                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w900, fontSize: 16),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              selectedBranch.location,
+                              style: const TextStyle(color: Color(0xFFC8E6C9), fontSize: 11, fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          staffUser?.role == StaffRole.admin ? 'PRO' : 'CLERK',
+                          style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800),
+                        ),
                       ),
-                      child: const Text('PRO', style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w800)),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
 
@@ -128,63 +150,79 @@ class MoreMenuScreen extends ConsumerWidget {
                   final isWide = constraints.maxWidth > 550;
                   final crossAxisCount = isWide ? 3 : 2;
 
-                  return GridView.count(
-                    crossAxisCount: crossAxisCount,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisSpacing: AppSpacing.md,
-                    mainAxisSpacing: AppSpacing.md,
-                    childAspectRatio: isWide ? 1.25 : 1.05,
-                    children: [
-                      // 1. Seller Ledger
-                      _buildMenuCard(
-                        title: 'Seller Ledger',
-                        subtitle: '$sellersCount Farmer Accounts',
-                        icon: Icons.receipt_long_rounded,
-                        onTap: () => context.push('/seller-loads'),
-                      ),
+                    return GridView.count(
+                      crossAxisCount: crossAxisCount,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: AppSpacing.md,
+                      mainAxisSpacing: AppSpacing.md,
+                      childAspectRatio: isWide ? 1.25 : 1.05,
+                      children: [
+                        // 1. Seller Ledger
+                        _buildMenuCard(
+                          title: ref.tr('sellerLedger'),
+                          subtitle: '$sellersCount Farmer Accounts',
+                          icon: Icons.receipt_long_rounded,
+                          onTap: () => context.push('/seller-loads'),
+                        ),
 
-                      // 2. Buyer Ledger
-                      _buildMenuCard(
-                        title: 'Buyer Ledger',
-                        subtitle: '$buyersCount Wholesale Buyers',
-                        icon: Icons.table_chart_rounded,
-                        onTap: () => context.push('/customers'),
-                      ),
+                        // 2. Buyer Ledger
+                        _buildMenuCard(
+                          title: ref.tr('buyerLedger'),
+                          subtitle: '$buyersCount Wholesale Buyers',
+                          icon: Icons.table_chart_rounded,
+                          onTap: () => context.push('/customers'),
+                        ),
 
-                      // 3. Reports
-                      _buildMenuCard(
-                        title: 'Reports',
-                        subtitle: 'Sales, Volume & Audit',
-                        icon: Icons.assessment_rounded,
-                        onTap: () => context.push('/reports'),
-                      ),
+                        // 3. Stock & Inventory
+                        _buildMenuCard(
+                          title: ref.tr('inventory'),
+                          subtitle: '$unsoldBagsCount Bags Live Stock',
+                          icon: Icons.inventory_2_rounded,
+                          onTap: () => context.push('/inventory'),
+                        ),
 
-                      // 4. Advances
-                      _buildMenuCard(
-                        title: 'Advances',
-                        subtitle: '$advancesCount Payment Records',
-                        icon: Icons.savings_rounded,
-                        onTap: () => context.push('/advances'),
-                      ),
+                        // 4. Reports
+                        _buildMenuCard(
+                          title: ref.tr('reports'),
+                          subtitle: 'Sales, Volume & Audit',
+                          icon: Icons.assessment_rounded,
+                          onTap: () => context.push('/reports'),
+                        ),
 
-                      // 5. Transport (Transporto)
-                      _buildMenuCard(
-                        title: 'Transporto',
-                        subtitle: '${sellerLoads.length} Trucks Inward',
-                        icon: Icons.local_shipping_rounded,
-                        onTap: () => context.push('/transporto'),
-                      ),
+                        // 5. Advances
+                        _buildMenuCard(
+                          title: ref.tr('advances'),
+                          subtitle: '$advancesCount Payment Records',
+                          icon: Icons.savings_rounded,
+                          onTap: () => context.push('/advances'),
+                        ),
 
-                      // 6. Partners
-                      _buildMenuCard(
-                        title: 'Partners',
-                        subtitle: '${customers.length} Contacts',
-                        icon: Icons.people_alt_rounded,
-                        onTap: () => context.push('/partners'),
-                      ),
-                    ],
-                  );
+                        // 6. Transport (Transporto)
+                        _buildMenuCard(
+                          title: 'Transporto',
+                          subtitle: '${sellerLoads.length} Trucks Inward',
+                          icon: Icons.local_shipping_rounded,
+                          onTap: () => context.push('/transporto'),
+                        ),
+
+                        // 7. Partners
+                        _buildMenuCard(
+                          title: ref.tr('partners'),
+                          subtitle: '${customers.length} Contacts',
+                          icon: Icons.people_alt_rounded,
+                          onTap: () => context.push('/partners'),
+                        ),
+
+                        // 8. Staff Login & Terminal
+                        _buildMenuCard(
+                          title: ref.tr('mandiStaffLogin'),
+                          subtitle: staffUser?.name ?? 'Admin / Clerk',
+                          icon: Icons.badge_outlined,
+                          onTap: () => context.push('/login'),
+                        ),
+                      ],
+                    );
                 },
               ),
 

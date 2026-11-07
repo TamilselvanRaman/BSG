@@ -10,12 +10,14 @@ import '../../../data/models/seller_load.dart';
 import '../billing/widgets/bag_weights_entry_dialog.dart';
 
 class CreateSellerLoadDialog extends ConsumerStatefulWidget {
-  const CreateSellerLoadDialog({super.key});
+  final SellerLoad? initialLoad;
 
-  static Future<SellerLoad?> show(BuildContext context) {
+  const CreateSellerLoadDialog({super.key, this.initialLoad});
+
+  static Future<SellerLoad?> show(BuildContext context, {SellerLoad? initialLoad}) {
     return showDialog<SellerLoad>(
       context: context,
-      builder: (ctx) => const CreateSellerLoadDialog(),
+      builder: (ctx) => CreateSellerLoadDialog(initialLoad: initialLoad),
     );
   }
 
@@ -40,21 +42,33 @@ class _CreateSellerLoadDialogState extends ConsumerState<CreateSellerLoadDialog>
   @override
   void initState() {
     super.initState();
+    final init = widget.initialLoad;
     final existingLoads = ref.read(sellerLoadsProvider);
     final nextNo = 'LOAD-2026-${(existingLoads.length + 1).toString().padLeft(3, '0')}';
 
-    _loadNoCtrl = TextEditingController(text: nextNo);
-    _vehicleCtrl = TextEditingController(text: 'TN 30 BD 1045');
-    _commodityCtrl = TextEditingController(text: 'Country Tomatoes');
-    _bagsCtrl = TextEditingController(text: '50');
-    _weightCtrl = TextEditingController(text: '1250');
-    _advanceCtrl = TextEditingController(text: '5000');
-    _commissionCtrl = TextEditingController(text: '5.0');
-    _notesCtrl = TextEditingController();
+    _loadNoCtrl = TextEditingController(text: init?.loadNumber ?? nextNo);
+    _vehicleCtrl = TextEditingController(text: init?.vehicleNumber ?? 'TN 30 BD 1045');
+    _commodityCtrl = TextEditingController(text: init?.commodity ?? 'Country Tomatoes');
+    _bagsCtrl = TextEditingController(text: init?.totalBags.toString() ?? '50');
+    _weightCtrl = TextEditingController(text: init != null ? init.grossWeight.toStringAsFixed(0) : '1250');
+    _advanceCtrl = TextEditingController(text: init != null ? init.advancePaidToSeller.toStringAsFixed(0) : '5000');
+    _commissionCtrl = TextEditingController(text: init?.commissionPercent.toString() ?? '5.0');
+    _notesCtrl = TextEditingController(text: init?.notes ?? '');
 
-    // Default to first seller customer
+    // Default to seller
     final sellers = ref.read(customersProvider).where((c) => c.customerType == CustomerType.seller || c.customerType == CustomerType.both).toList();
-    if (sellers.isNotEmpty) {
+    if (init != null) {
+      _selectedSeller = sellers.where((s) => s.id == init.sellerId).firstOrNull ??
+          Customer(
+            id: init.sellerId,
+            name: init.sellerName,
+            village: init.village,
+            phone: init.phone,
+            customerType: CustomerType.seller,
+            createdAt: DateTime.now(),
+            updatedAt: DateTime.now(),
+          );
+    } else if (sellers.isNotEmpty) {
       _selectedSeller = sellers.first;
     }
   }
@@ -78,6 +92,26 @@ class _CreateSellerLoadDialogState extends ConsumerState<CreateSellerLoadDialog>
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a farmer / seller'), backgroundColor: AppColors.danger),
       );
+      return;
+    }
+
+    if (widget.initialLoad != null) {
+      final updated = widget.initialLoad!.copyWith(
+        loadNumber: _loadNoCtrl.text.trim(),
+        sellerId: _selectedSeller!.id,
+        sellerName: _selectedSeller!.name,
+        village: _selectedSeller!.village,
+        phone: _selectedSeller!.phone,
+        vehicleNumber: _vehicleCtrl.text.trim(),
+        commodity: _commodityCtrl.text.trim(),
+        totalBags: int.tryParse(_bagsCtrl.text.trim()) ?? 0,
+        grossWeight: double.tryParse(_weightCtrl.text.trim()) ?? 0.0,
+        advancePaidToSeller: double.tryParse(_advanceCtrl.text.trim()) ?? 0.0,
+        commissionPercent: double.tryParse(_commissionCtrl.text.trim()) ?? 5.0,
+        notes: _notesCtrl.text.trim(),
+      );
+      ref.read(appStateProvider.notifier).updateSellerLoad(updated);
+      Navigator.of(context).pop(updated);
       return;
     }
 
@@ -131,12 +165,12 @@ class _CreateSellerLoadDialogState extends ConsumerState<CreateSellerLoadDialog>
                     child: const Icon(Icons.local_shipping, color: AppColors.primaryGreen, size: 22),
                   ),
                   const SizedBox(width: AppSpacing.sm),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Create Inward Seller Load', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
-                        Text('Record farmer arrival, lorry load & advance payment', style: TextStyle(fontSize: 11, color: AppColors.textSecondary)),
+                        Text(widget.initialLoad != null ? 'Edit Inward Seller Load' : 'Create Inward Seller Load', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w800, color: AppColors.textPrimary)),
+                        Text(widget.initialLoad != null ? 'Update truck arrival, bags & advance details' : 'Record farmer arrival, lorry load & advance payment', style: const TextStyle(fontSize: 11, color: AppColors.textSecondary)),
                       ],
                     ),
                   ),

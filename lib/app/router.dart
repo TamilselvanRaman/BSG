@@ -22,6 +22,8 @@ import '../features/settings/settings_screen.dart';
 import '../features/more/advances_screen.dart';
 import '../features/more/transporto_screen.dart';
 import '../features/more/partners_screen.dart';
+import '../features/inventory/stock_summary_screen.dart';
+import '../features/auth/login_screen.dart';
 import '../core/widgets/mandi_bottom_navbar.dart';
 import '../core/widgets/mandi_quick_action_sheet.dart';
 
@@ -188,6 +190,16 @@ final GoRouter appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/partners',
       builder: (context, state) => const PartnersScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/inventory',
+      builder: (context, state) => const StockSummaryScreen(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
     ),
   ],
 );

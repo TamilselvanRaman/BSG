@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../app/theme/app_colors.dart';
 import '../../app/theme/app_spacing.dart';
 import '../../app/theme/app_typography.dart';
 import '../../core/responsive/responsive_container.dart';
 import '../../core/widgets/app_button.dart';
+import '../../core/localization/language_provider.dart';
+import '../../core/localization/language_selector_button.dart';
+import '../../core/localization/app_language.dart';
+import '../auth/login_screen.dart';
 import '../../data/app_state.dart';
 
 class SettingsScreen extends ConsumerWidget {
@@ -66,6 +71,127 @@ class SettingsScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+            // Language Selection Card
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(
+                color: AppColors.cardSurface,
+                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Row(
+                        children: [
+                          Icon(Icons.translate_rounded, color: AppColors.primaryGreen, size: 22),
+                          SizedBox(width: 8),
+                          Text('Display Language / மொழி / भाषा', style: AppTypography.titleMedium),
+                        ],
+                      ),
+                      TextButton.icon(
+                        icon: const Icon(Icons.touch_app_outlined, size: 16),
+                        label: const Text('Change'),
+                        onPressed: () => LanguageSelectorButton.showLanguageSheet(context, ref),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    children: AppLanguage.values.map((lang) {
+                      final current = ref.watch(languageProvider);
+                      final isSelected = lang == current;
+                      return Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          child: OutlinedButton(
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: isSelected ? AppColors.lightGreenSurface : Colors.white,
+                              side: BorderSide(
+                                color: isSelected ? AppColors.primaryGreen : const Color(0xFFCBD5E1),
+                                width: isSelected ? 2 : 1,
+                              ),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                            ),
+                            onPressed: () => ref.read(languageProvider.notifier).setLanguage(lang),
+                            child: Column(
+                              children: [
+                                Text(
+                                  lang.nativeName,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 13,
+                                    color: isSelected ? AppColors.primaryGreenDark : const Color(0xFF334155),
+                                  ),
+                                ),
+                                Text(
+                                  lang.displayName,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    color: isSelected ? AppColors.primaryGreen : const Color(0xFF64748B),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.lg),
+
+            // Mandi Staff & Terminal Card
+            Container(
+              padding: const EdgeInsets.all(AppSpacing.lg),
+              decoration: BoxDecoration(
+                color: AppColors.cardSurface,
+                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.lightGreenSurface,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Icon(Icons.badge_outlined, color: AppColors.primaryGreen, size: 24),
+                  ),
+                  const SizedBox(width: AppSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ref.watch(currentStaffUserProvider)?.name ?? 'Staff User',
+                          style: AppTypography.titleMedium,
+                        ),
+                        Text(
+                          'Role: ${ref.watch(currentStaffUserProvider)?.role.title ?? "Admin"}',
+                          style: const TextStyle(fontSize: 12, color: AppColors.textSecondary),
+                        ),
+                      ],
+                    ),
+                  ),
+                  OutlinedButton(
+                    onPressed: () => context.push('/login'),
+                    child: const Text('Switch Role'),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.lg),
+
             // Business Profile Card
             Container(
               padding: const EdgeInsets.all(AppSpacing.lg),
@@ -173,6 +299,25 @@ class SettingsScreen extends ConsumerWidget {
                     icon: Icons.restart_alt,
                     width: double.infinity,
                     onPressed: () => _showResetConfirmation(context, ref),
+                  ),
+                  const SizedBox(height: 10),
+                  AppButton(
+                    label: 'Export Data Backup (JSON)',
+                    isOutlined: true,
+                    icon: Icons.download_rounded,
+                    width: double.infinity,
+                    onPressed: () {
+                      final bills = ref.read(billsProvider);
+                      final customers = ref.read(customersProvider);
+                      final loads = ref.read(sellerLoadsProvider);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Backup Generated: ${bills.length} bills, ${customers.length} partners, ${loads.length} loads.'),
+                          backgroundColor: AppColors.primaryGreen,
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),

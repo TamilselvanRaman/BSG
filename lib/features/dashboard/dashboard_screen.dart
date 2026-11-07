@@ -12,17 +12,22 @@ import '../../core/responsive/responsive_container.dart';
 import '../../core/widgets/kpi_card.dart';
 import '../../core/widgets/section_header.dart';
 import '../../core/widgets/status_badge.dart';
+import '../../core/widgets/business_branch_dialog.dart';
+import '../../core/widgets/global_search_dialog.dart';
+import '../../core/localization/language_provider.dart';
+import '../../core/localization/language_selector_button.dart';
+import '../auth/login_screen.dart';
 import '../../data/app_state.dart';
 import '../../data/models/bill.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
 
-  String _getGreeting() {
+  String _getGreeting(WidgetRef ref) {
     final hour = DateTime.now().hour;
-    if (hour < 12) return 'Good Morning';
-    if (hour < 17) return 'Good Afternoon';
-    return 'Good Evening';
+    if (hour < 12) return ref.tr('goodMorning');
+    if (hour < 17) return ref.tr('goodAfternoon');
+    return ref.tr('goodEvening');
   }
 
   @override
@@ -30,31 +35,56 @@ class DashboardScreen extends ConsumerWidget {
     final metrics = ref.watch(dashboardMetricsProvider);
     final bills = ref.watch(billsProvider);
     final customers = ref.watch(customersProvider);
+    final selectedBranch = ref.watch(selectedBranchProvider);
+    final staffUser = ref.watch(currentStaffUserProvider);
 
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              '${_getGreeting()}, Admin',
-              style: AppTypography.bodySmall.copyWith(
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w500,
+        title: InkWell(
+          onTap: () => BusinessBranchDialog.show(context),
+          borderRadius: BorderRadius.circular(8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${_getGreeting(ref)}, ${staffUser?.name.split(" ").first ?? "Admin"}',
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-            const Text(
-              'BSG Agro Goods Mandi',
-              style: TextStyle(
-                fontSize: 17,
-                fontWeight: FontWeight.w700,
-                color: AppColors.primaryGreen,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      selectedBranch.name.split(' - ').first,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primaryGreen,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const Icon(Icons.arrow_drop_down_rounded, color: AppColors.primaryGreen, size: 20),
+                ],
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         actions: [
+          // Global Search Icon
+          IconButton(
+            icon: const Icon(Icons.search_rounded, color: Color(0xFF334155)),
+            tooltip: 'Search lots, bills, merchants',
+            onPressed: () => GlobalSearchDialog.show(context),
+          ),
+          // Language selector
+          const LanguageSelectorButton(),
+          const SizedBox(width: 4),
           // Notification demo icon
           IconButton(
             icon: Stack(
@@ -141,7 +171,7 @@ class DashboardScreen extends ConsumerWidget {
                     childAspectRatio: childAspectRatio,
                     children: [
                       KpiCard(
-                        title: "Today's Sales",
+                        title: ref.tr('todaySales'),
                         amount: metrics.todaySales,
                         icon: Icons.trending_up,
                         iconColor: AppColors.primaryGreen,
@@ -159,7 +189,7 @@ class DashboardScreen extends ConsumerWidget {
                         onTap: () => context.push('/reports'),
                       ),
                       KpiCard(
-                        title: 'Total Collections',
+                        title: ref.tr('collections'),
                         amount: metrics.todayTotalCollections,
                         icon: Icons.payments_outlined,
                         iconColor: AppColors.accentGreen,
@@ -168,7 +198,7 @@ class DashboardScreen extends ConsumerWidget {
                         onTap: () => context.push('/reports'),
                       ),
                       KpiCard(
-                        title: 'Outstanding Dues',
+                        title: ref.tr('pendingDues'),
                         amount: metrics.outstandingBuyerBalances,
                         icon: Icons.pending_actions_outlined,
                         iconColor: AppColors.pending,
@@ -184,33 +214,39 @@ class DashboardScreen extends ConsumerWidget {
               const SizedBox(height: AppSpacing.xl),
 
               // Quick Actions Section
-              const SectionHeader(title: 'Quick Actions'),
+              SectionHeader(title: ref.tr('fastMandiActions')),
               const SizedBox(height: AppSpacing.sm),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
                     _QuickActionChip(
+                      icon: Icons.inventory_2_outlined,
+                      label: ref.tr('inventory'),
+                      onTap: () => context.push('/inventory'),
+                    ),
+                    const SizedBox(width: AppSpacing.sm),
+                    _QuickActionChip(
                       icon: Icons.person_add_alt_1_outlined,
-                      label: 'Add Buyer',
+                      label: ref.tr('addCustomer'),
                       onTap: () => context.push('/customers/new'),
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     _QuickActionChip(
-                      icon: Icons.inventory_2_outlined,
-                      label: 'New Goods Entry',
+                      icon: Icons.local_shipping_outlined,
+                      label: ref.tr('sellBill'),
                       onTap: () => context.push('/goods-entries/new'),
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     _QuickActionChip(
                       icon: Icons.receipt_long_outlined,
-                      label: 'Create Bill',
+                      label: ref.tr('buyBill'),
                       onTap: () => context.push('/bills/new'),
                     ),
                     const SizedBox(width: AppSpacing.sm),
                     _QuickActionChip(
                       icon: Icons.add_card_outlined,
-                      label: 'Record Payment',
+                      label: ref.tr('recordPayment'),
                       onTap: () => context.push('/payments/new'),
                     ),
                     const SizedBox(width: AppSpacing.sm),

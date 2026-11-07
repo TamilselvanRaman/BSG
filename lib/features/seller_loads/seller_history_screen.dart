@@ -9,6 +9,7 @@ import '../../data/models/bill.dart';
 import '../../data/models/customer.dart';
 import '../../data/models/seller_load.dart';
 import 'create_seller_load_dialog.dart';
+import '../billing/print_purchase_slip_dialog.dart';
 
 class SellerHistoryScreen extends ConsumerStatefulWidget {
   final String sellerId;
@@ -349,18 +350,46 @@ class _SellerHistoryScreenState extends ConsumerState<SellerHistoryScreen> with 
                       color: load.unsoldBags > 0 ? const Color(0xFFDC2626) : const Color(0xFF16A34A),
                     ),
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF2E7D32),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                      elevation: 0,
-                    ),
-                    onPressed: () {
-                      context.push('/bills/new?lotNumber=${load.effectiveLotNumber}&sellerId=${load.sellerId}');
-                    },
-                    child: const Text('Auction / Bill', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.print_outlined, size: 18, color: Color(0xFF475569)),
+                        tooltip: 'Print Voucher',
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(6),
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => PrintPurchaseSlipDialog(load: load),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 4),
+                      IconButton(
+                        icon: const Icon(Icons.edit_outlined, size: 18, color: Color(0xFF16A34A)),
+                        tooltip: 'Edit Load',
+                        constraints: const BoxConstraints(),
+                        padding: const EdgeInsets.all(6),
+                        onPressed: () {
+                          CreateSellerLoadDialog.show(context, initialLoad: load);
+                        },
+                      ),
+                      const SizedBox(width: 6),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF2E7D32),
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                          elevation: 0,
+                        ),
+                        onPressed: () {
+                          context.push('/bills/new?lotNumber=${load.effectiveLotNumber}&sellerId=${load.sellerId}');
+                        },
+                        child: const Text('Auction / Bill', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800)),
+                      ),
+                    ],
                   ),
                 ],
               ),

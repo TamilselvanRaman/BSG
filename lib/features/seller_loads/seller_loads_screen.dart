@@ -8,6 +8,8 @@ import '../../data/app_state.dart';
 import '../../data/models/customer.dart';
 import '../../data/models/seller_load.dart';
 import 'create_seller_load_dialog.dart';
+import '../../core/localization/language_provider.dart';
+import '../../core/localization/language_selector_button.dart';
 
 class SellerLoadsScreen extends ConsumerStatefulWidget {
   const SellerLoadsScreen({super.key});
@@ -79,6 +81,7 @@ class _SellerLoadsScreenState extends ConsumerState<SellerLoadsScreen> with Sing
             tooltip: 'New Seller Load',
             onPressed: () => CreateSellerLoadDialog.show(context),
           ),
+          const LanguageSelectorButton(),
           const SizedBox(width: 8),
         ],
         bottom: TabBar(

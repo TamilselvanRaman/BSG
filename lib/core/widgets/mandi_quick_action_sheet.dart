@@ -120,6 +120,38 @@ class MandiQuickActionSheet extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: _buildActionTile(
+                    context,
+                    title: 'Stock / Inventory',
+                    subtitle: 'Warehouse Bags Balance',
+                    icon: Icons.inventory_2_rounded,
+                    color: const Color(0xFF0F8B8D),
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push('/inventory');
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildActionTile(
+                    context,
+                    title: 'Add Partner',
+                    subtitle: 'New Buyer or Farmer',
+                    icon: Icons.person_add_alt_1_rounded,
+                    color: const Color(0xFF0284C7),
+                    onTap: () {
+                      Navigator.pop(context);
+                      context.push('/customers/new');
+                    },
+                  ),
+                ),
+              ],
+            ),
             const SizedBox(height: 8),
           ],
         ),

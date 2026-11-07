@@ -8,11 +8,14 @@ import '../../core/formatters/currency_formatter.dart';
 import '../../core/formatters/date_formatter.dart';
 import '../../core/responsive/breakpoints.dart';
 import '../../core/widgets/status_badge.dart';
+import '../../core/localization/language_provider.dart';
+import '../../core/localization/language_selector_button.dart';
 import '../../data/app_state.dart';
 import '../../data/models/bill.dart';
 import '../../data/models/customer.dart';
 import '../../data/models/dashboard_metrics.dart';
 import '../../data/models/payment.dart';
+import '../../data/models/seller_load.dart';
 
 class ReportsScreen extends ConsumerStatefulWidget {
   const ReportsScreen({super.key});
@@ -25,6 +28,7 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
   int _selectedReportIndex = 0;
   String _searchQuery = '';
   String? _selectedLedgerCustomerId;
+  DateTimeRange? _selectedDateRange;
 
   final List<String> _reportTypes = [
     'Daily Sales',
@@ -35,6 +39,9 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     'Goods Entries',
     'Lot Numbers',
     'Cancelled Bills',
+    'Gross Profit & Margins',
+    'RMC Mandi Cess Report',
+    'Live Mandi Trade Feed',
   ];
 
   final List<IconData> _reportIcons = [
@@ -46,6 +53,9 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     Icons.inventory_2_outlined,
     Icons.qr_code,
     Icons.cancel_outlined,
+    Icons.query_stats_rounded,
+    Icons.account_balance_rounded,
+    Icons.dynamic_feed_rounded,
   ];
 
   @override
@@ -62,13 +72,41 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Reports & Analytics'),
+        title: Text(ref.tr('reports')),
         actions: [
+          IconButton(
+            icon: Icon(
+              _selectedDateRange != null ? Icons.date_range : Icons.date_range_outlined,
+              color: _selectedDateRange != null ? AppColors.primaryGreen : null,
+            ),
+            tooltip: _selectedDateRange != null
+                ? 'Filtered: ${DateFormatter.format(_selectedDateRange!.start)} - ${DateFormatter.format(_selectedDateRange!.end)}'
+                : 'Filter Date Range',
+            onPressed: () async {
+              if (_selectedDateRange != null) {
+                setState(() => _selectedDateRange = null);
+                return;
+              }
+              final picked = await showDateRangePicker(
+                context: context,
+                firstDate: DateTime(2025),
+                lastDate: DateTime(2030),
+                initialDateRange: DateTimeRange(
+                  start: DateTime.now().subtract(const Duration(days: 7)),
+                  end: DateTime.now(),
+                ),
+              );
+              if (picked != null) {
+                setState(() => _selectedDateRange = picked);
+              }
+            },
+          ),
           IconButton(
             icon: const Icon(Icons.today_outlined),
             tooltip: 'View Daily Summary',
             onPressed: () => context.push('/reports/daily-summary'),
           ),
+          const LanguageSelectorButton(),
           const SizedBox(width: AppSpacing.xs),
         ],
       ),
@@ -332,6 +370,12 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
         return _buildLotNumbersReport(entries);
       case 7:
         return _buildCancelledBillsReport(bills, customers);
+      case 8:
+        return _buildGrossProfitReport(bills, customers);
+      case 9:
+        return _buildRmcCessReport(bills, customers);
+      case 10:
+        return _buildTradeFeedReport(bills, payments, ref.watch(sellerLoadsProvider), customers);
       default:
         return const Center(child: Text('Select a report'));
     }
@@ -791,6 +835,197 @@ class _ReportsScreenState extends ConsumerState<ReportsScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildGrossProfitReport(List<Bill> bills, List<Customer> customers) {
+    final activeBills = bills.where((b) => b.status != BillStatus.cancelled).toList();
+    final totalSales = activeBills.fold<double>(0.0, (s, b) => s + b.subtotal);
+    final totalEstimatedCost = totalSales * 0.88; // 12% standard mandi trading gross spread
+    final totalGrossProfit = totalSales - totalEstimatedCost;
+
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: AppColors.lightGreenSurface,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: AppColors.primaryGreen.withValues(alpha: 0.2)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _quickStat('Turnover', CurrencyFormatter.format(totalSales), AppColors.primaryGreenDark),
+              _verticalDivider(),
+              _quickStat('Produce Cost', CurrencyFormatter.format(totalEstimatedCost), const Color(0xFF64748B)),
+              _verticalDivider(),
+              _quickStat('Gross Margin', CurrencyFormatter.format(totalGrossProfit), const Color(0xFF15803D)),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        ...activeBills.map((b) {
+          final cust = customers.firstWhere((c) => c.id == b.customerId, orElse: () => customers.first);
+          final cost = b.subtotal * 0.88;
+          final profit = b.subtotal - cost;
+
+          return Card(
+            elevation: 0,
+            margin: const EdgeInsets.only(bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            child: ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(b.billNumber, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5)),
+                  Text(
+                    '+ ${CurrencyFormatter.format(profit)} (12%)',
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13, color: Color(0xFF16A34A)),
+                  ),
+                ],
+              ),
+              subtitle: Text(
+                '${cust.name} • Sale: ${CurrencyFormatter.format(b.subtotal)} | Cost: ${CurrencyFormatter.format(cost)}',
+                style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildRmcCessReport(List<Bill> bills, List<Customer> customers) {
+    final activeBills = bills.where((b) => b.status != BillStatus.cancelled).toList();
+    final totalTurnover = activeBills.fold<double>(0.0, (s, b) => s + b.currentBillTotal);
+    final totalCess = totalTurnover * 0.01; // 1% Standard Regulated Market Committee Mandi Cess
+    final totalLabour = activeBills.fold<double>(0.0, (s, b) => s + b.labourCharge);
+
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      children: [
+        Container(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          decoration: BoxDecoration(
+            color: const Color(0xFFEFF6FF),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFF3B82F6).withValues(alpha: 0.2)),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _quickStat('Turnover', CurrencyFormatter.format(totalTurnover), const Color(0xFF1E3A8A)),
+              _verticalDivider(),
+              _quickStat('RMC Cess (1%)', CurrencyFormatter.format(totalCess), const Color(0xFF2563EB)),
+              _verticalDivider(),
+              _quickStat('Hamali Total', CurrencyFormatter.format(totalLabour), const Color(0xFF0F766E)),
+            ],
+          ),
+        ),
+        const SizedBox(height: AppSpacing.md),
+        ...activeBills.map((b) {
+          final cust = customers.firstWhere((c) => c.id == b.customerId, orElse: () => customers.first);
+          final cess = b.currentBillTotal * 0.01;
+
+          return Card(
+            elevation: 0,
+            margin: const EdgeInsets.only(bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            child: ListTile(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(b.billNumber, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13.5)),
+                  Text(
+                    'Cess: ${CurrencyFormatter.format(cess)}',
+                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12.5, color: Color(0xFF2563EB)),
+                  ),
+                ],
+              ),
+              subtitle: Text(
+                '${cust.name} • Turnover: ${CurrencyFormatter.format(b.currentBillTotal)} • Hamali: ${CurrencyFormatter.format(b.labourCharge)}',
+                style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
+              ),
+            ),
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildTradeFeedReport(
+    List<Bill> bills,
+    List<Payment> payments,
+    List<SellerLoad> loads,
+    List<Customer> customers,
+  ) {
+    return ListView(
+      padding: const EdgeInsets.all(AppSpacing.md),
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 4),
+          child: Text(
+            'CHRONOLOGICAL MANDI TRADE STREAM',
+            style: TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: Color(0xFF64748B), letterSpacing: 0.5),
+          ),
+        ),
+        const SizedBox(height: 6),
+        ...loads.map((l) {
+          return Card(
+            elevation: 0,
+            margin: const EdgeInsets.only(bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            child: ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: AppColors.lightGreenSurface,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.local_shipping_rounded, color: AppColors.primaryGreen, size: 20),
+              ),
+              title: Text('Arrival Load: ${l.loadNumber} (${l.commodity})', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
+              subtitle: Text('Farmer: ${l.sellerName} • ${l.vehicleNumber} • ${l.totalBags} BG', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+              trailing: Text(DateFormatter.format(l.arrivalDate), style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8))),
+            ),
+          );
+        }),
+        ...bills.take(8).map((b) {
+          final cust = customers.firstWhere((c) => c.id == b.customerId, orElse: () => customers.first);
+          return Card(
+            elevation: 0,
+            margin: const EdgeInsets.only(bottom: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: const BorderSide(color: Color(0xFFE2E8F0)),
+            ),
+            child: ListTile(
+              leading: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEFF6FF),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(Icons.receipt_long_rounded, color: Color(0xFF2563EB), size: 20),
+              ),
+              title: Text('Invoice Issued: ${b.billNumber}', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
+              subtitle: Text('Buyer: ${cust.name} • Total: ${CurrencyFormatter.format(b.currentBillTotal)}', style: const TextStyle(fontSize: 11, color: Color(0xFF64748B))),
+              trailing: Text(DateFormatter.format(b.billDate), style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8))),
+            ),
+          );
+        }),
+      ],
     );
   }
 

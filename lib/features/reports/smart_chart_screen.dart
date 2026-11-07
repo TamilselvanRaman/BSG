@@ -10,6 +10,8 @@ import '../../core/responsive/responsive_container.dart';
 import '../../data/app_state.dart';
 import '../../data/models/seller_load.dart';
 import '../seller_loads/create_seller_load_dialog.dart';
+import '../../core/localization/language_provider.dart';
+import '../../core/localization/language_selector_button.dart';
 
 class SmartChartScreen extends ConsumerStatefulWidget {
   const SmartChartScreen({super.key});
@@ -61,7 +63,7 @@ class _SmartChartScreenState extends ConsumerState<SmartChartScreen> with Single
         elevation: 0,
         title: const Text(
           'Smart Chart',
-          style: TextStyle(fontWeight: FontWeight.w900, fontSize: 19, color: Color(0xFF0F172A)),
+          style: const TextStyle(fontWeight: FontWeight.w900, fontSize: 19, color: Color(0xFF0F172A)),
         ),
         actions: [
           IconButton(
@@ -89,6 +91,7 @@ class _SmartChartScreenState extends ConsumerState<SmartChartScreen> with Single
               }
             },
           ),
+          const LanguageSelectorButton(),
           const SizedBox(width: 8),
         ],
         bottom: TabBar(
@@ -100,10 +103,10 @@ class _SmartChartScreenState extends ConsumerState<SmartChartScreen> with Single
           indicatorColor: AppColors.primaryGreen,
           indicatorWeight: 3.5,
           indicatorSize: TabBarIndicatorSize.tab,
-          tabs: const [
-            Tab(text: 'Arrival Auction'),
-            Tab(text: 'Smart Chart'),
-            Tab(text: 'Sales Summary'),
+          tabs: [
+            Tab(text: ref.tr('arrivalAuction')),
+            Tab(text: ref.tr('liveChart')),
+            Tab(text: ref.tr('salesSummary')),
           ],
         ),
       ),

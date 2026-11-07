@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../localization/language_provider.dart';
 
-class MandiBottomNavBar extends StatelessWidget {
+class MandiBottomNavBar extends ConsumerWidget {
   final int selectedIndex;
   final ValueChanged<int> onDestinationSelected;
 
@@ -11,7 +13,7 @@ class MandiBottomNavBar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -35,27 +37,27 @@ class MandiBottomNavBar extends StatelessWidget {
             children: [
               _buildNavItem(
                 index: 0,
-                label: 'Smartboard',
+                label: ref.tr('smartboard'),
                 icon: Icons.grid_view_rounded,
               ),
               _buildNavItem(
                 index: 1,
-                label: 'Smart Chart',
+                label: ref.tr('smartChart'),
                 icon: Icons.description_outlined,
               ),
               _buildNavItem(
                 index: 2,
-                label: 'Sell Bill Book',
+                label: ref.tr('sellBillBook'),
                 icon: Icons.menu_book_rounded,
               ),
               _buildNavItem(
                 index: 3,
-                label: 'Buy Bill Book',
+                label: ref.tr('buyBillBook'),
                 icon: Icons.scale_rounded,
               ),
               _buildNavItem(
                 index: 4,
-                label: 'More',
+                label: ref.tr('more'),
                 customIcon: _buildMoreIcon(selectedIndex == 4),
               ),
             ],
