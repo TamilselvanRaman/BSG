@@ -1,0 +1,160 @@
+import fs from "fs";
+import path from "path";
+import PDFDocument from "pdfkit";
+import { env } from "../config/env";
+
+export interface PdfGenerationInput {
+  businessName: string;
+  businessAddress?: string;
+  businessPhone?: string;
+  gstNumber?: string;
+  documentTitle: string;
+  documentNumber: string;
+  documentDate: string;
+  partyLabel: string;
+  partyName: string;
+  partyPhone?: string;
+  partyAddress?: string;
+  columns: { header: string; key: string; align?: "left" | "right" | "center" }[];
+  rows: Record<string, string | number>[];
+  summaryRows: { label: string; value: string }[];
+  paymentStatus?: string;
+  notes?: string;
+  footerText?: string;
+}
+
+export async function generateDocumentPdf(
+  tenantId: string,
+  fileName: string,
+  payload: PdfGenerationInput
+): Promise<{ filePath: string; fileSizeBytes: number; buffer: Buffer }> {
+  const tenantDir = path.resolve(env.STORAGE_DIR, "pdfs", tenantId);
+  await fs.promises.mkdir(tenantDir, { recursive: true });
+  const filePath = path.join(tenantDir, fileName);
+
+  return new Promise((resolve, reject) => {
+    const doc = new PDFDocument({ size: "A4", margin: 40 });
+    const chunks: Buffer[] = [];
+
+    doc.on("data", (chunk: Buffer) => chunks.push(chunk));
+    doc.on("error", reject);
+    doc.on("end", async () => {
+      try {
+        const buffer = Buffer.concat(chunks);
+        await fs.promises.writeFile(filePath, buffer);
+        resolve({ filePath, fileSizeBytes: buffer.length, buffer });
+      } catch (err) {
+        reject(err);
+      }
+    });
+
+    // Header Banner
+    doc.rect(40, 40, 515, 72).fill("#0F172A");
+    doc.fillColor("#FFFFFF").fontSize(18).font("Helvetica-Bold").text(payload.businessName, 55, 52);
+    doc
+      .fontSize(9)
+      .font("Helvetica")
+      .text(
+        [payload.businessAddress, payload.businessPhone ? `Tel: ${payload.businessPhone}` : "", payload.gstNumber ? `GSTIN: ${payload.gstNumber}` : ""]
+          .filter(Boolean)
+          .join(" | "),
+        55,
+        78
+      );
+
+    // Document Title & Meta
+    doc.fillColor("#0F172A").fontSize(14).font("Helvetica-Bold").text(payload.documentTitle, 40, 130);
+    doc
+      .fontSize(10)
+      .font("Helvetica")
+      .text(`No: ${payload.documentNumber}`, 380, 130, { align: "right" })
+      .text(`Date: ${payload.documentDate}`, 380, 145, { align: "right" });
+
+    if (payload.paymentStatus) {
+      doc.font("Helvetica-Bold").fillColor("#2563EB").text(`Status: ${payload.paymentStatus}`, 380, 160, { align: "right" });
+    }
+
+    // Party Block
+    doc.rect(40, 175, 515, 55).fillAndStroke("#F8FAFC", "#E2E8F0");
+    doc.fillColor("#334155").fontSize(9).font("Helvetica-Bold").text(payload.partyLabel.toUpperCase(), 52, 185);
+    doc.fillColor("#0F172A").fontSize(11).font("Helvetica-Bold").text(payload.partyName, 52, 200);
+    doc
+      .fillColor("#475569")
+      .fontSize(9)
+      .font("Helvetica")
+      .text([payload.partyPhone, payload.partyAddress].filter(Boolean).join(" • "), 52, 215);
+
+    // Table Header
+    let currentY = 248;
+    doc.rect(40, currentY, 515, 24).fill("#1E293B");
+    const colWidth = Math.floor(495 / Math.max(1, payload.columns.length));
+
+    payload.columns.forEach((col, idx) => {
+      doc
+        .fillColor("#FFFFFF")
+        .fontSize(9)
+        .font("Helvetica-Bold")
+        .text(col.header, 48 + idx * colWidth, currentY + 7, {
+          width: colWidth - 8,
+          align: col.align ?? "left",
+        });
+    });
+
+    currentY += 24;
+
+    // Table Rows
+    payload.rows.forEach((row, rIdx) => {
+      if (currentY > 700) {
+        doc.addPage();
+        currentY = 50;
+      }
+      if (rIdx % 2 === 1) {
+        doc.rect(40, currentY, 515, 22).fill("#F8FAFC");
+      }
+      payload.columns.forEach((col, cIdx) => {
+        const val = row[col.key] !== undefined ? String(row[col.key]) : "-";
+        doc
+          .fillColor("#0F172A")
+          .fontSize(9)
+          .font("Helvetica")
+          .text(val, 48 + cIdx * colWidth, currentY + 6, {
+            width: colWidth - 8,
+            align: col.align ?? "left",
+          });
+      });
+      currentY += 22;
+    });
+
+    // Summary Totals Block
+    currentY += 14;
+    payload.summaryRows.forEach((sRow, idx) => {
+      const isLast = idx === payload.summaryRows.length - 1;
+      doc
+        .fillColor("#0F172A")
+        .fontSize(isLast ? 11 : 9.5)
+        .font(isLast ? "Helvetica-Bold" : "Helvetica")
+        .text(sRow.label, 310, currentY, { width: 130, align: "right" })
+        .text(sRow.value, 450, currentY, { width: 100, align: "right" });
+      currentY += isLast ? 20 : 16;
+    });
+
+    if (payload.notes) {
+      currentY += 10;
+      doc.fillColor("#475569").fontSize(9).font("Helvetica-Oblique").text(`Notes: ${payload.notes}`, 40, currentY);
+    }
+
+    // Footer
+    doc
+      .fillColor("#64748B")
+      .fontSize(8)
+      .font("Helvetica")
+      .text(
+        payload.footerText ?? "Generated by CLICK Smart Chart SaaS Platform • Verified Computer Generated Document",
+        40,
+        780,
+        { align: "center", width: 515 }
+      );
+
+    doc.end();
+  });
+}

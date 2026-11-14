@@ -1,0 +1,560 @@
+BSG FULL IMPLEMENTATION PLAN Phase-by-Phase Product,
+UI/UX, Flutter, Backend and Release Roadmap
+
+DOCUMENT PURPOSE This document is the implementation blueprint for CLICK
+SMART CHART. It defines the product structure, visual system, technology
+stack, page-by-page delivery sequence, business workflows, data rules,
+testing gates and release plan. Build one phase at a time. Do not
+generate all screens in one coding task.
+
+============================================================ 1. PRODUCT
+DEFINITION AND TERMINOLOGY
+============================================================
+
+Application: BSG Platform: Android mobile application
+(Flutter) Primary purpose: Manage incoming lots, suppliers, customers,
+cash bills, credit bills, payments, expenses, stock and business
+reports.
+
+MANDATORY TERMINOLOGY - Seller becomes Supplier. - Buyer becomes
+Customer. - Seller List becomes Supplier List. - Buyer List becomes
+Customer List. - Seller Ledger becomes Supplier Ledger. - Buyer Ledger
+becomes Customer Ledger.
+
+Apply these terms consistently in screen titles, buttons, forms,
+filters, reports, PDF bills, notifications, API labels and user-facing
+messages. Do not rename unrelated accounting terms without business
+approval.
+
+PRIMARY BOTTOM NAVIGATION 1. Home 2. Bills 3. Expenses 4. Users 5.
+Reports
+
+HOME QUICK ACTIONS 1. Create Cash Bill 2. Create Credit Bill 3. Received
+Amount 4. Create Lot 5. Users
+
+The five Home actions are shortcuts into the same workflows accessible
+from the relevant navigation sections. Do not create duplicate business
+logic for shortcuts.
+
+============================================================ 2. VISUAL
+DESIGN SYSTEM
+============================================================
+
+DESIGN DIRECTION Use a premium, restrained, modern business-management
+interface. The main visual identity is grayscale: off-white, charcoal,
+black and neutral gray. Use color only when it communicates status,
+category or an important action.
+
+CORE PALETTE - App background: #F5F5F2 (warm off-white) - Main
+surface/card: #FFFFFF - Primary text: #171717 (near black) - Secondary
+text: #666666 - Muted text: #8A8A86 - Primary dark action: #222222 -
+Dark surface: #303030 - Border/divider: #E5E5E1 - Subtle surface:
+#EEEEEA - Disabled surface: #E8E8E4 - Disabled text: #A3A3A0
+
+LIMITED SEMANTIC ACCENTS - Success: #287A52 - Warning / pending:
+#A66A16 - Error / overdue: #B93838 - Information: #426B8A
+
+Use semantic accents sparingly: status badges, validation, small chart
+series, and alerts. Do not make the entire interface colorful. Keep
+primary buttons charcoal/black with off-white text.
+
+COLOR USAGE RULES - Use off-white for the overall page background. - Use
+white for cards, forms and sheets. - Use near-black for headings,
+primary text and main CTAs. - Use neutral gray for secondary labels,
+metadata and dividers. - Use semantic colors only for meaningful
+states. - Maintain readable contrast and accessible text sizes. - Never
+communicate a status by color alone; include a label or icon.
+
+TYPOGRAPHY Use one consistent family across the app, such as Inter or
+the platform’s clean sans-serif fallback. - Page title: 22-24sp,
+semibold. - Section heading: 16-18sp, semibold. - Card title: 14-16sp,
+medium/semibold. - Body: 14sp. - Supporting label: 12sp. - Amounts:
+20-26sp, semibold, tabular numerals where possible. - Form labels must
+remain visible; do not rely on placeholder-only labels.
+
+SPACING AND SHAPE - Base spacing unit: 4dp. - Typical page horizontal
+padding: 16dp. - Section gap: 20-24dp. - Card padding: 14-16dp. - Input
+height: approximately 50-54dp. - Button height: approximately 48-52dp. -
+Card radius: 12-16dp. - Input radius: 10-12dp. - Use subtle borders
+before heavy shadows. - Keep tap targets at least 44-48dp.
+
+COMPONENT RULES Create reusable components for: - Primary, secondary,
+text and destructive buttons. - Text, number, date, search and multiline
+fields. - Dropdowns and searchable selectors. - Summary cards and list
+cards. - Data rows and responsive tables. - Status badges. - App bars
+and bottom navigation. - Filter chips and date-range selectors. -
+Confirmation dialogs and bottom sheets. - Loading skeletons, empty
+states and error states. - Success screens and receipt previews.
+
+RESPONSIVE BEHAVIOUR Design for small Android phones first, then larger
+phones and tablets. Prevent horizontal overflow. Long forms must scroll.
+Keep important save/continue actions accessible without hiding fields.
+Use safe areas and handle the Android keyboard correctly.
+
+============================================================ 3.
+TECHNOLOGY STACK
+============================================================
+
+MOBILE APPLICATION - Flutter: Android application framework. - Dart:
+application language. - Material 3 foundations, customized through a
+centralized ThemeData and design tokens. - State management: Riverpod
+(recommended). - Navigation: go_router. - API client: Dio. - JSON
+models: freezed and json_serializable, if the project team accepts code
+generation. - Forms and validation: Form widgets with centralized
+validators; optionally use a form package if it improves
+maintainability. - Local key-value settings: shared_preferences. -
+Secure tokens: flutter_secure_storage. - Local database/cache: Drift or
+Isar only where offline/local querying is genuinely required. Do not
+store authoritative financial balances only on-device. - PDF: pdf and
+printing packages, with server-generated PDFs considered where
+consistent business formatting is required. - File/image selection:
+file_picker or image_picker as needed. - Charts: fl_chart or Syncfusion
+Flutter Charts, subject to licensing and scope. - Notifications:
+Firebase Cloud Messaging if push notifications are included.
+
+IMPORTANT TAILWIND CLARIFICATION Tailwind CSS is not the styling engine
+for a native Flutter screen. Flutter widgets do not use HTML/CSS
+classes. For the Android app, implement the same design language using
+Flutter ThemeData, ColorScheme, TextTheme, spacing constants and
+reusable widgets.
+
+Use Tailwind CSS only if a separate web dashboard/admin portal is built
+using a web stack such as React or Next.js. If no web application is in
+scope, do not add Tailwind to the Flutter codebase just to style mobile
+screens.
+
+ANIMATION FRAMEWORKS - flutter_animate: lightweight transitions for
+Flutter widgets. - Lottie: branded loading or success animations where a
+supplied/approved animation adds value. - Rive: interactive stateful
+animations where genuinely needed. Use subtle animations only: 150-250ms
+page transitions, small fade/slide entrances, button feedback and
+loading states. Avoid continuous decorative animation, excessive motion
+and animations that slow down data entry. Respect
+reduced-motion/accessibility preferences where possible.
+
+BACKEND Recommended implementation choice: - Node.js + Express.js -
+TypeScript for backend maintainability - REST API over HTTPS -
+PostgreSQL relational database - Prisma or Drizzle ORM (choose one and
+standardize) - Zod or equivalent request validation - JWT access tokens
+with refresh-token strategy, or a secure managed authentication
+approach - Role-based authorization enforced on the server - Object
+storage for uploaded receipts/logos if needed - Centralized logging and
+error monitoring
+
+The source specification allows a choice between Python or Node.js +
+Express and MySQL or PostgreSQL. This plan recommends Node.js + Express
+and PostgreSQL; confirm this stack before implementation.
+
+INFRASTRUCTURE - Separate development, staging and production
+environments. - HTTPS only. - Automated database backups. - Secrets
+stored in environment variables/secret manager, never committed. -
+Database migrations version-controlled. - API rate limiting and request
+validation. - Audit logging for sensitive financial operations.
+
+============================================================ 4.
+APPLICATION NAVIGATION AND PAGE INVENTORY
+============================================================
+
+GLOBAL - Splash - Login - Optional business/account selector only if
+multiple businesses are supported - Home dashboard - Global search
+(recommended) - Notifications (if enabled) - Profile/account settings
+(scope to confirm)
+
+HOME - Dashboard - Create Cash Bill shortcut - Create Credit Bill
+shortcut - Received Amount shortcut - Create Lot shortcut - Users
+shortcut
+
+CASH BILL - Lot list - Lot filters/search - Lot details - Create cash
+bill - Bill calculation/review - Bill preview - Save confirmation - Bill
+success/receipt
+
+CREDIT BILL - Customer list - Customer details/financial snapshot - Lot
+list - Lot details - Create credit bill - Bill calculation/review - Bill
+preview - Save confirmation - Bill success/receipt
+
+RECEIVED AMOUNT - Customer list - Customer ledger - Add received
+amount - Allocate payment to one or more bills - Payment review -
+Payment success/receipt - Payment details/history
+
+CREATE LOT - Supplier list/selection - Supplier details - Lot basic
+information - Product/goods details - Quantity and weight -
+Cost/rate/charges - Lot review - Lot success - Lot details and lot
+history
+
+USERS - Users landing - Supplier list - Create/edit supplier - Supplier
+details - Supplier ledger - Customer list - Create/edit customer -
+Customer details - Customer ledger - Transporter list - Create/edit
+transporter - Transporter details
+
+BILLS - Bills landing - All bills - Cash bills - Credit bills - Bill
+details - Edit bill (permission/status controlled) - Cancel bill
+confirmation - Bill payment history - PDF/print/share preview
+
+EXPENSES - Expense dashboard - Expense category list/settings - Create
+expense - Expense list - Expense details - Edit expense - Delete/cancel
+confirmation, if permitted
+
+REPORTS - Reports landing - Daily summary - Sales report - Purchase
+report - Customer report - Supplier report - Payment report - Expense
+report - Stock report - Profit report (only after accounting formula
+approval) - Report detail/filter/export
+
+FUTURE MODULES - Supplier ledger and detailed ledger - Customer ledger
+and detailed ledger - Advance management - Advance details/outstanding -
+Stock summary and product-wise stock - Smart Chart dashboard -
+Arrival/auction management - Active lots and lot transaction history -
+WhatsApp templates/integration - Business settings and profile -
+Product/goods setup - Unit/weight settings - Rate/charge settings - Bill
+numbering and format settings - Custom fields - User roles and
+permissions - Excel import/export - Backup/restore - Audit logs -
+Multi-business SaaS - Web dashboard
+
+============================================================ 5.
+PHASE-BY-PHASE IMPLEMENTATION PLAN
+============================================================
+
+RULE FOR EVERY PHASE Implement only the named phase. Inspect the
+existing repository first. Reuse the approved design system. Do not
+redesign unrelated screens. Do not use fake buttons or placeholder
+business actions. Connect to real APIs when the backend is ready; until
+then, use clearly isolated mock repositories that can be replaced
+without rewriting the UI. Finish the phase’s acceptance checklist before
+starting the next phase.
+
+PHASE 0 — PROJECT AUDIT AND REQUIREMENTS FREEZE Tasks: 1. Inspect the
+existing Flutter/backend repository. 2. Identify current pages, routes,
+state management, models and APIs. 3. Review the approved feature
+specification and current business rules. 4. Create a feature-to-page
+traceability matrix. 5. Confirm terminology: Supplier and Customer. 6.
+Confirm cash bill, credit bill, lot, payment and expense calculations
+with the business owner. 7. Confirm whether the app is single-business
+or multi-business. 8. Confirm authentication and user roles. 9. Record
+out-of-scope items. Deliverables: - Existing codebase audit. - Approved
+page inventory. - Business rules register. - Open questions register.
+Exit gate: No financial formula or ambiguous business rule is silently
+invented.
+
+PHASE 1 — DESIGN SYSTEM AND APP FOUNDATION Tasks: 1. Create the
+grayscale color tokens. 2. Create ThemeData, ColorScheme and TextTheme.
+3. Create typography, spacing, radius and elevation tokens. 4. Build
+reusable buttons, cards, inputs, selectors and badges. 5. Build app bar,
+bottom navigation and dialogs. 6. Build loading, empty, error and
+success patterns. 7. Set up app folder structure, linting and
+environment configuration. 8. Add routing and state management
+foundations. Pages/components: - Theme preview page (internal only). -
+Reusable component showcase (internal only). Exit gate: Theme changes
+update all reusable components centrally; no page-specific hardcoded
+theme colors without justification.
+
+PHASE 2 — AUTHENTICATION AND APP SHELL Pages: 1. Splash. 2. Login. 3.
+Forgot/reset password or OTP flow only if approved. 4. Optional business
+selector if multi-business is approved. 5. Main app shell with five-item
+bottom navigation. Tasks: - Implement secure login/session handling. -
+Handle expired sessions and logout. - Protect authenticated routes. -
+Add loading and error handling. Exit gate: Login, logout, app restart
+and protected navigation work correctly.
+
+PHASE 3 — HOME DASHBOARD Page: 1. Home dashboard. Tasks: - Show business
+name and date. - Show five quick actions. - Show daily cash sales,
+credit sales, total sales, received amount, outstanding and expenses. -
+Show recent bills, lots, payments and expenses. - Load figures from
+summary API/repository. - Quick actions must route to the same workflows
+used elsewhere. Exit gate: Dashboard totals match the underlying
+transactions for the selected date.
+
+PHASE 4 — USERS FOUNDATION Pages: 1. Users landing. 2. Supplier list. 3.
+Create/edit supplier. 4. Supplier details. 5. Customer list. 6.
+Create/edit customer. 7. Customer details. 8. Transporter list. 9.
+Create/edit transporter. 10. Transporter details. Tasks: - Search,
+filter, sort and pagination. - Validate required fields and phone
+formats. - Prevent accidental duplicate records using agreed matching
+rules. - Show opening balance without silently changing ledger history.
+Exit gate: Users can be created, edited, searched and opened; all linked
+records use stable IDs, not names as identifiers.
+
+PHASE 5 — LOT CREATION AND LOT MANAGEMENT Pages: 1. Supplier selection.
+2. Lot basic information. 3. Product/goods details. 4. Quantity and
+weight. 5. Cost and charges. 6. Lot review. 7. Lot success. 8. Lot list.
+9. Lot details. 10. Edit lot (restricted after transactions). Tasks: -
+Generate unique lot number. - Capture supplier, date, entry number,
+vehicle number if approved, goods count, products, quantity, weight,
+units, cost and charges. - Track available, partially sold, fully sold
+and cancelled states. - Preserve lot history. - Prevent edits that would
+invalidate linked bills. Exit gate: Lot can be created and displayed
+accurately; remaining quantity/weight is traceable.
+
+PHASE 6 — CASH BILL WORKFLOW Pages: 1. Cash bill lot list. 2. Lot
+details. 3. Create cash bill. 4. Bill review/calculation. 5. Bill
+preview. 6. Save confirmation. 7. Success/receipt. Tasks: - Select a lot
+with available quantity. - Capture customer/cash details as approved. -
+Capture quantity, weight, sell rate, labour and other approved
+charges. - Calculate bill totals using signed-off formulas. - Record
+amount received and balance. - Update stock and relevant ledgers
+transactionally. - Generate unique bill number. - Provide
+PDF/print/share only as included in scope. Exit gate: A saved cash bill
+updates the bill book, stock and financial records exactly once.
+
+PHASE 7 — CREDIT BILL WORKFLOW Pages: 1. Customer list. 2. Customer
+details/summary. 3. Lot list. 4. Lot details. 5. Create credit bill. 6.
+Bill review. 7. Bill preview. 8. Save confirmation. 9. Success/receipt.
+Tasks: - Select customer first. - Select lot with available quantity. -
+Capture approved bill fields and payment received, if any. - Update
+customer outstanding and stock transactionally. - Show previous balance
+and current bill due separately. Exit gate: Credit bill updates customer
+ledger and lot availability exactly once.
+
+PHASE 8 — RECEIVED AMOUNT AND PAYMENT ALLOCATION Pages: 1. Customer
+list. 2. Customer ledger. 3. Add received amount. 4. Bill allocation. 5.
+Payment review. 6. Payment success/receipt. 7. Payment details/history.
+Tasks: - Record payment date, amount, method, reference and notes. -
+Support partial payments. - Allocate payment to one or more outstanding
+bills according to approved allocation rules. - Show unallocated amount
+if the business permits it. - Recalculate outstanding from ledger
+transactions. - Keep immutable payment references and audit trail. Exit
+gate: Partial and multi-bill payments reconcile; no payment is
+duplicated on retry.
+
+PHASE 9 — BILLS MANAGEMENT Pages: 1. Bills landing. 2. All bills. 3.
+Cash bills. 4. Credit bills. 5. Bill details. 6. Edit bill. 7. Cancel
+bill confirmation. 8. Payment history. Tasks: - Search by bill number,
+customer, supplier or lot. - Filter by date, type and status. - Apply
+edit permissions and status restrictions. - Cancel with reason and audit
+trail. - Reverse stock/ledger effects only through approved reversal
+logic. Exit gate: Bill book totals reconcile with bill records and
+cancellation history.
+
+PHASE 10 — EXPENSE MANAGEMENT Pages: 1. Expense dashboard. 2. Expense
+categories. 3. Create expense. 4. Expense list. 5. Expense details. 6.
+Edit expense. 7. Delete/cancel confirmation. Tasks: - Capture category,
+date, title, amount, method, paid-to, reference, notes and receipt. -
+Restrict edit/delete based on roles and period rules. - Reflect expenses
+in reports and dashboard. Exit gate: Expense totals reconcile with
+expense transactions; deleted/cancelled records remain traceable.
+
+PHASE 11 — REPORTS AND BUSINESS SUMMARIES Pages: 1. Reports landing. 2.
+Daily summary. 3. Sales report. 4. Purchase report. 5. Customer report.
+6. Supplier report. 7. Payment report. 8. Expense report. 9. Stock
+report. 10. Profit report after formula approval. Tasks: - Date presets
+and custom date ranges. - Filters by customer, supplier, product, lot,
+bill type and status where relevant. - Drill down from totals to source
+transactions. - Export/print only if included in scope. - Use
+server-calculated totals for authoritative financial reports. Exit gate:
+Report totals reconcile to source records and filters produce consistent
+results.
+
+PHASE 12 — LEDGERS AND ADVANCES Pages: 1. Supplier ledger. 2. Customer
+ledger. 3. Ledger transaction details. 4. Advance landing. 5. Add
+advance. 6. Advance details. 7. Outstanding advances. 8. Advance
+summary. Tasks: - Confirm debit/credit conventions. - Support opening
+balances, debits, credits and running balance. - Link every ledger entry
+to a source transaction. - Define advance direction, adjustment and
+settlement rules. Exit gate: Opening + debits/credits reconcile to
+closing balances for every partner.
+
+PHASE 13 — INVENTORY AND SMART CHART Pages: 1. Stock summary. 2. Daily
+stock summary. 3. Product-wise stock. 4. Stock item details. 5. Smart
+Chart dashboard. 6. Arrival management. 7. Auction management if
+approved. 8. Active lots. 9. Lot transaction history. Tasks: - Track
+opening, inward, sold/outward, returns and approved adjustments. -
+Define stock units and weight conventions. - Connect lot and bill
+transactions. - Define arrival/auction workflow with business owner
+before coding. Exit gate: Stock reports reconcile with lot creation,
+sales, returns and approved adjustments.
+
+PHASE 14 — SETTINGS, CONFIGURATION AND ADMINISTRATION Pages: 1. Business
+profile. 2. Product/goods setup. 3. Unit and weight settings. 4. Rate
+and charge settings. 5. Bill numbering/format. 6. Payment/balance
+settings. 7. WhatsApp templates. 8. Daily summary settings. 9. Report
+preferences. 10. Custom fields. 11. User roles and permissions. 12.
+Import/export. 13. Backup/restore. 14. Audit logs. Tasks: - Apply
+configuration centrally. - Validate configuration changes against
+existing records. - Require permission for sensitive settings. - Log
+changes to formulas, bill numbering and financial settings. Exit gate:
+Configuration changes are permission-controlled, auditable and do not
+corrupt historical records.
+
+PHASE 15 — INTEGRATION, SECURITY AND HARDENING Tasks: 1. Connect all
+production APIs. 2. Verify authentication and authorization on the
+server. 3. Validate every request on client and server. 4. Add rate
+limiting and secure headers. 5. Protect secrets and tokens. 6. Add
+backup/restore verification. 7. Add audit logging. 8. Test offline, slow
+network and retry behaviour. 9. Prevent duplicate submissions with
+idempotency keys for financial writes. 10. Add crash/error monitoring.
+11. Verify privacy and data retention requirements. Exit gate: Security
+review and financial integrity tests pass.
+
+PHASE 16 — QA, UAT AND RELEASE Tasks: 1. Test every page on small and
+large Android devices. 2. Test all navigation paths. 3. Test form
+validation. 4. Test cash bill calculations. 5. Test credit bill
+calculations. 6. Test partial and multiple payments. 7. Test stock
+deduction and cancellation reversal. 8. Test expenses and reports. 9.
+Test role permissions. 10. Test PDF and printing. 11. Test backup and
+restore. 12. Conduct business-owner user acceptance testing. 13. Fix
+release-blocking defects. 14. Build signed Android App Bundle (AAB). 15.
+Prepare Play Store listing and privacy disclosures if publishing. Exit
+gate: Business owner approves UAT; no critical financial or security
+defects remain.
+
+============================================================ 6. REQUIRED
+BUSINESS RULES AND CALCULATIONS
+============================================================
+
+Do not invent or hardcode accounting formulas until the business owner
+approves them.
+
+LOT AVAILABILITY Available quantity/weight must be derived from the
+lot’s original amount less approved sales, returns and adjustments.
+Decide whether stock is controlled by quantity, weight, both, or
+product-specific rules.
+
+OUTSTANDING BALANCE A proposed high-level relationship is: Opening
+outstanding + credit transactions - allocated payments - approved
+adjustments = current outstanding. Confirm whether cash bills can affect
+outstanding and how advances are represented.
+
+BILL TOTAL A proposed structure is: Line item totals + approved
+labour/other charges - approved discounts = bill total. Confirm rate
+basis, weight precision, rounding, taxes (if any) and charge allocation.
+
+STOCK A proposed relationship is: Opening stock + incoming lots -
+approved sales + approved returns +/- approved adjustments = closing
+stock. Define units and treatment of cancelled bills.
+
+PAYMENT ALLOCATION Define whether payment is allocated
+oldest-bill-first, manually selected, to the current bill, or held as an
+unallocated customer credit. Do not assume.
+
+CANCELLATION Cancellation must: - Require permission. - Capture a
+reason. - Preserve the original record. - Create traceable reversal
+entries. - Reverse stock and ledger effects according to approved
+rules. - Never hard-delete a financial transaction.
+
+FINANCIAL DATA INTEGRITY - Use database transactions for
+bill/payment/stock updates. - Use idempotency protection against double
+taps and network retries. - Store money in integer minor units (for INR,
+paise) or a suitable exact decimal type; never use floating-point
+arithmetic for authoritative money calculations. - Store timestamps
+consistently and display business-local dates. - Keep source references
+for all ledger and stock movements. - Do not let the mobile app alone
+determine authoritative balances.
+
+============================================================ 7.
+RECOMMENDED BACKEND DATA MODEL
+============================================================
+
+Core entities: 1. Business 2. AppUser 3. Role 4. Permission 5. Supplier
+6. Customer 7. Transporter 8. Product 9. Lot 10. LotItem 11. Bill 12.
+BillItem 13. Payment 14. PaymentAllocation 15. ExpenseCategory 16.
+Expense 17. StockTransaction 18. SupplierLedgerEntry 19.
+CustomerLedgerEntry 20. Advance 21. AuditLog 22. BusinessSettings 23.
+Attachment
+
+DATA MODELLING RULES - Use immutable primary IDs. - Store
+supplier/customer IDs on transactions, not only names. - Store source
+transaction type and source ID on ledger/stock entries. - Keep bill
+number unique within the agreed business scope. - Keep lot number unique
+within the agreed business scope. - Add created_at, updated_at and
+created_by where appropriate. - Use status fields and audit history
+instead of hard deletion for financial records. - Define tenant/business
+ID on every business-owned record if multi-business support is
+planned. - Add indexes for common searches: bill number, lot number,
+phone, date, partner ID and status.
+
+============================================================ 8. STANDARD
+PAGE-BY-PAGE CODING PROMPT
+============================================================
+
+Copy this instruction before each individual page prompt:
+
+“Work only on the current named page and its required supporting
+components.
+
+1.  Inspect the current repository before editing.
+2.  Read the approved design tokens and reuse the centralized theme.
+3.  Read the previous and next workflow context.
+4.  Do not redesign unrelated pages.
+5.  Do not change unrelated business logic.
+6.  Use Flutter and Dart for native Android UI.
+7.  Do not use Tailwind CSS for Flutter widgets. Use Flutter ThemeData
+    and shared design tokens. Tailwind is reserved for a separately
+    approved web dashboard.
+8.  Use the approved animation library sparingly.
+9.  Implement real validation and functional interactions.
+10. Connect to the existing repository/API layer; if unavailable,
+    isolate mock data behind a repository interface.
+11. Include loading, empty, error, success and disabled states where
+    relevant.
+12. Support small Android screens and keyboard/safe-area behaviour.
+13. Add or update tests for the page and its key interactions.
+14. Run formatting, static analysis and relevant tests.
+15. Report files changed, functionality completed, tests run and
+    unresolved questions.
+16. Stop after this page. Do not automatically start the next phase.”
+
+============================================================ 9. QUALITY
+GATES FOR EVERY PAGE
+============================================================
+
+Before marking any page complete, verify:
+
+[ ] Page matches the approved grayscale design system. [ ] Typography
+and spacing are consistent. [ ] All labels use Supplier and Customer
+terminology. [ ] All buttons have real actions. [ ] All form fields
+validate correctly. [ ] Search and filters work where specified. [ ]
+Loading state exists. [ ] Empty state exists. [ ] Error state exists. [
+] Success state exists. [ ] Back navigation works. [ ] Bottom navigation
+works. [ ] Small-screen layout has no overflow. [ ] Keyboard does not
+cover important actions. [ ] Accessibility labels and contrast are
+acceptable. [ ] No unrelated pages were changed. [ ] Relevant tests
+pass. [ ] No fake production data or fake financial calculations remain.
+
+============================================================ 10.
+DELIVERY AND RELEASE CHECKLIST
+============================================================
+
+PRODUCT AND SCOPE [ ] Final page inventory approved. [ ]
+Supplier/Customer terminology approved. [ ] Cash and credit bill rules
+approved. [ ] Lot and stock rules approved. [ ] Payment allocation rules
+approved. [ ] Expense categories approved. [ ] Report definitions
+approved. [ ] Roles and permissions approved. [ ] Included/excluded
+features signed off.
+
+TECHNICAL [ ] Flutter/Dart project builds. [ ] Backend and database
+selected. [ ] API contract documented. [ ] Database migrations reviewed.
+[ ] Authentication secured. [ ] Authorization enforced server-side. [ ]
+Backups configured and restore tested. [ ] Monitoring and logs
+configured.
+
+FUNCTIONAL [ ] Supplier/customer CRUD works. [ ] Lot creation and
+tracking work. [ ] Cash bills work. [ ] Credit bills work. [ ] Received
+amount and allocations work. [ ] Expenses work. [ ] Bills and reports
+reconcile. [ ] Cancellation/reversal works. [ ] PDF/print/share works if
+included. [ ] Role restrictions work.
+
+RELEASE [ ] QA complete. [ ] Business UAT signed off. [ ] Critical
+defects closed. [ ] Production environment configured. [ ] Signed
+Android AAB generated. [ ] Release notes prepared. [ ] Privacy policy
+and store disclosures prepared if required. [ ] Production backup and
+rollback plan ready.
+
+============================================================ 11.
+IMPORTANT SCOPE NOTES
+============================================================
+
+The reference application specification identifies additional modules
+such as Smart Chart/arrival/auction, separate bill books, partner
+categories, ledgers, advances, stock summaries, expanded reports, RMC
+reporting, mOS, wallet interfaces, customization and import/export.
+
+These are not automatically included just because they appear in the
+reference inventory. Confirm each module and its commercial/timeline
+impact before implementation.
+
+The earlier proposal material refers to Flutter Android, a choice of
+backend (Python or Node.js + Express), a choice of database (MySQL or
+PostgreSQL), REST APIs over HTTPS and WhatsApp setup subject to
+access/configuration. This plan recommends Node.js + Express +
+PostgreSQL but that is a recommendation to approve, not a claim that the
+source documents mandated it.
+
+END OF IMPLEMENTATION PLAN

@@ -1,0 +1,20 @@
+import dotenv from "dotenv";
+import { z } from "zod";
+
+dotenv.config();
+
+const envSchema = z.object({
+  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  PORT: z.coerce.number().default(4000),
+  DATABASE_URL: z.string().default("mysql://root:rootpassword@localhost:3306/click_smart_chart_saas"),
+  JWT_ACCESS_SECRET: z.string().min(16).default("super-secret-access-key-change-in-production-32chars"),
+  JWT_REFRESH_SECRET: z.string().min(16).default("super-secret-refresh-key-change-in-production-32chars"),
+  JWT_ACCESS_EXPIRES_IN: z.string().default("15m"),
+  JWT_REFRESH_EXPIRES_IN: z.string().default("7d"),
+  CORS_ORIGIN: z.string().default("http://localhost:3000"),
+  RAZORPAY_KEY_ID: z.string().default("rzp_test_clicksmartchart"),
+  RAZORPAY_KEY_SECRET: z.string().default("rzp_test_secret_key_verify"),
+  STORAGE_DIR: z.string().default("./storage"),
+});
+
+export const env = envSchema.parse(process.env);
