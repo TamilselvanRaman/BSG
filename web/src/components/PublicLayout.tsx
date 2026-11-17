@@ -138,38 +138,6 @@ export function PublicNavbar() {
 export function PublicFooter() {
   return (
     <footer className="border-t-2 border-[#0D5C43] bg-[#021810] text-[#B8DFC6]">
-      {/* Top Pre-Footer Strip: Live Tech Desk & Operational Ribbon */}
-      <div className="border-b border-[#0A3D2A] bg-[#032015]/90 py-5">
-        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center gap-3 text-xs">
-            <span className="inline-flex items-center gap-2 rounded-full border border-[#10A66A]/40 bg-[#0A503B]/80 px-3 py-1 font-bold text-[#A8E2BD]">
-              <span className="h-2 w-2 rounded-full bg-[#10A66A] animate-pulse" />
-              <span>All Mandi Cloud Nodes Operational • ap-south-1</span>
-            </span>
-            <span className="hidden text-[#47785C] sm:inline">•</span>
-            <span className="text-xs text-[#A8D9B9]">
-              Morning Mandi Helpline: <a href="tel:+919841238910" className="font-bold text-white hover:text-[#10A66A] transition">+91 98412 38910</a> (5:30 AM – 9:00 PM IST)
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            <Link
-              href="/register"
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-4 py-1.5 text-xs font-bold text-white shadow-sm transition"
-            >
-              <span>Start Free Trial</span>
-              <ArrowRight className="h-3 w-3" />
-            </Link>
-            <Link
-              href="/contact"
-              className="rounded-xl border border-[#0E6E50] bg-[#063423] hover:bg-[#0A503B] px-3.5 py-1.5 text-xs font-bold text-[#A8E2BD] transition"
-            >
-              Contact Specialist
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Main Footer Content Grid */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-12">
