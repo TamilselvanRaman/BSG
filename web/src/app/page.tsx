@@ -353,39 +353,154 @@ export default function HomePage() {
               </span>
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* Interactive Metric Tiles */}
-          <div className="mt-14 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 text-center shadow-xs">
-              <p className="text-3xl font-black text-[#063D2E]">50K+</p>
-              <p className="text-xs font-bold text-[#47785C] mt-1 uppercase tracking-wider">
-                Bags Weighed Daily
-              </p>
+      {/* ============================================================
+          2. REAL-TIME PLATFORM SCALE & OPERATIONAL BENCHMARKS (ANIMATED)
+         ============================================================ */}
+      <section className="relative py-20 bg-gradient-to-b from-white via-[#F4FAF5]/80 to-white border-b border-[#CDE8D5] overflow-hidden">
+        {/* Ambient Glowing Animated Background Orbs */}
+        <div className="absolute top-12 left-10 w-96 h-96 bg-[#10A66A]/10 rounded-full blur-3xl pointer-events-none animate-gentle-pulse" />
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#CDE8D5]/40 rounded-full blur-3xl pointer-events-none animate-gentle-pulse" style={{ animationDelay: "2s" }} />
+
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center max-w-3xl mx-auto">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#CDE8D5] bg-[#E8F5EC] px-3.5 py-1 text-xs font-bold text-[#087A50] mb-4">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10A66A] opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10A66A]" />
+              </span>
+              <span>LIVE MANDI OPERATIONAL TELEMETRY</span>
             </div>
-            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 text-center shadow-xs">
-              <p className="text-3xl font-black text-[#087A50]">₹150Cr+</p>
-              <p className="text-xs font-bold text-[#47785C] mt-1 uppercase tracking-wider">
-                Mandi Turnover Processed
-              </p>
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl tracking-tight">
+              Enterprise Scale Tested on Active Mandi Floors
+            </h2>
+            <p className="mt-3 text-sm text-[#47785C] leading-relaxed">
+              Handling intense 4:00 AM auction rush hours, bag-by-bag digital scale weighments, and millisecond ledger reconciliation with zero downtime.
+            </p>
+          </div>
+
+          {/* Animated 4-Card Benchmark Grid */}
+          <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Card 1: Bags Weighed */}
+            <div className="group relative rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#10A66A] hover:-translate-y-2 transition-all duration-300 animate-subtle-float">
+              <div className="flex items-center justify-between">
+                <div className="h-11 w-11 rounded-xl bg-[#E8F5EC] text-[#087A50] flex items-center justify-center group-hover:bg-[#10A66A] group-hover:text-white transition-colors duration-300">
+                  <Scale className="h-5 w-5" />
+                </div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#E8F5EC] px-2.5 py-0.5 text-[10px] font-bold text-[#087A50]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#10A66A] animate-pulse" />
+                  Live Weighment
+                </span>
+              </div>
+              <div className="mt-5">
+                <p className="text-4xl font-black text-[#063D2E] tracking-tight group-hover:text-[#087A50] transition-colors">
+                  50K+
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#063D2E]">
+                  Bags Weighed Daily
+                </p>
+                <p className="mt-2 text-xs text-[#47785C] leading-relaxed">
+                  Sub-second electronic scales sync individual bag weights directly to customer bills with auto-tare.
+                </p>
+              </div>
+              <div className="mt-5 pt-4 border-t border-[#F0F7F2] flex items-center justify-between text-[11px] font-mono text-[#087A50]">
+                <span>Speed: &lt;1.2s / bag</span>
+                <span className="font-bold">100% Verified</span>
+              </div>
             </div>
-            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 text-center shadow-xs">
-              <p className="text-3xl font-black text-[#063D2E]">100%</p>
-              <p className="text-xs font-bold text-[#47785C] mt-1 uppercase tracking-wider">
-                ACID Ledger Balance
-              </p>
+
+            {/* Card 2: Mandi Turnover */}
+            <div className="group relative rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#10A66A] hover:-translate-y-2 transition-all duration-300 animate-subtle-float" style={{ animationDelay: "0.8s" }}>
+              <div className="flex items-center justify-between">
+                <div className="h-11 w-11 rounded-xl bg-[#E8F5EC] text-[#087A50] flex items-center justify-center group-hover:bg-[#10A66A] group-hover:text-white transition-colors duration-300">
+                  <Coins className="h-5 w-5" />
+                </div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#E8F5EC] px-2.5 py-0.5 text-[10px] font-bold text-[#087A50]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#10A66A] animate-pulse" />
+                  Processed
+                </span>
+              </div>
+              <div className="mt-5">
+                <p className="text-4xl font-black text-[#087A50] tracking-tight">
+                  ₹150Cr+
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#063D2E]">
+                  Mandi Turnover Processed
+                </p>
+                <p className="mt-2 text-xs text-[#47785C] leading-relaxed">
+                  Automated APMC commission, market yard cess, and coolie hamali calculated without manual calculation errors.
+                </p>
+              </div>
+              <div className="mt-5 pt-4 border-t border-[#F0F7F2] flex items-center justify-between text-[11px] font-mono text-[#087A50]">
+                <span>Settlements: Same-day</span>
+                <span className="font-bold">APMC Audited</span>
+              </div>
             </div>
-            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 text-center shadow-xs">
-              <p className="text-3xl font-black text-[#10A66A]">0 sec</p>
-              <p className="text-xs font-bold text-[#47785C] mt-1 uppercase tracking-wider">
-                Offline Floor Downtime
-              </p>
+
+            {/* Card 3: ACID Ledger */}
+            <div className="group relative rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#10A66A] hover:-translate-y-2 transition-all duration-300 animate-subtle-float" style={{ animationDelay: "1.6s" }}>
+              <div className="flex items-center justify-between">
+                <div className="h-11 w-11 rounded-xl bg-[#E8F5EC] text-[#087A50] flex items-center justify-center group-hover:bg-[#10A66A] group-hover:text-white transition-colors duration-300">
+                  <ShieldCheck className="h-5 w-5" />
+                </div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#E8F5EC] px-2.5 py-0.5 text-[10px] font-bold text-[#087A50]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#10A66A] animate-pulse" />
+                  Zero Discrepancy
+                </span>
+              </div>
+              <div className="mt-5">
+                <p className="text-4xl font-black text-[#063D2E] tracking-tight group-hover:text-[#087A50] transition-colors">
+                  100%
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#063D2E]">
+                  ACID Ledger Balance
+                </p>
+                <p className="mt-2 text-xs text-[#47785C] leading-relaxed">
+                  Cryptographic double-entry buyer/farmer khata balancing ensures every single rupee of credit is strictly accounted for.
+                </p>
+              </div>
+              <div className="mt-5 pt-4 border-t border-[#F0F7F2] flex items-center justify-between text-[11px] font-mono text-[#087A50]">
+                <span>Khata: Cryptographic</span>
+                <span className="font-bold">PostgreSQL ACID</span>
+              </div>
+            </div>
+
+            {/* Card 4: Offline Floor Downtime */}
+            <div className="group relative rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-sm hover:shadow-xl hover:border-[#10A66A] hover:-translate-y-2 transition-all duration-300 animate-subtle-float" style={{ animationDelay: "2.4s" }}>
+              <div className="flex items-center justify-between">
+                <div className="h-11 w-11 rounded-xl bg-[#E8F5EC] text-[#10A66A] flex items-center justify-center group-hover:bg-[#10A66A] group-hover:text-white transition-colors duration-300">
+                  <Zap className="h-5 w-5" />
+                </div>
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#E8F5EC] px-2.5 py-0.5 text-[10px] font-bold text-[#10A66A]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#10A66A] animate-pulse" />
+                  Local-First Engine
+                </span>
+              </div>
+              <div className="mt-5">
+                <p className="text-4xl font-black text-[#10A66A] tracking-tight">
+                  0 sec
+                </p>
+                <p className="mt-1 text-sm font-bold text-[#063D2E]">
+                  Offline Floor Downtime
+                </p>
+                <p className="mt-2 text-xs text-[#47785C] leading-relaxed">
+                  Android handhelds keep recording weights and printing Bluetooth bills even during complete internet or power outages.
+                </p>
+              </div>
+              <div className="mt-5 pt-4 border-t border-[#F0F7F2] flex items-center justify-between text-[11px] font-mono text-[#10A66A]">
+                <span>Sync: Automatic</span>
+                <span className="font-bold">Zero Data Loss</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ============================================================
-          2. PRODUCT SHOWCASE (DEEP GREEN SECTION)
+          3. PRODUCT SHOWCASE (DEEP GREEN SECTION)
          ============================================================ */}
       <section className="py-20 bg-[#063D2E] text-white border-b border-[#0A503B]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

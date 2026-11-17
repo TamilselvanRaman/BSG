@@ -68,3 +68,18 @@
 .animate-gentle-pulse {
   animation: gentlePulse 4s ease-in-out infinite;
 }
+
+@keyframes shimmerWave {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(16, 166, 106, 0.12), transparent);
+  background-size: 200% 100%;
+  animation: shimmerWave 3.5s ease-in-out infinite;
+}
