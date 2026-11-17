@@ -25,7 +25,6 @@ import {
   Shield,
   ShieldCheck,
   Sliders,
-  Sparkles,
   UserCheck,
   Users,
   X,
@@ -709,8 +708,8 @@ export default function SuperAdminDashboardPage() {
                               </td>
 
                               <td className="px-4 py-3.5 text-xs">
-                                <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-0.5 text-[11px] font-semibold text-blue-700">
-                                  <Sparkles className="h-3 w-3 text-blue-600" />
+                                <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-emerald-800 border border-emerald-200">
+                                  <Layers className="h-3 w-3 text-emerald-600" />
                                   {enabledFeatures.length}/10 Features
                                 </span>
                               </td>
@@ -1359,7 +1358,7 @@ export default function SuperAdminDashboardPage() {
                     onClick={() => handleEnableAllFeatures(selectedBizForLicense.id)}
                     className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 font-bold text-white hover:bg-emerald-700 shadow-sm transition"
                   >
-                    <Sparkles className="h-4 w-4" />
+                    <CheckCircle2 className="h-4 w-4" />
                     Enable All 10 Features (1-Click)
                   </button>
                 </div>

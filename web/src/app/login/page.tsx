@@ -16,7 +16,6 @@ import {
   Lock,
   Scale,
   ShieldCheck,
-  Sparkles,
   Store,
   User,
   UserCheck,
@@ -111,11 +110,7 @@ export default function LoginPage() {
             <div>
               <BsgLogo size="md" theme="dark" />
 
-              <div className="mt-12 space-y-4">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-900/60 border border-emerald-700/60 px-3 py-1 text-[11px] font-bold text-emerald-300">
-                  <Sparkles className="h-3 w-3" />
-                  BSG Mandi OS Cloud Portal
-                </span>
+              <div className="mt-12 space-y-3">
                 <h2 className="text-2xl font-bold leading-tight">
                   Single Sign-On for Your Entire Mandi Operations
                 </h2>
@@ -153,11 +148,7 @@ export default function LoginPage() {
           {/* Right: Login Form */}
           <div className="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center">
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-[11px] font-bold text-emerald-800">
-                <Lock className="h-3 w-3 text-emerald-600" />
-                Unified Single Sign-In
-              </div>
-              <h1 className="text-2xl font-bold text-slate-900 mt-2">Sign In to Workspace</h1>
+              <h1 className="text-2xl font-bold text-slate-900">Sign In to Workspace</h1>
               <p className="text-xs text-slate-500">
                 One login form for everyone. The system automatically detects your role (Main Admin, Sub Admin, or Staff) and redirects to your portal.
               </p>

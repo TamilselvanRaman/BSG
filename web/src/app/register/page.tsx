@@ -11,7 +11,6 @@ import {
   Building2,
   CheckCircle2,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 
 export default function RegisterBusinessPage() {
@@ -117,7 +116,7 @@ export default function RegisterBusinessPage() {
                     placeholder="e.g. BSG Trading Corp / Lakshmi Vegetable Mandi"
                     value={form.businessName}
                     onChange={(e) => setForm({ ...form, businessName: e.target.value })}
-                    className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
 
@@ -132,7 +131,7 @@ export default function RegisterBusinessPage() {
                       placeholder="e.g. Ramanathan Kannan"
                       value={form.ownerFullName}
                       onChange={(e) => setForm({ ...form, ownerFullName: e.target.value })}
-                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                     />
                   </div>
                   <div>
@@ -145,7 +144,7 @@ export default function RegisterBusinessPage() {
                       placeholder="e.g. Coimbatore / Oddanchatram"
                       value={form.city}
                       onChange={(e) => setForm({ ...form, city: e.target.value })}
-                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -161,7 +160,7 @@ export default function RegisterBusinessPage() {
                       placeholder="10-digit mobile number"
                       value={form.phone}
                       onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                     />
                   </div>
                   <div>
@@ -174,7 +173,7 @@ export default function RegisterBusinessPage() {
                       placeholder="owner@bsg.com"
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
-                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                     />
                   </div>
                 </div>
@@ -194,7 +193,7 @@ export default function RegisterBusinessPage() {
                         placeholder="e.g. raman_admin"
                         value={form.username}
                         onChange={(e) => setForm({ ...form, username: e.target.value })}
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                       />
                     </div>
                     <div>

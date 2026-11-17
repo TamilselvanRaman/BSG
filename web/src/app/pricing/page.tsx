@@ -10,7 +10,6 @@ import {
   HelpCircle,
   PhoneCall,
   ShieldCheck,
-  Sparkles,
   Zap,
 } from "lucide-react";
 
@@ -87,11 +86,7 @@ export default function PricingPage() {
       {/* Hero Header */}
       <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-6 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3.5 py-1 text-xs font-bold text-emerald-800">
-            <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
-            Transparent Mandi SaaS Pricing
-          </span>
-          <h1 className="mt-5 text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
+          <h1 className="text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
             Simple, Predictable Plans for Every Mandi Shop
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
@@ -242,50 +237,50 @@ export default function PricingPage() {
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">User Login Seats Allowed</td>
                   <td className="p-4 text-center">3 Seats (1 Admin + 2 Staff)</td>
-                  <td className="p-4 text-center font-bold text-blue-700">3 Seats (1 Admin + 2 Staff)</td>
+                  <td className="p-4 text-center font-bold text-emerald-800">3 Seats (1 Admin + 2 Staff)</td>
                   <td className="p-4 text-center">Custom / Unlimited</td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">Multi-Product Inward Lots</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">Bag-by-Bag Digital Weighment Scale</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">Smart Chart Live Lot Auctions</td>
                   <td className="p-4 text-center text-slate-400">—</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">Daily Cash Tally & Denominations Counter</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">Handheld Android Mobile Offline Sync</td>
                   <td className="p-4 text-center text-slate-400">—</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">WhatsApp 1-Click Bill Sharing</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
                 </tr>
                 <tr>
                   <td className="p-4 font-semibold text-slate-900">Dedicated Technical Account Manager</td>
                   <td className="p-4 text-center text-slate-400">—</td>
                   <td className="p-4 text-center text-slate-400">—</td>
-                  <td className="p-4 text-center text-emerald-600 font-bold">✓ Included</td>
+                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
                 </tr>
               </tbody>
             </table>

@@ -10,7 +10,6 @@ import {
   PackagePlus,
   Scale,
   ShieldCheck,
-  Sparkles,
   Truck,
   Users,
   Utensils,
@@ -78,11 +77,7 @@ export default function SolutionsPage() {
       {/* Header */}
       <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-6 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3.5 py-1 text-xs font-bold text-blue-700">
-            <Cpu className="h-3.5 w-3.5" />
-            Specialized Agricultural Trade Solutions
-          </span>
-          <h1 className="mt-5 text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
+          <h1 className="text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
             Built for Your Specific Commodity Workflow
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">

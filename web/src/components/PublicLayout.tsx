@@ -10,7 +10,6 @@ import {
   ArrowRight,
   Menu,
   X,
-  Sparkles,
   PhoneCall,
   CheckCircle,
 } from "lucide-react";

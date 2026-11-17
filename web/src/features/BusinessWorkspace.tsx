@@ -31,7 +31,6 @@ import {
   Settings,
   ShieldCheck,
   ShoppingBag,
-  Sparkles,
   Store,
   User,
   Users,
@@ -688,8 +687,8 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
 
             {/* Trial & License Badge */}
             {profileData?.tenant?.status === "TRIAL" || employeesData?.trialEndsAt ? (
-              <div className="hidden sm:flex items-center gap-2 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-800 shadow-sm">
-                <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+              <div className="hidden sm:flex items-center gap-2 rounded-lg bg-amber-50 border border-amber-200 px-2.5 py-1 text-xs font-semibold text-amber-800 shadow-sm">
+                <span className="h-2 w-2 rounded-full bg-amber-500" />
                 <span>
                   Free Trial:{" "}
                   {Math.max(

@@ -12,7 +12,6 @@ import {
   PhoneCall,
   Send,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 
 export default function ContactPage() {
@@ -44,11 +43,7 @@ export default function ContactPage() {
         <div className="mx-auto max-w-7xl px-6">
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto">
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3.5 py-1 text-xs font-bold text-blue-700">
-              <Sparkles className="h-3.5 w-3.5" />
-              Mandi Onboarding & Enterprise Support
-            </span>
-            <h1 className="mt-4 text-3xl font-black text-slate-900 sm:text-5xl">
+            <h1 className="text-3xl font-black text-slate-900 sm:text-5xl">
               Get in Touch with Our Team
             </h1>
             <p className="mt-3 text-sm sm:text-base text-slate-600">
@@ -61,7 +56,7 @@ export default function ContactPage() {
             <div className="lg:col-span-5 space-y-4">
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
                     <PhoneCall className="h-6 w-6" />
                   </div>
                   <div>
@@ -205,7 +200,7 @@ export default function ContactPage() {
                           placeholder="e.g. Coimbatore / Oddanchatram"
                           value={formData.marketLocation}
                           onChange={(e) => setFormData({ ...formData, marketLocation: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                       <div>
@@ -215,7 +210,7 @@ export default function ContactPage() {
                         <select
                           value={formData.subject}
                           onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none bg-white"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none bg-white"
                         >
                           <option value="New Shop License & Onboarding">New Shop License & Onboarding</option>
                           <option value="Schedule Live Video Demo">Schedule Live Video Demo</option>
@@ -236,14 +231,14 @@ export default function ContactPage() {
                         placeholder="Tell us what commodities you trade, daily bag volume, or any custom questions..."
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-blue-600 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-sm font-bold text-white shadow-md shadow-blue-600/25 hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50"
+                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/25 hover:from-emerald-700 hover:to-teal-800 transition disabled:opacity-50"
                     >
                       <Send className="h-4 w-4" />
                       <span>{submitting ? "Sending..." : "Submit Enquiry"}</span>

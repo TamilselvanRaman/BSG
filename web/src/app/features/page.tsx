@@ -18,7 +18,6 @@ import {
   Scale,
   ShieldCheck,
   Smartphone,
-  Sparkles,
   Truck,
   UserCheck,
   Users,
@@ -157,11 +156,7 @@ export default function FeaturesPage() {
       {/* Header */}
       <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-6 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3.5 py-1 text-xs font-bold text-blue-700">
-            <Cpu className="h-3.5 w-3.5" />
-            Enterprise Architecture & Capabilities
-          </span>
-          <h1 className="mt-5 text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
+          <h1 className="text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
             Engineered for High-Volume Mandis
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
@@ -171,7 +166,7 @@ export default function FeaturesPage() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:from-blue-700 hover:to-indigo-700 transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:from-emerald-700 hover:to-teal-800 transition"
             >
               <span>Start 30-Day Free Trial</span>
               <ArrowRight className="h-4 w-4" />
@@ -204,14 +199,14 @@ export default function FeaturesPage() {
                     {/* Left Info */}
                     <div className="lg:col-span-7 space-y-4">
                       <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
                           <Icon className="h-6 w-6" />
                         </div>
                         <div>
-                          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[10px] font-bold text-slate-600 uppercase tracking-wider">
+                          <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">
                             {feat.badge}
                           </span>
-                          <h2 className="text-2xl font-bold text-slate-900 mt-1">
+                          <h2 className="text-2xl font-bold text-slate-900 mt-0.5">
                             {feat.title}
                           </h2>
                         </div>
@@ -232,7 +227,7 @@ export default function FeaturesPage() {
 
                       <div className="pt-3">
                         <span className="inline-flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-bold text-emerald-800">
-                          <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
+                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
                           {feat.metric}
                         </span>
                       </div>
@@ -242,7 +237,7 @@ export default function FeaturesPage() {
                     <div className="lg:col-span-5">
                       <div className="rounded-2xl border border-slate-200 bg-slate-900 p-6 text-white shadow-inner">
                         <div className="flex items-center justify-between border-b border-slate-800 pb-3 text-xs">
-                          <span className="font-mono text-blue-400">MANDI_OS::{feat.id.toUpperCase()}</span>
+                          <span className="font-mono text-emerald-400">BSG_OPERATIONS::{feat.id.toUpperCase()}</span>
                           <span className="rounded bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">
                             ONLINE / LIVE
                           </span>

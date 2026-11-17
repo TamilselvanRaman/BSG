@@ -25,7 +25,6 @@ import {
   Send,
   ShieldCheck,
   Smartphone,
-  Sparkles,
   Truck,
   UserCheck,
   Users,
@@ -173,15 +172,8 @@ export default function HomePage() {
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-3xl text-center">
-            {/* Pill Banner */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-4 py-1.5 text-xs font-bold text-emerald-800 shadow-sm backdrop-blur-sm">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>BSG Mandi OS v1.1 • Multi-Product Billing & Bag Weighment Live</span>
-              <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
-            </div>
-
             {/* Headline */}
-            <h1 className="mt-7 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.12]">
+            <h1 className="text-4xl font-black tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.12]">
               Run Your Entire Goods Inward, Mandi Trade & Billing in{" "}
               <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-green-700 bg-clip-text text-transparent">
                 One BSG Platform
@@ -356,10 +348,9 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-12 items-center">
             {/* Left pitch */}
             <div className="lg:col-span-5 space-y-6">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3.5 py-1 text-xs font-bold text-emerald-800">
-                <Zap className="h-3.5 w-3.5 text-emerald-600" />
-                Free Onboarding Support
-              </span>
+              <p className="text-xs font-bold uppercase tracking-widest text-emerald-700">
+                Direct Onboarding & Deployment
+              </p>
               <h2 className="text-3xl font-black text-slate-900 sm:text-4xl">
                 Ready to Upgrade Your Mandi Shop Operations?
               </h2>
