@@ -38,7 +38,7 @@ export default function LoginPage() {
         });
         if (data?.accessToken && data?.user) {
           saveStoredSession(data.accessToken, data.refreshToken, data.user);
-          router.push("/");
+          router.push("/super-admin/dashboard");
           return;
         }
       } catch {
@@ -46,7 +46,7 @@ export default function LoginPage() {
       }
 
       const session = performDirectLogin("superadmin");
-      router.push("/");
+      router.push("/super-admin/dashboard");
     } catch (err: any) {
       setError(err.message || "Authentication failed");
     } finally {
@@ -56,7 +56,7 @@ export default function LoginPage() {
 
   function handleInstantAccess() {
     performDirectLogin("superadmin");
-    router.push("/");
+    router.push("/super-admin/dashboard");
   }
 
   return (

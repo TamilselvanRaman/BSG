@@ -63,7 +63,7 @@ export function createMockUser(role: "SUPER_ADMIN" | "ADMIN" | "BUSINESS_USER", 
         ],
   };
 
-  const redirectTo = "/";
+  const redirectTo = "/super-admin/dashboard";
 
   return {
     user,
