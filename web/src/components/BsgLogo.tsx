@@ -124,19 +124,30 @@ export function BsgLogo({
     <div className={`flex items-center gap-3 ${className}`}>
       <BsgIcon size={px} className="shrink-0 shadow-sm rounded-xl" />
       <div className="flex flex-col">
-        <span
-          className={`font-black tracking-tight leading-none ${
-            size === "sm"
-              ? "text-lg"
-              : size === "lg"
-              ? "text-2xl"
-              : size === "xl"
-              ? "text-3xl"
-              : "text-xl"
-          } ${isDark ? "text-white" : "text-[#123B29]"}`}
-        >
-          BSG
-        </span>
+        <div className="flex items-center gap-2">
+          <span
+            className={`font-black tracking-tight leading-none ${
+              size === "sm"
+                ? "text-lg"
+                : size === "lg"
+                ? "text-2xl"
+                : size === "xl"
+                ? "text-3xl"
+                : "text-xl"
+            } ${isDark ? "text-white" : "text-[#063D2E]"}`}
+          >
+            BSG
+          </span>
+          <span
+            className={`rounded-md px-1.5 py-0.5 text-[9px] font-black tracking-wider uppercase ${
+              isDark
+                ? "bg-[#0A503B] text-[#A8E2BD] border border-[#10A66A]/40"
+                : "bg-[#E8F5EC] text-[#087A50] border border-[#CDE8D5]"
+            }`}
+          >
+            MANDI OS
+          </span>
+        </div>
         <span
           className={`font-medium tracking-tight mt-1 leading-none ${
             size === "sm" ? "text-[10px]" : "text-[11px]"

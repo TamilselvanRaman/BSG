@@ -41,14 +41,11 @@ export default function ContactPage() {
       <main className="flex-1 py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Header */}
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-              Get In Touch With Specialists
-            </span>
-            <h1 className="mt-3 text-3xl font-black text-[#063D2E] sm:text-5xl">
+          <div className="text-center max-w-3xl mx-auto">
+            <h1 className="text-3xl font-black text-[#063D2E] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
               Connect with Our Mandi Architecture Team
             </h1>
-            <p className="mt-3 text-sm sm:text-base text-[#47785C]">
+            <p className="mt-4 text-sm sm:text-base text-[#47785C] leading-relaxed">
               Have questions about multi-product lot arrivals, bag weighment scales, or custom APMC billing? We are here to help.
             </p>
           </div>

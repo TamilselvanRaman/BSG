@@ -6,9 +6,6 @@ export default function PrivacyPage() {
       <PublicNavbar />
       <main className="mx-auto max-w-4xl flex-1 px-4 sm:px-6 py-16">
         <div className="rounded-3xl border border-[#CDE8D5] bg-white p-8 sm:p-12 shadow-xs space-y-6">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-            Data Governance & Privacy
-          </span>
           <h1 className="text-3xl font-black text-[#063D2E]">BSG Platform Privacy Policy</h1>
           <div className="space-y-4 text-xs sm:text-sm leading-relaxed text-[#47785C]">
             <p>

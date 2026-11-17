@@ -406,10 +406,7 @@ export default function HomePage() {
       <section className="py-20 bg-[#063D2E] text-white border-b border-[#0A503B]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
-              Live Application Architecture
-            </span>
-            <h2 className="mt-2 text-3xl font-black sm:text-4xl text-white">
+            <h2 className="text-3xl font-black sm:text-4xl text-white">
               Purpose-Built for Mandi Floor Operations
             </h2>
             <p className="mt-3 text-sm text-[#C4E2CF]">
@@ -583,10 +580,7 @@ export default function HomePage() {
       <section className="py-20 bg-[#F4FAF5] border-b border-[#CDE8D5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-              Operational Reality
-            </span>
-            <h2 className="mt-2 text-3xl font-black text-[#063D2E] sm:text-4xl">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl">
               Eliminate Mandi Inefficiencies with Real Technology
             </h2>
             <p className="mt-3 text-sm text-[#47785C]">
@@ -629,10 +623,7 @@ export default function HomePage() {
       <section className="py-20 bg-[#E8F5EC]/50 border-b border-[#CDE8D5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-              Full Enterprise Suite
-            </span>
-            <h2 className="mt-2 text-3xl font-black text-[#063D2E] sm:text-4xl">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl">
               8 Core Mandi Management Modules
             </h2>
             <p className="mt-3 text-sm text-[#47785C]">
@@ -670,10 +661,7 @@ export default function HomePage() {
       <section className="py-20 bg-white border-b border-[#CDE8D5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-              System Workflow
-            </span>
-            <h2 className="mt-2 text-3xl font-black text-[#063D2E] sm:text-4xl">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl">
               From Shop Registration to Daily Closing
             </h2>
             <p className="mt-3 text-sm text-[#47785C]">
@@ -713,10 +701,7 @@ export default function HomePage() {
       <section className="py-20 bg-[#F4FAF5] border-b border-[#CDE8D5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-              Target Market Verticals
-            </span>
-            <h2 className="mt-2 text-3xl font-black text-[#063D2E] sm:text-4xl">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl">
               Tailored for Agricultural Wholesale Trades
             </h2>
             <p className="mt-3 text-sm text-[#47785C]">
@@ -763,10 +748,7 @@ export default function HomePage() {
       <section className="py-20 bg-[#063D2E] text-white border-b border-[#0A503B]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
-              Enterprise Governance
-            </span>
-            <h2 className="mt-2 text-3xl font-black sm:text-4xl text-white">
+            <h2 className="text-3xl font-black sm:text-4xl text-white">
               Zero Compromise on Data Isolation & Security
             </h2>
             <p className="mt-3 text-sm text-[#C4E2CF]">
@@ -831,10 +813,7 @@ export default function HomePage() {
       <section className="py-20 bg-white border-b border-[#CDE8D5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-              Transparent SaaS Pricing
-            </span>
-            <h2 className="mt-2 text-3xl font-black text-[#063D2E] sm:text-4xl">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl">
               Simple, Predictable Mandi Subscription Plans
             </h2>
             <p className="mt-3 text-sm text-[#47785C]">
@@ -925,10 +904,7 @@ export default function HomePage() {
       <section className="py-20 bg-[#F4FAF5] border-b border-[#CDE8D5]">
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-              Frequently Asked Questions
-            </span>
-            <h2 className="mt-2 text-3xl font-black text-[#063D2E] sm:text-4xl">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl">
               Everything You Need to Know
             </h2>
           </div>
@@ -968,9 +944,6 @@ export default function HomePage() {
           <div className="grid gap-12 lg:grid-cols-12 items-center">
             {/* Left information */}
             <div className="lg:col-span-5 space-y-6">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-                Schedule a Guided Demo
-              </span>
               <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl leading-tight">
                 See How BSG Accelerates Your Daily Mandi Operations
               </h2>
@@ -1125,9 +1098,6 @@ export default function HomePage() {
         {/* Subtle radial emerald glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-4xl px-4 text-center space-y-6">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
-            Transform Your Trading Operations
-          </span>
           <h2 className="text-3xl font-black sm:text-5xl leading-tight">
             Bring Your Entire Mandi Operation Into One Platform.
           </h2>

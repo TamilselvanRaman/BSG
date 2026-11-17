@@ -152,15 +152,12 @@ export default function FeaturesPage() {
       <PublicNavbar />
 
       {/* Header */}
-      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-[#F4FAF5] to-[#E8F5EC] py-16 lg:py-24">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-white via-[#F4FAF5] to-[#E8F5EC]/60 py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-            Enterprise Architecture & Capabilities
-          </span>
-          <h1 className="mt-3 text-4xl font-black text-[#063D2E] sm:text-5xl lg:text-6xl tracking-tight">
-            Engineered for High-Volume Mandis
+          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[#063D2E] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+            Engineered for High-Volume Mandi Operations
           </h1>
-          <p className="mx-auto mt-6 max-w-3xl text-base sm:text-lg text-[#47785C] leading-relaxed">
+          <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-[#47785C] leading-relaxed">
             Every module in BSG is purpose-built for the unique speed, weighment methods, and financial credit rituals of agricultural wholesale markets.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
@@ -263,9 +260,6 @@ export default function FeaturesPage() {
       <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-4xl px-4 text-center space-y-6">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
-            Deploy to Your Market Yard
-          </span>
           <h2 className="text-3xl font-black sm:text-5xl">
             Upgrade Your Mandi with Enterprise Software Today
           </h2>

@@ -83,40 +83,65 @@ export default function PricingPage() {
       <PublicNavbar />
 
       {/* Hero Header */}
-      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-[#F4FAF5] to-[#E8F5EC] py-16 lg:py-24">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-white via-[#F4FAF5] to-[#E8F5EC]/60 py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
-            Transparent Subscriptions
-          </span>
-          <h1 className="mt-3 text-4xl font-black text-[#063D2E] sm:text-5xl lg:text-6xl tracking-tight">
-            Simple, Predictable Plans for Every Mandi Shop
+          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[#063D2E] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+            Simple, Predictable Plans for Every Mandi Business
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-[#47785C] max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-[#47785C] max-w-2xl mx-auto leading-relaxed">
             Every plan includes our strict multi-user license protection, digital bag weighment tables, and instant WhatsApp billing. Zero hidden commissions.
           </p>
 
-          {/* Billing Cycle Toggle */}
-          <div className="mt-10 flex items-center justify-center gap-3">
-            <span className={`text-xs font-bold ${!annualBilling ? "text-[#063D2E]" : "text-[#71917B]"}`}>
-              Monthly Billing
-            </span>
-            <button
-              onClick={() => setAnnualBilling(!annualBilling)}
-              className="relative h-7 w-12 rounded-full bg-[#087A50] transition-colors focus:outline-none"
-              aria-label="Toggle annual billing"
-            >
-              <span
-                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
-                  annualBilling ? "translate-x-6" : "translate-x-1"
+          {/* Billing Cycle Segmented Control */}
+          <div className="mt-8 flex flex-col items-center justify-center gap-4">
+            <div className="inline-flex items-center rounded-full border border-[#CDE8D5] bg-white p-1.5 shadow-xs">
+              <button
+                type="button"
+                onClick={() => setAnnualBilling(false)}
+                className={`rounded-full px-5 py-2 text-xs font-bold transition-all ${
+                  !annualBilling
+                    ? "bg-[#087A50] text-white shadow-xs"
+                    : "text-[#47785C] hover:text-[#063D2E]"
                 }`}
-              />
-            </button>
-            <span className={`text-xs font-bold ${annualBilling ? "text-[#063D2E]" : "text-[#71917B]"}`}>
-              Annual Billing
-            </span>
-            <span className="rounded-full bg-[#DDF2E4] border border-[#CDE8D5] px-2.5 py-0.5 text-[10px] font-bold text-[#087A50]">
-              Save 2 Months Free
-            </span>
+              >
+                Monthly Billing
+              </button>
+              <button
+                type="button"
+                onClick={() => setAnnualBilling(true)}
+                className={`rounded-full px-5 py-2 text-xs font-bold transition-all flex items-center gap-2 ${
+                  annualBilling
+                    ? "bg-[#087A50] text-white shadow-xs"
+                    : "text-[#47785C] hover:text-[#063D2E]"
+                }`}
+              >
+                <span>Annual Billing</span>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold tracking-wide ${
+                    annualBilling
+                      ? "bg-[#063D2E] text-[#DDF2E4]"
+                      : "bg-[#E8F5EC] text-[#087A50]"
+                  }`}
+                >
+                  Save 20%
+                </span>
+              </button>
+            </div>
+
+            <div className="flex flex-wrap items-center justify-center gap-5 text-xs font-semibold text-[#47785C]">
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A]" />
+                30-Day Free Trial
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A]" />
+                No Credit Card Required
+              </span>
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A]" />
+                3-Seat License Included
+              </span>
+            </div>
           </div>
         </div>
       </section>
@@ -249,9 +274,6 @@ export default function PricingPage() {
       <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-4xl px-4 text-center space-y-6">
-          <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
-            Risk-Free Guarantee
-          </span>
           <h2 className="text-3xl font-black sm:text-5xl">
             Test Drive BSG in Your Mandi for 30 Days
           </h2>

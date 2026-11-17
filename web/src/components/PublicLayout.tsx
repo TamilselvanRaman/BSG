@@ -27,31 +27,28 @@ export function PublicNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[#CDE8D5] bg-[#F4FAF5]/95 backdrop-blur-md transition-all shadow-xs">
+    <header className="sticky top-0 z-50 w-full border-b border-[#CDE8D5] bg-white/95 backdrop-blur-md transition-all shadow-xs">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center group transition-opacity hover:opacity-95">
           <BsgLogo size="md" />
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 lg:flex">
+        {/* Desktop Navigation Capsule Island */}
+        <nav className="hidden items-center rounded-full border border-[#D5E8DA] bg-[#EBF3ED] p-1 shadow-xs lg:flex">
           {NAV_LINKS.map((item) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-3.5 py-2 text-sm font-semibold transition-all rounded-xl ${
+                className={`rounded-full px-4 py-1.5 text-xs transition-all ${
                   active
-                    ? "text-[#123B29] font-bold bg-[#DDF2E4]"
-                    : "text-[#47785C] hover:text-[#123B29] hover:bg-[#E8F5EC]"
+                    ? "bg-white text-[#063D2E] font-bold shadow-xs"
+                    : "text-[#47785C] hover:text-[#063D2E] hover:bg-white/60 font-semibold"
                 }`}
               >
                 {item.label}
-                {active && (
-                  <span className="absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-[#10A66A] rounded-full" />
-                )}
               </Link>
             );
           })}
@@ -61,13 +58,13 @@ export function PublicNavbar() {
         <div className="hidden items-center gap-2.5 sm:flex">
           <Link
             href="/login"
-            className="rounded-xl px-4 py-2 text-sm font-bold text-[#123B29] hover:bg-[#E8F5EC] transition"
+            className="rounded-xl border border-[#D5E8DA] bg-white px-4 py-2 text-xs font-bold text-[#063D2E] hover:bg-[#E8F5EC] shadow-xs transition"
           >
             Sign In
           </Link>
           <Link
             href="/register"
-            className="inline-flex items-center gap-2 rounded-xl bg-[#087A50] px-4 py-2.5 text-xs font-bold text-white shadow-sm hover:bg-[#063D2E] active:scale-[0.98] transition-all"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-[#087A50] px-4 py-2 text-xs font-bold text-white shadow-sm hover:bg-[#063D2E] active:scale-[0.98] transition-all"
           >
             <span>Start Free Trial</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -77,7 +74,7 @@ export function PublicNavbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="rounded-xl p-2 text-[#123B29] hover:bg-[#E8F5EC] lg:hidden transition"
+          className="rounded-xl p-2 text-[#063D2E] hover:bg-[#E8F5EC] lg:hidden transition"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -86,27 +83,30 @@ export function PublicNavbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="border-b border-[#CDE8D5] bg-[#F4FAF5] px-6 py-4 shadow-xl backdrop-blur-md lg:hidden">
+        <div className="border-b border-[#CDE8D5] bg-white px-6 py-4 shadow-xl backdrop-blur-md lg:hidden">
           <nav className="flex flex-col space-y-1.5">
-            {NAV_LINKS.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`rounded-xl px-3.5 py-2 text-sm font-bold transition ${
-                  pathname === item.href
-                    ? "bg-[#DDF2E4] text-[#123B29]"
-                    : "text-[#47785C] hover:bg-[#E8F5EC]"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((item) => {
+              const active = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`rounded-xl px-3.5 py-2 text-sm font-bold transition ${
+                    active
+                      ? "bg-[#E8F5EC] text-[#063D2E]"
+                      : "text-[#47785C] hover:bg-[#F4FAF5]"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
             <div className="pt-3.5 border-t border-[#CDE8D5] flex flex-col gap-2">
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center rounded-xl border border-[#CDE8D5] bg-white py-2.5 text-xs font-bold text-[#123B29] hover:bg-[#E8F5EC] transition"
+                className="w-full text-center rounded-xl border border-[#D5E8DA] bg-white py-2.5 text-xs font-bold text-[#063D2E] hover:bg-[#E8F5EC] transition"
               >
                 Sign In to Portal
               </Link>
