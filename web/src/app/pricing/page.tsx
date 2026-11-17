@@ -87,8 +87,8 @@ export default function PricingPage() {
       {/* Hero Header */}
       <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-6 text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3.5 py-1 text-xs font-bold text-blue-700">
-            <Sparkles className="h-3.5 w-3.5" />
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3.5 py-1 text-xs font-bold text-emerald-800">
+            <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             Transparent Mandi SaaS Pricing
           </span>
           <h1 className="mt-5 text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
@@ -137,12 +137,12 @@ export default function PricingPage() {
                   key={plan.id}
                   className={`relative flex flex-col justify-between rounded-3xl p-8 transition-all ${
                     plan.popular
-                      ? "border-2 border-blue-600 bg-white shadow-xl shadow-blue-600/10 lg:-translate-y-2"
+                      ? "border-2 border-emerald-600 bg-white shadow-xl shadow-emerald-600/10 lg:-translate-y-2"
                       : "border border-slate-200 bg-white shadow-sm hover:shadow-md"
                   }`}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 px-4 py-1 text-[11px] font-extrabold text-white shadow-md uppercase tracking-wider">
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-1 text-[11px] font-extrabold text-white shadow-md uppercase tracking-wider">
                       Most Popular in Mandis
                     </div>
                   )}
@@ -183,7 +183,7 @@ export default function PricingPage() {
                         href="/contact"
                         className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-300 py-3 text-xs font-bold text-slate-800 hover:bg-slate-50 transition"
                       >
-                        <PhoneCall className="h-3.5 w-3.5 text-blue-600" />
+                        <PhoneCall className="h-3.5 w-3.5 text-emerald-600" />
                         <span>{plan.buttonLabel}</span>
                       </Link>
                     ) : (
@@ -191,7 +191,7 @@ export default function PricingPage() {
                         href="/register"
                         className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-xs font-bold transition shadow-sm ${
                           plan.popular
-                            ? "bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:from-blue-700 hover:to-indigo-700 shadow-blue-600/20"
+                            ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white hover:from-emerald-700 hover:to-teal-800 shadow-emerald-600/20"
                             : "bg-slate-900 text-white hover:bg-slate-800"
                         }`}
                       >

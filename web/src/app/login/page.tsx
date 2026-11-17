@@ -10,12 +10,15 @@ import {
   ArrowRight,
   BarChart3,
   CheckCircle2,
+  Crown,
   Eye,
   EyeOff,
   Lock,
   Scale,
   ShieldCheck,
   Sparkles,
+  Store,
+  User,
   UserCheck,
   Zap,
 } from "lucide-react";
@@ -104,12 +107,12 @@ export default function LoginPage() {
       <main className="flex flex-1 items-center justify-center py-12 px-6">
         <div className="w-full max-w-4xl overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-xl shadow-slate-200/50 grid lg:grid-cols-12">
           {/* Left: Brand showcase */}
-          <div className="hidden lg:flex lg:col-span-5 flex-col justify-between bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 p-8 text-white">
+          <div className="hidden lg:flex lg:col-span-5 flex-col justify-between bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900 p-8 text-white">
             <div>
               <BsgLogo size="md" theme="dark" />
 
               <div className="mt-12 space-y-4">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-900/60 border border-blue-700/60 px-3 py-1 text-[11px] font-bold text-blue-300">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-900/60 border border-emerald-700/60 px-3 py-1 text-[11px] font-bold text-emerald-300">
                   <Sparkles className="h-3 w-3" />
                   BSG Mandi OS Cloud Portal
                 </span>
@@ -141,7 +144,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="pt-8 border-t border-slate-800 text-[11px] text-slate-400 flex items-center justify-between">
+            <div className="pt-8 border-t border-emerald-900/60 text-[11px] text-slate-400 flex items-center justify-between">
               <span>ACID Multi-Tenant</span>
               <span>AES-256 Encrypted</span>
             </div>
@@ -150,8 +153,8 @@ export default function LoginPage() {
           {/* Right: Login Form */}
           <div className="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center">
             <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-bold text-blue-700">
-                <Lock className="h-3 w-3" />
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-[11px] font-bold text-emerald-800">
+                <Lock className="h-3 w-3 text-emerald-600" />
                 Unified Single Sign-In
               </div>
               <h1 className="text-2xl font-bold text-slate-900 mt-2">Sign In to Workspace</h1>
@@ -177,7 +180,7 @@ export default function LoginPage() {
                   placeholder="e.g. vinayaka_admin or superadmin"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                  className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                 />
               </div>
 
@@ -188,7 +191,7 @@ export default function LoginPage() {
                   </label>
                   <Link
                     href="/forgot-password"
-                    className="text-[11px] font-semibold text-blue-600 hover:text-blue-700"
+                    className="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800"
                   >
                     Forgot Password?
                   </Link>
@@ -200,7 +203,7 @@ export default function LoginPage() {
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm pr-10 focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm pr-10 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                   <button
                     type="button"
@@ -218,7 +221,7 @@ export default function LoginPage() {
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
+                    className="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 h-3.5 w-3.5"
                   />
                   <span>Keep me signed in for 30 days</span>
                 </label>
@@ -227,21 +230,21 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-bold text-white shadow-md shadow-blue-600/25 hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/25 hover:from-emerald-700 hover:to-teal-800 transition disabled:opacity-50"
               >
                 <span>{loading ? "Authenticating..." : "Sign In to Portal"}</span>
                 <ArrowRight className="h-4 w-4" />
               </button>
             </form>
 
-            {/* Quick Demo Autofill Cards */}
+            {/* Quick Demo Autofill Cards - ZERO EMOJIS, PURE SVG ICONS */}
             <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
               <div className="flex items-center justify-between mb-2.5">
                 <span className="text-[10px] uppercase font-bold text-slate-600 tracking-wider">
                   Instant 1-Click Role Login (Direct Access)
                 </span>
-                <span className="text-[10px] text-emerald-600 font-bold flex items-center gap-1">
-                  <Zap className="h-3 w-3" />
+                <span className="text-[10px] text-emerald-700 font-bold flex items-center gap-1">
+                  <Zap className="h-3 w-3 text-emerald-600" />
                   Instant Direct Login
                 </span>
               </div>
@@ -249,36 +252,38 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => handleInstantRoleLogin("SUPER_ADMIN")}
-                  className="text-left rounded-xl border border-blue-200 bg-blue-50/70 p-3 hover:bg-blue-100 hover:border-blue-400 transition shadow-xs group"
+                  className="text-left rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 hover:bg-emerald-100 hover:border-emerald-400 transition shadow-xs group"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 font-bold text-xs text-blue-900">
-                      <span>👑</span>
+                    <div className="flex items-center gap-1.5 font-bold text-xs text-emerald-950">
+                      <Crown className="h-4 w-4 text-emerald-700" />
                       <span>Main Admin</span>
                     </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-blue-500 group-hover:translate-x-0.5 transition" />
+                    <ArrowRight className="h-3.5 w-3.5 text-emerald-600 group-hover:translate-x-0.5 transition" />
                   </div>
-                  <p className="text-[10px] text-blue-700 mt-1 line-clamp-1 font-medium">Platform Master (SaaS)</p>
-                  <span className="inline-block mt-1.5 rounded bg-blue-200/60 px-1.5 py-0.5 text-[9px] font-bold text-blue-800">
-                    Click to Open ➜
+                  <p className="text-[10px] text-emerald-800 mt-1 line-clamp-1 font-medium">Platform Master (SaaS)</p>
+                  <span className="inline-flex items-center gap-1 mt-1.5 rounded bg-emerald-200/70 px-1.5 py-0.5 text-[9px] font-bold text-emerald-900">
+                    <span>Click to Open</span>
+                    <ArrowRight className="h-2.5 w-2.5" />
                   </span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleInstantRoleLogin("ADMIN")}
-                  className="text-left rounded-xl border border-purple-200 bg-purple-50/70 p-3 hover:bg-purple-100 hover:border-purple-400 transition shadow-xs group"
+                  className="text-left rounded-xl border border-teal-200 bg-teal-50/70 p-3 hover:bg-teal-100 hover:border-teal-400 transition shadow-xs group"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 font-bold text-xs text-purple-900">
-                      <span>🏪</span>
+                    <div className="flex items-center gap-1.5 font-bold text-xs text-teal-950">
+                      <Store className="h-4 w-4 text-teal-700" />
                       <span>Sub Admin</span>
                     </div>
-                    <ArrowRight className="h-3.5 w-3.5 text-purple-500 group-hover:translate-x-0.5 transition" />
+                    <ArrowRight className="h-3.5 w-3.5 text-teal-600 group-hover:translate-x-0.5 transition" />
                   </div>
-                  <p className="text-[10px] text-purple-700 mt-1 line-clamp-1 font-medium">Shop Owner (All 10 Features)</p>
-                  <span className="inline-block mt-1.5 rounded bg-purple-200/60 px-1.5 py-0.5 text-[9px] font-bold text-purple-800">
-                    Click to Open ➜
+                  <p className="text-[10px] text-teal-800 mt-1 line-clamp-1 font-medium">Shop Owner (All 10 Features)</p>
+                  <span className="inline-flex items-center gap-1 mt-1.5 rounded bg-teal-200/70 px-1.5 py-0.5 text-[9px] font-bold text-teal-900">
+                    <span>Click to Open</span>
+                    <ArrowRight className="h-2.5 w-2.5" />
                   </span>
                 </button>
 
@@ -289,32 +294,33 @@ export default function LoginPage() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 font-bold text-xs text-slate-800">
-                      <span>👤</span>
+                      <User className="h-4 w-4 text-slate-600" />
                       <span>Staff / Cashier</span>
                     </div>
                     <ArrowRight className="h-3.5 w-3.5 text-slate-500 group-hover:translate-x-0.5 transition" />
                   </div>
                   <p className="text-[10px] text-slate-600 mt-1 line-clamp-1 font-medium">Billing & Weighment</p>
-                  <span className="inline-block mt-1.5 rounded bg-slate-100 px-1.5 py-0.5 text-[9px] font-bold text-slate-700">
-                    Click to Open ➜
+                  <span className="inline-flex items-center gap-1 mt-1.5 rounded bg-slate-100 px-1.5 py-0.5 text-[9px] font-bold text-slate-700">
+                    <span>Click to Open</span>
+                    <ArrowRight className="h-2.5 w-2.5" />
                   </span>
                 </button>
               </div>
 
               <div className="mt-3 pt-2.5 border-t border-slate-200 text-[11px] text-slate-500 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+                  <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
                   <span>
                     <strong>Strict License:</strong> Max 3 concurrent user logins enforced per shop tenant.
                   </span>
                 </div>
-                <span className="text-[10px] font-semibold text-emerald-600">Direct Login Ready</span>
+                <span className="text-[10px] font-semibold text-emerald-700">Direct Login Ready</span>
               </div>
             </div>
 
             <div className="mt-5 text-center text-xs text-slate-500">
               Need a new shop workspace?{" "}
-              <Link href="/register" className="font-bold text-blue-600 hover:underline">
+              <Link href="/register" className="font-bold text-emerald-700 hover:underline">
                 Register Store with 30-Day Free Trial
               </Link>
             </div>

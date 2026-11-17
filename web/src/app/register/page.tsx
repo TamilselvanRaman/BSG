@@ -78,7 +78,7 @@ export default function RegisterBusinessPage() {
 
               <Link
                 href="/login"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-xs font-bold text-white shadow hover:from-blue-700 hover:to-indigo-700 transition"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-3 text-xs font-bold text-white shadow hover:from-emerald-700 hover:to-teal-800 transition"
               >
                 <span>Proceed to Sign In</span>
                 <ArrowRight className="h-4 w-4" />
@@ -87,7 +87,7 @@ export default function RegisterBusinessPage() {
           ) : (
             <div>
               <div className="flex items-center gap-3">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-500/20">
                   <Building2 className="h-5 w-5" />
                 </div>
                 <div>
@@ -207,14 +207,14 @@ export default function RegisterBusinessPage() {
                         placeholder="At least 6 characters"
                         value={form.password}
                         onChange={(e) => setForm({ ...form, password: e.target.value })}
-                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-3 flex items-start gap-2.5 text-xs text-blue-900">
-                  <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                <div className="rounded-xl border border-emerald-200 bg-emerald-50/60 p-3 flex items-start gap-2.5 text-xs text-emerald-950">
+                  <ShieldCheck className="h-4 w-4 text-emerald-700 shrink-0 mt-0.5" />
                   <span>
                     Includes 30-Day Free Trial with 3 Authorized Login Seats (1 Store Admin + 2 Staff/Cashiers) and all 10 Mandi features unlocked.
                   </span>
@@ -223,7 +223,7 @@ export default function RegisterBusinessPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-bold text-white shadow-md shadow-blue-600/25 hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 py-3 text-sm font-bold text-white shadow-md shadow-emerald-600/25 hover:from-emerald-700 hover:to-teal-800 transition disabled:opacity-50"
                 >
                   <span>{loading ? "Provisioning Shop..." : "Create Shop Workspace"}</span>
                   <ArrowRight className="h-4 w-4" />
@@ -232,7 +232,7 @@ export default function RegisterBusinessPage() {
 
               <div className="mt-6 text-center text-xs text-slate-500">
                 Already registered?{" "}
-                <Link href="/login" className="font-bold text-blue-600 hover:underline">
+                <Link href="/login" className="font-bold text-emerald-700 hover:underline">
                   Sign In to Workspace
                 </Link>
               </div>

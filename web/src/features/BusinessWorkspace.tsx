@@ -32,6 +32,8 @@ import {
   ShieldCheck,
   ShoppingBag,
   Sparkles,
+  Store,
+  User,
   Users,
   Wallet,
 } from "lucide-react";
@@ -640,7 +642,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                 onClick={() => setActiveTab(item.id as WorkspaceTab)}
                 className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 transition ${
                   active
-                    ? "bg-blue-600 text-white"
+                    ? "bg-emerald-600 text-white shadow-xs"
                     : "text-slate-300 hover:bg-slate-800 hover:text-white"
                 }`}
               >
@@ -2372,8 +2374,8 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                           }
                           className="rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold bg-white text-slate-800"
                         >
-                          <option value="BUSINESS_USER">👤 Staff / Cashier (Billing & Weighment)</option>
-                          <option value="ADMIN">🏪 Sub Admin (Full Access to All 10 Features)</option>
+                          <option value="BUSINESS_USER">Staff / Cashier (Billing & Weighment)</option>
+                          <option value="ADMIN">Sub Admin (Full Access to All 10 Features)</option>
                         </select>
                         <input
                           type="text"
@@ -2408,7 +2410,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         />
                         <button
                           type="submit"
-                          className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 shadow-sm"
+                          className="rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 shadow-sm transition"
                         >
                           + Create {empForm.roleType === "ADMIN" ? "Sub Admin" : "Staff"}
                         </button>
@@ -2441,12 +2443,14 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                             </div>
                             <div>
                               {u.role?.code === "ADMIN" ? (
-                                <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-50 border border-purple-200 px-2.5 py-1 text-[11px] font-bold text-purple-700 shadow-xs">
-                                  <span>🏪</span> Sub Admin (All Features)
+                                <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-300 px-2.5 py-1 text-[11px] font-bold text-emerald-800 shadow-xs">
+                                  <Store className="h-3.5 w-3.5 text-emerald-700" />
+                                  <span>Sub Admin (All Features)</span>
                                 </span>
                               ) : (
-                                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-2.5 py-1 text-[11px] font-semibold text-blue-700 shadow-xs">
-                                  <span>👤</span> Staff / Cashier
+                                <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 border border-slate-300 px-2.5 py-1 text-[11px] font-semibold text-slate-700 shadow-xs">
+                                  <User className="h-3.5 w-3.5 text-slate-500" />
+                                  <span>Staff / Cashier</span>
                                 </span>
                               )}
                             </div>

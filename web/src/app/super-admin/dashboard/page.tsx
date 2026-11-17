@@ -407,7 +407,7 @@ export default function SuperAdminDashboardPage() {
                 onClick={() => setActiveTab(item.id as SuperTab)}
                 className={`flex w-full items-center gap-3 rounded-lg px-3.5 py-2.5 font-medium transition ${
                   active
-                    ? "bg-blue-600 text-white"
+                    ? "bg-emerald-600 text-white shadow-xs"
                     : "text-slate-300 hover:bg-slate-800 hover:text-white"
                 }`}
               >
@@ -450,7 +450,7 @@ export default function SuperAdminDashboardPage() {
             </button>
             <button
               onClick={() => setShowNewBizModal(true)}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-emerald-700 shadow-sm transition"
             >
               <Plus className="h-3.5 w-3.5" />
               New Tenant Business
@@ -1233,7 +1233,10 @@ export default function SuperAdminDashboardPage() {
                     onChange={(e) => setNewBizForm({ ...newBizForm, enableAllFeatures: e.target.checked })}
                     className="h-4 w-4 rounded border-blue-400 text-blue-600 focus:ring-blue-500"
                   />
-                  <span>⚡ 1-Click: Enable All 10 Mandi Features by Default</span>
+                  <span className="flex items-center gap-1.5 font-bold text-slate-900">
+                    <Zap className="h-4 w-4 text-emerald-600 shrink-0" />
+                    <span>1-Click: Enable All 10 Mandi Features by Default</span>
+                  </span>
                 </label>
                 <p className="text-[11px] text-blue-700 mt-1 pl-6">
                   Includes Multi-Product Lots, Multi-Product Billing, Bag Weighment Scale, Smart Chart Auctions, Partner Ledgers, and WhatsApp bills.

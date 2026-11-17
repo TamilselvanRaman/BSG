@@ -167,23 +167,23 @@ export default function HomePage() {
       {/* ============================================================
           HERO SECTION
          ============================================================ */}
-      <section className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-white via-slate-50 to-blue-50/30 pt-16 pb-20 lg:pt-24 lg:pb-32">
+      <section className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-white via-slate-50 to-emerald-50/25 pt-16 pb-20 lg:pt-24 lg:pb-32">
         {/* Glow circles */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-gradient-to-tr from-blue-400/10 via-indigo-500/10 to-teal-400/10 blur-3xl pointer-events-none rounded-full" />
+        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[350px] bg-gradient-to-tr from-emerald-400/15 via-teal-500/15 to-green-400/10 blur-3xl pointer-events-none rounded-full" />
 
         <div className="relative mx-auto max-w-7xl px-6">
           <div className="mx-auto max-w-3xl text-center">
             {/* Pill Banner */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-4 py-1.5 text-xs font-bold text-blue-700 shadow-sm backdrop-blur-sm">
+            <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/80 px-4 py-1.5 text-xs font-bold text-emerald-800 shadow-sm backdrop-blur-sm">
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
               <span>BSG Mandi OS v1.1 • Multi-Product Billing & Bag Weighment Live</span>
-              <Sparkles className="h-3.5 w-3.5 text-blue-600" />
+              <Sparkles className="h-3.5 w-3.5 text-emerald-600" />
             </div>
 
             {/* Headline */}
             <h1 className="mt-7 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.12]">
               Run Your Entire Goods Inward, Mandi Trade & Billing in{" "}
-              <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-green-700 bg-clip-text text-transparent">
                 One BSG Platform
               </span>
             </h1>
@@ -198,7 +198,7 @@ export default function HomePage() {
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
               <Link
                 href="/register"
-                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-blue-600/25 hover:from-blue-700 hover:to-indigo-700 transition hover:shadow-xl hover:-translate-y-0.5"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-emerald-600/25 hover:from-emerald-700 hover:to-teal-800 transition hover:shadow-xl hover:-translate-y-0.5"
               >
                 <span>Start 30-Day Free Trial</span>
                 <ArrowRight className="h-4 w-4" />
@@ -207,7 +207,7 @@ export default function HomePage() {
                 href="#enquiry-section"
                 className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 text-sm font-bold text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-400 transition hover:-translate-y-0.5"
               >
-                <PhoneCall className="h-4 w-4 text-blue-600" />
+                <PhoneCall className="h-4 w-4 text-emerald-600" />
                 <span>Request Mandi Demo</span>
               </a>
             </div>
@@ -265,7 +265,7 @@ export default function HomePage() {
       <section className="py-20 bg-slate-900 text-white border-b border-slate-800">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-400">
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-400">
               End-to-End Workflow
             </span>
             <h2 className="mt-2 text-3xl font-black sm:text-4xl">
@@ -280,17 +280,17 @@ export default function HomePage() {
             {WORKFLOW_STEPS.map((s) => (
               <div
                 key={s.step}
-                className="relative rounded-2xl border border-slate-800 bg-slate-800/60 p-6 backdrop-blur hover:border-blue-500/50 hover:bg-slate-800 transition group"
+                className="relative rounded-2xl border border-slate-800 bg-slate-800/60 p-6 backdrop-blur hover:border-emerald-500/50 hover:bg-slate-800 transition group"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-2xl font-black text-blue-400 group-hover:scale-110 transition-transform">
+                  <span className="text-2xl font-black text-emerald-400 group-hover:scale-110 transition-transform">
                     {s.step}
                   </span>
-                  <span className="rounded-full bg-blue-900/40 border border-blue-700/50 px-2.5 py-0.5 text-[10px] font-bold text-blue-300">
+                  <span className="rounded-full bg-emerald-950/60 border border-emerald-700/50 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300">
                     {s.tag}
                   </span>
                 </div>
-                <h3 className="mt-4 text-base font-bold text-white group-hover:text-blue-300 transition-colors">
+                <h3 className="mt-4 text-base font-bold text-white group-hover:text-emerald-300 transition-colors">
                   {s.title}
                 </h3>
                 <p className="mt-2 text-xs text-slate-300 leading-relaxed">
@@ -308,7 +308,7 @@ export default function HomePage() {
       <section className="py-20 bg-white border-b border-slate-200">
         <div className="mx-auto max-w-7xl px-6">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-700">
               Complete Mandi Suite
             </span>
             <h2 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl">
@@ -325,17 +325,17 @@ export default function HomePage() {
               return (
                 <div
                   key={item.title}
-                  className="rounded-2xl border border-slate-200 bg-slate-50/50 p-6 hover:bg-white hover:border-blue-300 hover:shadow-lg transition-all group"
+                  className="rounded-2xl border border-slate-200 bg-slate-50/50 p-6 hover:bg-white hover:border-emerald-300 hover:shadow-lg transition-all group"
                 >
                   <div className="flex items-center justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100/80 text-blue-700 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100/80 text-emerald-800 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
                       <Icon className="h-6 w-6" />
                     </div>
                     <span className="rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-[10px] font-bold text-slate-600 uppercase tracking-wider">
                       {item.badge}
                     </span>
                   </div>
-                  <h3 className="mt-5 text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                  <h3 className="mt-5 text-base font-bold text-slate-900 group-hover:text-emerald-700 transition-colors">
                     {item.title}
                   </h3>
                   <p className="mt-2 text-xs text-slate-600 leading-relaxed">
@@ -351,13 +351,13 @@ export default function HomePage() {
       {/* ============================================================
           ENQUIRY & DEMO CONTACT FORM
          ============================================================ */}
-      <section id="enquiry-section" className="py-20 bg-gradient-to-b from-slate-50 to-blue-50/40">
+      <section id="enquiry-section" className="py-20 bg-gradient-to-b from-slate-50 to-emerald-50/30">
         <div className="mx-auto max-w-7xl px-6">
           <div className="grid gap-12 lg:grid-cols-12 items-center">
             {/* Left pitch */}
             <div className="lg:col-span-5 space-y-6">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3.5 py-1 text-xs font-bold text-blue-800">
-                <Zap className="h-3.5 w-3.5 text-blue-600" />
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-100 px-3.5 py-1 text-xs font-bold text-emerald-800">
+                <Zap className="h-3.5 w-3.5 text-emerald-600" />
                 Free Onboarding Support
               </span>
               <h2 className="text-3xl font-black text-slate-900 sm:text-4xl">
@@ -437,7 +437,7 @@ export default function HomePage() {
                           placeholder="e.g. Kannan Murugan"
                           value={enquiryForm.fullName}
                           onChange={(e) => setEnquiryForm({ ...enquiryForm, fullName: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                       <div>
@@ -450,7 +450,7 @@ export default function HomePage() {
                           placeholder="e.g. BSG Trading Corp"
                           value={enquiryForm.shopName}
                           onChange={(e) => setEnquiryForm({ ...enquiryForm, shopName: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -466,7 +466,7 @@ export default function HomePage() {
                           placeholder="10-digit mobile number"
                           value={enquiryForm.phone}
                           onChange={(e) => setEnquiryForm({ ...enquiryForm, phone: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                       <div>
@@ -479,7 +479,7 @@ export default function HomePage() {
                           placeholder="e.g. Coimbatore / Oddanchatram"
                           value={enquiryForm.city}
                           onChange={(e) => setEnquiryForm({ ...enquiryForm, city: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -492,7 +492,7 @@ export default function HomePage() {
                         <select
                           value={enquiryForm.businessType}
                           onChange={(e) => setEnquiryForm({ ...enquiryForm, businessType: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:border-blue-600 focus:outline-none bg-white"
+                          className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none bg-white"
                         >
                           <option value="Vegetable Mandi">Vegetable Mandi Trader</option>
                           <option value="Fruit Commission Agent">Fruit Commission Agent</option>
@@ -508,7 +508,7 @@ export default function HomePage() {
                         <select
                           value={enquiryForm.dailyBags}
                           onChange={(e) => setEnquiryForm({ ...enquiryForm, dailyBags: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:border-blue-600 focus:outline-none bg-white"
+                          className="w-full rounded-xl border border-slate-300 px-3 py-2.5 text-sm focus:border-emerald-600 focus:outline-none bg-white"
                         >
                           <option value="Under 500 Bags">Under 500 Bags / Day</option>
                           <option value="500 - 2000 Bags">500 - 2,000 Bags / Day</option>
@@ -526,14 +526,14 @@ export default function HomePage() {
                         placeholder="Tell us about your weighment flow, printers, or custom commission rate needs..."
                         value={enquiryForm.message}
                         onChange={(e) => setEnquiryForm({ ...enquiryForm, message: e.target.value })}
-                        className="w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-blue-600 focus:outline-none"
+                        className="w-full rounded-xl border border-slate-300 p-3 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                       />
                     </div>
 
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3.5 text-sm font-bold text-white shadow-md shadow-blue-600/25 hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50"
+                      className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 py-3.5 text-sm font-bold text-white shadow-md shadow-emerald-600/25 hover:from-emerald-700 hover:to-teal-800 transition disabled:opacity-50"
                     >
                       <Send className="h-4 w-4" />
                       <span>{submitting ? "Sending Enquiry..." : "Submit Enquiry & Get Free Trial Key"}</span>
@@ -555,7 +555,7 @@ export default function HomePage() {
       <section className="py-20 bg-white border-t border-slate-200">
         <div className="mx-auto max-w-4xl px-6">
           <div className="text-center">
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-700">
               Frequently Asked Questions
             </span>
             <h2 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl">
@@ -580,18 +580,18 @@ export default function HomePage() {
       {/* ============================================================
           BOTTOM CTA BAR
          ============================================================ */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 text-white text-center">
+      <section className="py-16 bg-gradient-to-r from-emerald-700 via-teal-700 to-green-800 text-white text-center">
         <div className="mx-auto max-w-4xl px-6 space-y-6">
           <h2 className="text-3xl font-black sm:text-4xl tracking-tight">
             Start Your Shop's 30-Day Free Trial Today
           </h2>
-          <p className="text-sm text-blue-100 max-w-xl mx-auto">
+          <p className="text-sm text-emerald-100 max-w-xl mx-auto">
             Experience the speed of digital bag weighment, live smart charts, and daily cash tallies.
           </p>
           <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
             <Link
               href="/register"
-              className="rounded-xl bg-white px-7 py-3 text-sm font-bold text-blue-700 shadow-md hover:bg-blue-50 transition"
+              className="rounded-xl bg-white px-7 py-3 text-sm font-bold text-emerald-800 shadow-md hover:bg-emerald-50 transition"
             >
               Register Shop Now
             </Link>
