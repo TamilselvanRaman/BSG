@@ -1119,10 +1119,12 @@ export default function HomePage() {
       </section>
 
       {/* ============================================================
-          11. FINAL CTA (DEEP FOREST GREEN FULL-WIDTH)
+          11. FINAL CTA (RICH FOREST-EMERALD GRADIENT SECTION)
          ============================================================ */}
-      <section className="py-20 bg-[#063D2E] text-white">
-        <div className="mx-auto max-w-4xl px-4 text-center space-y-6">
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
+        {/* Subtle radial emerald glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
+        <div className="relative mx-auto max-w-4xl px-4 text-center space-y-6">
           <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
             Transform Your Trading Operations
           </span>
@@ -1142,7 +1144,7 @@ export default function HomePage() {
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center gap-2 rounded-xl border border-[#0A503B] bg-[#0A503B] hover:bg-[#0E664C] px-7 py-3.5 text-sm font-bold text-white transition"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#10A66A]/40 bg-[#063D2E] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white transition"
             >
               <span>Sign In to Workspace</span>
             </Link>

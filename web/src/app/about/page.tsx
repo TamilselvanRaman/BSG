@@ -98,8 +98,9 @@ export default function AboutPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-[#063D2E] text-white text-center">
-        <div className="mx-auto max-w-4xl px-4 space-y-6">
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white text-center border-t border-[#0E6E50] border-b border-[#063423]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
+        <div className="relative mx-auto max-w-4xl px-4 space-y-6">
           <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
             Experience Enterprise Mandi Tech
           </span>

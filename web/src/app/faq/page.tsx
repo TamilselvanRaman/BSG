@@ -140,8 +140,9 @@ export default function FaqPage() {
       </section>
 
       {/* Still Have Questions */}
-      <section className="py-20 bg-[#063D2E] text-white text-center">
-        <div className="mx-auto max-w-3xl px-4 space-y-4">
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white text-center border-t border-[#0E6E50] border-b border-[#063423]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
+        <div className="relative mx-auto max-w-3xl px-4 space-y-4">
           <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
             Direct Mandi Support
           </span>
@@ -160,7 +161,7 @@ export default function FaqPage() {
             </Link>
             <Link
               href="/register"
-              className="rounded-xl border border-[#0A503B] bg-[#0A503B] hover:bg-[#0E664C] px-6 py-3 text-xs font-bold text-white transition"
+              className="rounded-xl border border-[#10A66A]/40 bg-[#063D2E] hover:bg-[#087A50] px-6 py-3 text-xs font-bold text-white transition"
             >
               Start 30-Day Free Trial
             </Link>

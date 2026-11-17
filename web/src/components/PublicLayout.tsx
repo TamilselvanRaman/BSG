@@ -127,13 +127,13 @@ export function PublicNavbar() {
 
 export function PublicFooter() {
   return (
-    <footer className="border-t border-[#0A503B] bg-[#063D2E] text-[#C4E2CF]">
-      <div className="mx-auto max-w-7xl px-6 py-14">
+    <footer className="border-t-2 border-[#0D5C43] bg-[#021810] text-[#B8DFC6]">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
             <BsgLogo size="md" theme="dark" />
-            <p className="text-xs text-[#C4E2CF] leading-relaxed max-w-sm">
+            <p className="text-xs text-[#A8D9B9] leading-relaxed max-w-sm">
               BSG (Buyer Seller Goods) is the dedicated Enterprise Mandi SaaS & Handheld Operating System for APMC Mandis, Wholesale Vegetable & Fruit Traders, Commission Agents, and Multi-Crop Agricultural Enterprises.
             </p>
             <div className="flex items-center gap-2 pt-2 text-xs font-semibold text-[#10A66A]">
@@ -177,12 +177,12 @@ export function PublicFooter() {
           </div>
         </div>
 
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-[#0A503B] pt-8 text-[11px] text-[#71917B]">
+        <div className="mt-14 flex flex-wrap items-center justify-between gap-4 border-t border-[#063423] pt-8 text-[11px] text-[#5C856C]">
           <p>© {new Date().getFullYear()} BSG Platform Technologies Pvt Ltd. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <Link href="/privacy" className="hover:text-[#C4E2CF] transition">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-[#C4E2CF] transition">Terms of Service</Link>
-            <Link href="/contact" className="hover:text-[#C4E2CF] transition">Mandi Enquiry & Demo</Link>
+            <Link href="/privacy" className="hover:text-[#B8DFC6] transition">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-[#B8DFC6] transition">Terms of Service</Link>
+            <Link href="/contact" className="hover:text-[#B8DFC6] transition">Mandi Enquiry & Demo</Link>
           </div>
         </div>
       </div>
