@@ -115,9 +115,13 @@ export default function LoginPage() {
           {/* Right: Login Form */}
           <div className="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center">
             <div className="space-y-1">
-              <h1 className="text-2xl font-bold text-slate-900">Sign In to Workspace</h1>
+              <div className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-[11px] font-bold text-blue-700">
+                <Lock className="h-3 w-3" />
+                Unified Single Sign-In
+              </div>
+              <h1 className="text-2xl font-bold text-slate-900 mt-2">Sign In to Workspace</h1>
               <p className="text-xs text-slate-500">
-                Enter your registered store username and password to access your dashboard.
+                One login form for everyone. The system automatically detects your role (Main Admin, Sub Admin, or Staff) and redirects to your portal.
               </p>
             </div>
 
@@ -135,7 +139,7 @@ export default function LoginPage() {
                 <input
                   type="text"
                   required
-                  placeholder="e.g. kannan_admin or superadmin"
+                  placeholder="e.g. vinayaka_admin or superadmin"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
@@ -181,7 +185,7 @@ export default function LoginPage() {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 h-3.5 w-3.5"
                   />
-                  <span>Keep me signed in</span>
+                  <span>Keep me signed in for 30 days</span>
                 </label>
               </div>
 
@@ -195,40 +199,67 @@ export default function LoginPage() {
               </button>
             </form>
 
-            {/* Quick Demo Fill Pills */}
-            <div className="mt-8 rounded-2xl border border-slate-200 bg-slate-50 p-3.5">
-              <span className="text-[10px] uppercase font-bold text-slate-500 block mb-2">
-                1-Click Demo Accounts (Instant Testing)
-              </span>
-              <div className="flex flex-wrap gap-2">
-                <button
-                  type="button"
-                  onClick={() => fillDemoCredentials("raman_admin", "Admin@1234")}
-                  className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 transition shadow-sm"
-                >
-                  Store Admin
-                </button>
-                <button
-                  type="button"
-                  onClick={() => fillDemoCredentials("karthik_emp", "Emp@1234")}
-                  className="rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-[11px] font-semibold text-slate-700 hover:bg-slate-100 transition shadow-sm"
-                >
-                  Cashier / Staff
-                </button>
+            {/* Quick Demo Autofill Cards */}
+            <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50/80 p-4">
+              <div className="flex items-center justify-between mb-2.5">
+                <span className="text-[10px] uppercase font-bold text-slate-600 tracking-wider">
+                  Quick Seeded Role Logins (Click to Autofill)
+                </span>
+                <span className="text-[10px] text-blue-600 font-semibold">1-Click Auto Fill</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={() => fillDemoCredentials("superadmin", "SuperAdmin@1234")}
-                  className="rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-700 hover:bg-blue-100 transition shadow-sm"
+                  className="text-left rounded-xl border border-blue-200 bg-blue-50/70 p-2.5 hover:bg-blue-100/70 transition shadow-xs group"
                 >
-                  Super Admin
+                  <div className="flex items-center gap-1.5 font-bold text-xs text-blue-900">
+                    <span>👑</span>
+                    <span>Main Admin</span>
+                  </div>
+                  <p className="text-[10px] text-blue-700 mt-0.5 line-clamp-1">Platform Master (SaaS)</p>
+                  <p className="text-[10px] font-mono text-blue-600 font-medium mt-1">superadmin</p>
                 </button>
+
+                <button
+                  type="button"
+                  onClick={() => fillDemoCredentials("vinayaka_admin", "Admin@1234")}
+                  className="text-left rounded-xl border border-purple-200 bg-purple-50/70 p-2.5 hover:bg-purple-100/70 transition shadow-xs group"
+                >
+                  <div className="flex items-center gap-1.5 font-bold text-xs text-purple-900">
+                    <span>🏪</span>
+                    <span>Sub Admin</span>
+                  </div>
+                  <p className="text-[10px] text-purple-700 mt-0.5 line-clamp-1">Shop Owner (All Features)</p>
+                  <p className="text-[10px] font-mono text-purple-600 font-medium mt-1">vinayaka_admin</p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => fillDemoCredentials("vinayaka_staff", "Staff@1234")}
+                  className="text-left rounded-xl border border-slate-300 bg-white p-2.5 hover:bg-slate-100 transition shadow-xs group"
+                >
+                  <div className="flex items-center gap-1.5 font-bold text-xs text-slate-800">
+                    <span>👤</span>
+                    <span>Staff / Cashier</span>
+                  </div>
+                  <p className="text-[10px] text-slate-600 mt-0.5 line-clamp-1">Billing & Weighment</p>
+                  <p className="text-[10px] font-mono text-slate-500 font-medium mt-1">vinayaka_staff</p>
+                </button>
+              </div>
+
+              <div className="mt-3 pt-2.5 border-t border-slate-200 text-[11px] text-slate-500 flex items-center gap-1.5">
+                <ShieldCheck className="h-3.5 w-3.5 text-blue-600 shrink-0" />
+                <span>
+                  <strong>Strict License:</strong> Max 3 concurrent user logins enforced per shop tenant.
+                </span>
               </div>
             </div>
 
-            <div className="mt-6 text-center text-xs text-slate-500">
+            <div className="mt-5 text-center text-xs text-slate-500">
               Need a new shop workspace?{" "}
               <Link href="/register" className="font-bold text-blue-600 hover:underline">
-                Register with 30-Day Free Trial
+                Register Store with 30-Day Free Trial
               </Link>
             </div>
           </div>

@@ -160,6 +160,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
     fullName: "",
     phone: "",
     password: "",
+    roleType: "BUSINESS_USER" as "ADMIN" | "BUSINESS_USER",
     designation: "Billing Operator",
   });
 
@@ -501,31 +502,66 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
         method: "POST",
         body: JSON.stringify({
           ...empForm,
-          permissions: [
-            "partners:read",
-            "goods:read",
-            "lots:read",
-            "lots:write",
-            "smart_chart:read",
-            "smart_chart:write",
-            "purchases:read",
-            "purchases:write",
-            "sales:read",
-            "sales:write",
-            "payments:read",
-            "inventory:read",
-            "documents:generate",
-          ],
+          designation:
+            empForm.designation ||
+            (empForm.roleType === "ADMIN" ? "Sub Admin / Manager" : "Billing Operator"),
+          permissions:
+            empForm.roleType === "ADMIN"
+              ? [
+                  "partners:read",
+                  "partners:write",
+                  "goods:read",
+                  "goods:write",
+                  "lots:read",
+                  "lots:write",
+                  "smart_chart:read",
+                  "smart_chart:write",
+                  "purchases:read",
+                  "purchases:write",
+                  "sales:read",
+                  "sales:write",
+                  "payments:read",
+                  "payments:write",
+                  "inventory:read",
+                  "inventory:adjust",
+                  "ledgers:read",
+                  "ledgers:export",
+                  "reports:read",
+                  "reports:profit_loss",
+                  "reports:export",
+                  "documents:generate",
+                ]
+              : [
+                  "partners:read",
+                  "goods:read",
+                  "lots:read",
+                  "lots:write",
+                  "smart_chart:read",
+                  "smart_chart:write",
+                  "purchases:read",
+                  "purchases:write",
+                  "sales:read",
+                  "sales:write",
+                  "payments:read",
+                  "inventory:read",
+                  "documents:generate",
+                ],
         }),
       });
+      const createdRole = empForm.roleType;
       setEmpForm({
         username: "",
         fullName: "",
         phone: "",
         password: "",
+        roleType: "BUSINESS_USER",
         designation: "Billing Operator",
       });
-      notify("Employee account created.");
+      notify(
+        createdRole === "ADMIN"
+          ? "Sub Admin created with full access to all 10 features."
+          : "Staff / Cashier account created."
+      );
       loadAllWorkspaceData();
     } catch (err: any) {
       setError(err.message);
@@ -2318,12 +2354,29 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                     ) : (
                       <form
                         onSubmit={handleCreateEmployee}
-                        className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-5"
+                        className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-6"
                       >
+                        <select
+                          value={empForm.roleType}
+                          onChange={(e) =>
+                            setEmpForm({
+                              ...empForm,
+                              roleType: e.target.value as "ADMIN" | "BUSINESS_USER",
+                              designation:
+                                e.target.value === "ADMIN"
+                                  ? "Sub Admin / Store Manager"
+                                  : "Billing Operator / Cashier",
+                            })
+                          }
+                          className="rounded-lg border border-slate-300 px-3 py-2 text-xs font-semibold bg-white text-slate-800"
+                        >
+                          <option value="BUSINESS_USER">👤 Staff / Cashier (Billing & Weighment)</option>
+                          <option value="ADMIN">🏪 Sub Admin (Full Access to All 10 Features)</option>
+                        </select>
                         <input
                           type="text"
                           required
-                          placeholder="Employee Username *"
+                          placeholder="Username *"
                           value={empForm.username}
                           onChange={(e) => setEmpForm({ ...empForm, username: e.target.value })}
                           className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
@@ -2353,31 +2406,48 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         />
                         <button
                           type="submit"
-                          className="rounded-lg bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                          className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700 shadow-sm"
                         >
-                          + Create Employee
+                          + Create {empForm.roleType === "ADMIN" ? "Sub Admin" : "Staff"}
                         </button>
                       </form>
                     )}
 
                     <div className="rounded-xl border border-slate-200 bg-white p-5">
-                      <h3 className="text-sm font-bold text-slate-900">
-                        Business Users & Staff Accounts ({employeesData?.users?.length || 0} / {maxUsers})
-                      </h3>
+                      <div className="flex items-center justify-between mb-3">
+                        <h3 className="text-sm font-bold text-slate-900">
+                          Business Users & Staff Accounts ({employeesData?.users?.length || 0} / {maxUsers})
+                        </h3>
+                        <span className="text-[11px] text-slate-500 font-medium">
+                          Strict License Limit: Max {maxUsers} Users
+                        </span>
+                      </div>
                       <div className="mt-3 divide-y divide-slate-100 text-xs">
                         {(employeesData?.users || []).map((u: any) => (
                           <div key={u.id} className="flex items-center justify-between py-3">
                             <div>
-                              <p className="font-bold text-slate-900">
-                                {u.fullName} ({u.username})
+                              <p className="font-bold text-slate-900 flex items-center gap-2">
+                                <span>{u.fullName}</span>
+                                <span className="font-mono text-[11px] font-normal text-slate-500">
+                                  (@{u.username})
+                                </span>
                               </p>
-                              <p className="text-slate-500">
-                                Role: {u.role?.name} • Status: {u.status}
+                              <p className="text-slate-500 mt-0.5">
+                                Designation: {u.designation || u.role?.name} • Status:{" "}
+                                <span className="text-emerald-600 font-medium">{u.status}</span>
                               </p>
                             </div>
-                            <span className="rounded-full bg-blue-50 px-2.5 py-1 font-semibold text-blue-700">
-                              {u.role?.code}
-                            </span>
+                            <div>
+                              {u.role?.code === "ADMIN" ? (
+                                <span className="inline-flex items-center gap-1.5 rounded-full bg-purple-50 border border-purple-200 px-2.5 py-1 text-[11px] font-bold text-purple-700 shadow-xs">
+                                  <span>🏪</span> Sub Admin (All Features)
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 border border-blue-200 px-2.5 py-1 text-[11px] font-semibold text-blue-700 shadow-xs">
+                                  <span>👤</span> Staff / Cashier
+                                </span>
+                              )}
+                            </div>
                           </div>
                         ))}
                       </div>

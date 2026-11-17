@@ -332,13 +332,15 @@ businessRouter.post(
         email: z.string().email().optional(),
         phone: z.string().optional(),
         password: z.string().min(6),
+        roleType: z.enum(["ADMIN", "BUSINESS_USER"]).default("BUSINESS_USER"),
         designation: z.string().optional(),
         permissions: z.array(z.string()).default([]),
       });
       const body = schema.parse(req.body);
 
-      const employeeRole = await prisma.role.findUnique({ where: { code: "BUSINESS_USER" } });
-      if (!employeeRole) throw new AppError(500, "ROLE_MISSING", "Business user role not found.");
+      const targetRoleCode = body.roleType === "ADMIN" ? "ADMIN" : "BUSINESS_USER";
+      const targetRole = await prisma.role.findUnique({ where: { code: targetRoleCode } });
+      if (!targetRole) throw new AppError(500, "ROLE_MISSING", `${targetRoleCode} role not found.`);
 
       const passwordHash = await bcrypt.hash(body.password, 12);
 
@@ -346,7 +348,7 @@ businessRouter.post(
         const user = await tx.user.create({
           data: {
             tenantId,
-            roleId: employeeRole.id,
+            roleId: targetRole.id,
             username: body.username,
             fullName: body.fullName,
             email: body.email ?? null,
@@ -361,7 +363,7 @@ businessRouter.post(
           data: {
             tenantId,
             userId: user.id,
-            designation: body.designation ?? "Staff / Operator",
+            designation: body.designation ?? (body.roleType === "ADMIN" ? "Sub Admin / Manager" : "Staff / Operator"),
             isPrimary: false,
           },
         });
