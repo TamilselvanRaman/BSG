@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { PublicNavbar, PublicFooter } from "@/components/PublicLayout";
 import {
+  AlertTriangle,
   ArrowRight,
   Boxes,
   CheckCircle2,
@@ -167,30 +168,35 @@ const CHALLENGES_AND_SOLUTIONS = [
     pain: "Floor weighment scribbled on paper slips leads to calculation errors, misplaced records, and hours of night-time computer re-entry.",
     solution: "Instant Digital Multi-Product Lots",
     benefit: "Operators enter weights directly on handheld tablets or PC desks; inventory and bills generate instantaneously.",
+    impact: "Zero Re-Entry Lag",
   },
   {
     challenge: "Bag Weight Sum & Tare Math Errors",
     pain: "Adding 50 individual bag weights manually during rushed morning auctions produces math discrepancies and buyer disputes.",
     solution: "Bag-by-Bag Digital Scale Calculator",
     benefit: "Enter bag weights into dedicated keyboard-friendly cells. Total bags, tare deductions, and net weight compute in milliseconds.",
+    impact: "100% Scale Accuracy",
   },
   {
     challenge: "Paper Ledgers & Unsettled Advances",
     pain: "Tracking farmer advance deductions and wholesale buyer credits in traditional khata books leads to bad debts and delayed settlements.",
     solution: "ACID Double-Entry Partner Ledgers",
     benefit: "Real-time running balances for all farmers, buyers, and transporters with 1-click WhatsApp PDF statement dispatch.",
+    impact: "Real-Time Balances",
   },
   {
     challenge: "Long Billing Queues at Yard Exit",
     pain: "Buyers waiting 20+ minutes at the counter for hand-written bills causes yard congestion and vehicle blockages.",
     solution: "High-Speed Cash & Credit POS Billing",
     benefit: "Generate itemized bills with Hamali, Coolie, and APMC cess in under 5 seconds with instant thermal receipt print.",
+    impact: "< 5s Thermal Bills",
   },
   {
     challenge: "Evening Cash Drawer Discrepancies",
     pain: "Uncertainty whether actual physical currency matches sales receipts, UPI collections, and cash expenses at day end.",
     solution: "Evening Denomination Cash Tally",
     benefit: "Physical currency counter (₹500, ₹200, ₹100, ₹50, coins) reconciles against expected drawer balance with discrepancy audit logs.",
+    impact: "Zero Cash Shortage",
   },
 ];
 
@@ -588,31 +594,64 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="mt-14 space-y-4">
-            {CHALLENGES_AND_SOLUTIONS.map((row) => (
-              <div
-                key={row.challenge}
-                className="grid gap-4 md:grid-cols-12 rounded-2xl border border-[#CDE8D5] bg-white p-5 shadow-xs hover:border-[#10A66A] transition-all"
-              >
-                {/* Left: Challenge */}
-                <div className="md:col-span-5 space-y-1 border-b md:border-b-0 md:border-r border-[#CDE8D5] pb-3 md:pb-0 md:pr-4">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#C2413B]">
-                    Traditional Pain Point
-                  </span>
-                  <h4 className="text-sm font-bold text-[#123B29]">{row.challenge}</h4>
-                  <p className="text-xs text-[#47785C] leading-relaxed">{row.pain}</p>
-                </div>
+          {/* Comparison Table: Problem vs Outcome */}
+          <div className="mt-12 overflow-hidden rounded-2xl border border-[#CDE8D5] bg-white shadow-xs">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[720px]">
+                <thead>
+                  <tr className="border-b border-[#CDE8D5] bg-[#F4FAF5]">
+                    <th className="w-1/2 px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-[#C2413B] bg-red-50/60 border-r border-[#F0D0CB]">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-[#C2413B]" />
+                        <span>Traditional Mandi Bottleneck</span>
+                      </div>
+                    </th>
+                    <th className="w-1/2 px-6 py-4 text-[11px] font-bold uppercase tracking-wider text-[#087A50] bg-[#E8F5EC]/70">
+                      <div className="flex items-center gap-2">
+                        <span className="h-2 w-2 rounded-full bg-[#10A66A]" />
+                        <span>BSG Platform Verified Outcome</span>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-[#DCEEE1]">
+                  {CHALLENGES_AND_SOLUTIONS.map((row) => (
+                    <tr key={row.challenge} className="hover:bg-[#F9FCFA] transition-colors">
+                      {/* Left: Traditional Problem (Red/Coral Tint) */}
+                      <td className="w-1/2 px-6 py-4 align-top bg-red-50/20 border-r border-[#F0D0CB]/60">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-1.5 text-xs font-bold text-[#A82822]">
+                            <AlertTriangle className="h-3.5 w-3.5 text-[#C2413B] shrink-0" />
+                            <span>{row.challenge}</span>
+                          </div>
+                          <p className="text-xs text-[#7A271A]/90 leading-relaxed">
+                            {row.pain}
+                          </p>
+                        </div>
+                      </td>
 
-                {/* Right: Solution */}
-                <div className="md:col-span-7 space-y-1 md:pl-2">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#087A50]">
-                    BSG Platform Capability
-                  </span>
-                  <h4 className="text-sm font-bold text-[#063D2E]">{row.solution}</h4>
-                  <p className="text-xs text-[#123B29] leading-relaxed">{row.benefit}</p>
-                </div>
-              </div>
-            ))}
+                      {/* Right: BSG Outcome (Emerald Green Tint) */}
+                      <td className="w-1/2 px-6 py-4 align-top bg-[#E8F5EC]/20">
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-1.5 text-xs font-bold text-[#063D2E]">
+                              <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A] shrink-0" />
+                              <span>{row.solution}</span>
+                            </div>
+                            <span className="shrink-0 rounded-full bg-[#DDF2E4] border border-[#CDE8D5] px-2.5 py-0.5 text-[10px] font-extrabold text-[#087A50]">
+                              {row.impact}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#123B29] leading-relaxed">
+                            {row.benefit}
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
