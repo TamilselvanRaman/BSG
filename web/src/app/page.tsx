@@ -293,28 +293,6 @@ export default function HomePage() {
   const [activeShowcase, setActiveShowcase] = useState("inward");
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  // Lead Enquiry State
-  const [enquiryForm, setEnquiryForm] = useState({
-    fullName: "",
-    businessName: "",
-    phone: "",
-    email: "",
-    businessType: "Vegetable & Fruit Mandi",
-    location: "",
-    usersCount: "3 Users (Standard License)",
-    message: "",
-  });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  async function handleEnquirySubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setSubmitting(false);
-    setSubmitted(true);
-  }
-
   const currentShowcase = PRODUCT_SHOWCASE_TABS.find((t) => t.id === activeShowcase) || PRODUCT_SHOWCASE_TABS[0];
 
   return (
@@ -350,13 +328,13 @@ export default function HomePage() {
                 <span>Start 30-Day Free Trial</span>
                 <ArrowRight className="h-4 w-4" />
               </Link>
-              <a
-                href="#enquiry-section"
+              <Link
+                href="/contact"
                 className="inline-flex items-center gap-2 rounded-xl border border-[#CDE8D5] bg-[#E8F5EC] hover:bg-[#DDF2E4] px-6 py-3.5 text-sm font-bold text-[#063D2E] transition-all"
               >
                 <PhoneCall className="h-4 w-4 text-[#087A50]" />
                 <span>Request Mandi Demo</span>
-              </a>
+              </Link>
             </div>
 
             {/* Trust Indicators */}
@@ -976,162 +954,7 @@ export default function HomePage() {
       </section>
 
       {/* ============================================================
-          10. CONTACT & DEMO LEAD CAPTURE FORM
-         ============================================================ */}
-      <section id="enquiry-section" className="py-20 bg-white border-b border-[#CDE8D5]">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-12 lg:grid-cols-12 items-center">
-            {/* Left information */}
-            <div className="lg:col-span-5 space-y-6">
-              <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl leading-tight">
-                See How BSG Accelerates Your Daily Mandi Operations
-              </h2>
-              <p className="text-xs text-[#47785C] leading-relaxed">
-                Connect with our mandi solution architects for a live interactive demonstration customized to your market yard, crops, and weighment procedures.
-              </p>
-
-              <div className="space-y-3 pt-2 text-xs text-[#123B29]">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E8F5EC] text-[#087A50]">
-                    <CheckCircle2 className="h-4 w-4" />
-                  </div>
-                  <span>Hands-on walkthrough of bag scale calculator and digital lots</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E8F5EC] text-[#087A50]">
-                    <CheckCircle2 className="h-4 w-4" />
-                  </div>
-                  <span>Zero-obligation 30-day full access trial for your shop staff</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#E8F5EC] text-[#087A50]">
-                    <CheckCircle2 className="h-4 w-4" />
-                  </div>
-                  <span>Dedicated onboarding support for thermal printers and tablets</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right lead capture card */}
-            <div className="lg:col-span-7">
-              <div className="rounded-3xl border border-[#CDE8D5] bg-[#F4FAF5] p-7 sm:p-9 shadow-sm">
-                {submitted ? (
-                  <div className="py-12 text-center space-y-3">
-                    <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#E8F5EC] text-[#087A50]">
-                      <CheckCircle2 className="h-8 w-8" />
-                    </div>
-                    <h3 className="text-xl font-bold text-[#063D2E]">Mandi Demo Request Received</h3>
-                    <p className="text-xs text-[#47785C] max-w-md mx-auto">
-                      Thank you. Our agricultural solution specialist will reach out within 2 hours to coordinate your live walkthrough.
-                    </p>
-                  </div>
-                ) : (
-                  <form onSubmit={handleEnquirySubmit} className="space-y-4 text-xs">
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block font-bold text-[#123B29] mb-1">Your Full Name *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Kannan Sundaram"
-                          value={enquiryForm.fullName}
-                          onChange={(e) => setEnquiryForm({ ...enquiryForm, fullName: e.target.value })}
-                          className="w-full rounded-xl border border-[#CDE8D5] bg-white p-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-bold text-[#123B29] mb-1">Mandi Business Name *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Sri Murugan Traders"
-                          value={enquiryForm.businessName}
-                          onChange={(e) => setEnquiryForm({ ...enquiryForm, businessName: e.target.value })}
-                          className="w-full rounded-xl border border-[#CDE8D5] bg-white p-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block font-bold text-[#123B29] mb-1">Contact Phone Number *</label>
-                        <input
-                          type="tel"
-                          required
-                          placeholder="10-digit mobile number"
-                          value={enquiryForm.phone}
-                          onChange={(e) => setEnquiryForm({ ...enquiryForm, phone: e.target.value })}
-                          className="w-full rounded-xl border border-[#CDE8D5] bg-white p-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block font-bold text-[#123B29] mb-1">Email Address *</label>
-                        <input
-                          type="email"
-                          required
-                          placeholder="kannan@murugantraders.in"
-                          value={enquiryForm.email}
-                          onChange={(e) => setEnquiryForm({ ...enquiryForm, email: e.target.value })}
-                          className="w-full rounded-xl border border-[#CDE8D5] bg-white p-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <label className="block font-bold text-[#123B29] mb-1">Business Domain</label>
-                        <select
-                          value={enquiryForm.businessType}
-                          onChange={(e) => setEnquiryForm({ ...enquiryForm, businessType: e.target.value })}
-                          className="w-full rounded-xl border border-[#CDE8D5] bg-white p-2.5 text-sm text-[#123B29]"
-                        >
-                          <option value="Vegetable & Fruit Mandi">Vegetable & Fruit Mandi</option>
-                          <option value="APMC Commission Agent">APMC Commission Agent</option>
-                          <option value="Grain & Spices Wholesale">Grain & Spices Wholesale</option>
-                          <option value="Multi-Yard Enterprise">Multi-Yard Enterprise</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block font-bold text-[#123B29] mb-1">Market Yard City / State *</label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Coimbatore, Tamil Nadu"
-                          value={enquiryForm.location}
-                          onChange={(e) => setEnquiryForm({ ...enquiryForm, location: e.target.value })}
-                          className="w-full rounded-xl border border-[#CDE8D5] bg-white p-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block font-bold text-[#123B29] mb-1">Specific Operational Requirement</label>
-                      <textarea
-                        rows={2}
-                        placeholder="Tell us about your daily bag volume, printer setup, or weighbridge equipment..."
-                        value={enquiryForm.message}
-                        onChange={(e) => setEnquiryForm({ ...enquiryForm, message: e.target.value })}
-                        className="w-full rounded-xl border border-[#CDE8D5] bg-white p-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="w-full rounded-xl bg-[#087A50] hover:bg-[#063D2E] py-3.5 text-sm font-bold text-white shadow-md transition disabled:opacity-50"
-                    >
-                      {submitting ? "Transmitting Request..." : "Request Live Interactive Mandi Demo"}
-                    </button>
-                  </form>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ============================================================
-          11. FINAL CTA (RICH FOREST-EMERALD GRADIENT SECTION)
+          10. FINAL CTA (RICH FOREST-EMERALD GRADIENT SECTION)
          ============================================================ */}
       <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
         {/* Subtle radial emerald glow */}
