@@ -107,7 +107,7 @@ export default function FaqPage() {
             return (
               <div key={sec.category} className="space-y-6">
                 <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
                     <Icon className="h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-bold text-slate-900">{sec.category}</h2>
@@ -120,7 +120,7 @@ export default function FaqPage() {
                       className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition"
                     >
                       <h3 className="font-bold text-slate-900 text-base flex items-start gap-2.5">
-                        <CheckCircle2 className="h-4 w-4 text-blue-600 shrink-0 mt-1" />
+                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-1" />
                         <span>{item.q}</span>
                       </h3>
                       <p className="mt-2 text-xs sm:text-sm text-slate-600 pl-6 leading-relaxed">
@@ -147,12 +147,12 @@ export default function FaqPage() {
               href="/contact"
               className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-xs font-bold text-white hover:bg-slate-800 transition"
             >
-              <PhoneCall className="h-4 w-4 text-blue-400" />
+              <PhoneCall className="h-4 w-4 text-emerald-400" />
               <span>Contact Support Desk</span>
             </Link>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-xs font-bold text-white hover:bg-blue-700 transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-800 px-6 py-3 text-xs font-bold text-white shadow-md shadow-emerald-950/30 hover:from-emerald-700 hover:to-emerald-900 transition"
             >
               <span>Start 30-Day Free Trial</span>
               <ArrowRight className="h-4 w-4" />

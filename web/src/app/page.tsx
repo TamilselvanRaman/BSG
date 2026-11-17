@@ -230,7 +230,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="rounded-2xl border border-slate-200/80 bg-white p-5 text-center shadow-sm hover:shadow-md transition">
-              <p className="text-3xl font-black text-blue-600">₹150Cr+</p>
+              <p className="text-3xl font-black text-emerald-800">₹150Cr+</p>
               <p className="text-xs font-semibold text-slate-500 mt-1 uppercase tracking-wider">
                 Mandi Turnover Processed
               </p>

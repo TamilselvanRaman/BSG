@@ -609,7 +609,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
               <span className="block text-sm font-bold truncate">
                 {user?.tenantName || "BSG Mandi Workspace"}
               </span>
-              <span className="block text-[11px] text-blue-400 font-semibold">
+              <span className="block text-[11px] text-emerald-400 font-semibold">
                 {mode === "ADMIN" ? "BSG Sub Admin Portal" : "BSG Staff Cashier"}
               </span>
             </div>
@@ -681,7 +681,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search buyer, seller, phone, bill #, lot #..."
-                className="w-full rounded-lg border border-slate-300 py-1.5 pl-9 pr-3 text-xs focus:border-blue-600 focus:outline-none"
+                className="w-full rounded-lg border border-slate-300 py-1.5 pl-9 pr-3 text-xs focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
               />
             </form>
 
@@ -731,7 +731,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                 setBillType("SALE");
                 setActiveTab("BILL_BOOKS");
               }}
-              className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700"
+              className="rounded-lg bg-emerald-700 px-3 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800"
             >
               + Sales Bill
             </button>
@@ -756,14 +756,14 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
 
         {/* Global Search Results Drawer */}
         {searchResults && (
-          <div className="mx-6 mt-4 rounded-xl border border-blue-200 bg-blue-50/70 p-4 text-xs">
+          <div className="mx-6 mt-4 rounded-xl border border-emerald-200 bg-emerald-50/70 p-4 text-xs">
             <div className="flex items-center justify-between">
               <span className="font-bold text-slate-900">
                 Global Search Results for &ldquo;{searchQuery}&rdquo;
               </span>
               <button
                 onClick={() => setSearchResults(null)}
-                className="font-semibold text-blue-700 hover:underline"
+                className="font-semibold text-emerald-800 hover:underline"
               >
                 Close
               </button>
@@ -827,7 +827,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                       <span className="text-xs font-semibold uppercase text-slate-500">
                         Total Sales & Receivables
                       </span>
-                      <p className="mt-2 text-2xl font-extrabold text-blue-600">
+                      <p className="mt-2 text-2xl font-extrabold text-emerald-700">
                         {formatINR(m.totalSalesAmount)}
                       </p>
                       <span className="mt-1 block text-xs text-slate-600">
@@ -880,7 +880,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         {(dashboard?.recentSales || []).map((sb: any) => (
                           <div key={sb.id} className="flex items-center justify-between py-2.5">
                             <div>
-                              <span className="font-mono font-bold text-blue-600">
+                              <span className="font-mono font-bold text-emerald-700">
                                 {sb.billNumber}
                               </span>{" "}
                               — {sb.buyer?.name}
@@ -940,7 +940,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                     </div>
                     <button
                       onClick={handleCreateSmartChart}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-800"
                     >
                       <Plus className="h-4 w-4" />
                       Generate Today&apos;s Smart Chart
@@ -970,7 +970,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         <tbody className="divide-y divide-slate-100">
                           {lots.map((l) => (
                             <tr key={l.id}>
-                              <td className="px-3 py-2.5 font-mono font-bold text-blue-600">
+                              <td className="px-3 py-2.5 font-mono font-bold text-emerald-700">
                                 {l.lotNumber}
                               </td>
                               <td className="px-3 py-2.5 font-medium">{l.seller?.name}</td>
@@ -987,7 +987,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                                 {l.remainingQuantity} {l.unit}
                               </td>
                               <td className="px-3 py-2.5">
-                                <span className="rounded-full bg-blue-50 px-2 py-0.5 font-semibold text-blue-700">
+                                <span className="rounded-md bg-emerald-50 px-2 py-0.5 font-semibold text-emerald-800 border border-emerald-200">
                                   {l.status}
                                 </span>
                               </td>
@@ -1020,7 +1020,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="text-sm font-extrabold text-blue-600">
+                            <p className="text-sm font-extrabold text-emerald-700">
                               {formatINR(sc.totalAmount)}
                             </p>
                           </div>
@@ -1177,7 +1177,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
 
                     <button
                       type="submit"
-                      className="w-full rounded-lg bg-blue-600 py-2.5 text-xs font-semibold text-white hover:bg-blue-700"
+                      className="w-full rounded-lg bg-emerald-700 py-2.5 text-xs font-semibold text-white hover:bg-emerald-800"
                     >
                       Save Goods Entry & Create Lot
                     </button>
@@ -1248,7 +1248,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                                 <td className="px-3 py-2 font-mono font-bold">{ent.entryNumber}</td>
                                 <td className="px-3 py-2">{ent.seller?.name}</td>
                                 <td className="px-3 py-2">{ent.goods?.name}</td>
-                                <td className="px-3 py-2 font-mono text-blue-600">
+                                <td className="px-3 py-2 font-mono text-emerald-700">
                                   {ent.lot?.lotNumber || "-"}
                                 </td>
                                 <td className="px-3 py-2">
@@ -1285,7 +1285,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                           }}
                           className={`rounded-lg px-4 py-2 text-xs font-bold ${
                             billType === "SALE"
-                              ? "bg-blue-600 text-white"
+                              ? "bg-emerald-700 text-white"
                               : "bg-slate-100 text-slate-700"
                           }`}
                         >
@@ -1315,7 +1315,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                             onClick={() => setBillStep(s as 1 | 2 | 3)}
                             className={`rounded-full px-3 py-1 ${
                               billStep === s
-                                ? "bg-blue-600 text-white"
+                                ? "bg-emerald-700 text-white"
                                 : "bg-slate-100 text-slate-600"
                             }`}
                           >
@@ -1579,7 +1579,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                               <p>Labour + RMC Cess: <strong>{formatINR(billLabourCharge + previewRmc)}</strong></p>
                             </div>
                             <div className="text-right">
-                              <p className="text-base font-extrabold text-blue-400">
+                              <p className="text-base font-extrabold text-emerald-400">
                                 Grand Total: {formatINR(previewGrandTotal)}
                               </p>
                               <p className="text-slate-300">
@@ -1598,7 +1598,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                             </button>
                             <button
                               type="submit"
-                              className="rounded-lg bg-blue-600 px-6 py-2.5 text-xs font-bold text-white hover:bg-blue-700"
+                              className="rounded-lg bg-emerald-700 px-6 py-2.5 text-xs font-bold text-white hover:bg-emerald-800"
                             >
                               Confirm & Save {billType === "SALE" ? "Sales" : "Purchase"} Bill
                             </button>
@@ -1629,7 +1629,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                           <tbody className="divide-y divide-slate-100">
                             {sales.map((sb) => (
                               <tr key={sb.id}>
-                                <td className="px-2.5 py-2 font-mono font-bold text-blue-600">
+                                <td className="px-2.5 py-2 font-mono font-bold text-emerald-700">
                                   {sb.billNumber}
                                 </td>
                                 <td className="px-2.5 py-2">{sb.buyer?.name}</td>
@@ -1645,7 +1645,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                                 <td className="px-2.5 py-2 text-right space-x-1">
                                   <button
                                     onClick={() => handleGeneratePdf("SALES_BILL", sb.id)}
-                                    className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-[11px] font-semibold text-blue-700 hover:bg-blue-100"
+                                    className="inline-flex items-center gap-1 rounded bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800 hover:bg-emerald-100"
                                   >
                                     <Printer className="h-3 w-3" />
                                     PDF
@@ -1701,7 +1701,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                                 <td className="px-2.5 py-2 text-right space-x-1">
                                   <button
                                     onClick={() => handleGeneratePdf("PURCHASE_BILL", pb.id)}
-                                    className="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-[11px] font-semibold text-blue-700 hover:bg-blue-100"
+                                    className="inline-flex items-center gap-1 rounded bg-emerald-50 px-2 py-1 text-[11px] font-semibold text-emerald-800 hover:bg-emerald-100"
                                   >
                                     <Printer className="h-3 w-3" />
                                     PDF
@@ -1778,7 +1778,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                     />
                     <button
                       type="submit"
-                      className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white"
+                      className="rounded-lg bg-emerald-700 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-800"
                     >
                       + Save Partner
                     </button>
@@ -1792,7 +1792,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         </h3>
                         <button
                           onClick={() => exportRowsToCsv("buyers.csv", buyers)}
-                          className="text-xs font-semibold text-blue-600 hover:underline"
+                          className="text-xs font-semibold text-emerald-700 hover:underline"
                         >
                           Export CSV
                         </button>
@@ -1809,7 +1809,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                               </p>
                             </div>
                             <div className="text-right">
-                              <p className="font-bold text-blue-600">{formatINR(b.currentBalance)}</p>
+                              <p className="font-bold text-emerald-700">{formatINR(b.currentBalance)}</p>
                               <button
                                 onClick={() => {
                                   setActiveTab("LEDGERS_ADVANCES");
@@ -1832,7 +1832,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         </h3>
                         <button
                           onClick={() => exportRowsToCsv("sellers.csv", sellers)}
-                          className="text-xs font-semibold text-blue-600 hover:underline"
+                          className="text-xs font-semibold text-emerald-700 hover:underline"
                         >
                           Export CSV
                         </button>
@@ -1955,7 +1955,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         </select>
                         <button
                           type="submit"
-                          className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white"
+                          className="rounded-lg bg-emerald-700 px-3 py-2 text-xs font-semibold text-white hover:bg-emerald-800"
                         >
                           Save Payment
                         </button>
@@ -2076,7 +2076,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                           <span>
                             Total Credit: <strong>{formatINR(ledgerData.summary?.totalCredit)}</strong>
                           </span>
-                          <span className="text-blue-600">
+                          <span className="text-emerald-700">
                             Closing Balance:{" "}
                             <strong>{formatINR(ledgerData.summary?.closingBalance)}</strong>
                           </span>
@@ -2213,7 +2213,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                     </div>
                     <div className="rounded-xl border border-slate-200 bg-white p-4">
                       <span className="text-xs text-slate-500">Daily Summary Sales</span>
-                      <p className="mt-1 text-lg font-extrabold text-blue-600">
+                      <p className="mt-1 text-lg font-extrabold text-emerald-700">
                         {formatINR(dailySummary?.totals?.totalSalesAmount)}
                       </p>
                     </div>
@@ -2225,7 +2225,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                     </div>
                     <div className="rounded-xl border border-slate-200 bg-white p-4">
                       <span className="text-xs text-slate-500">Net Gross Profit</span>
-                      <p className="mt-1 text-lg font-extrabold text-indigo-600">
+                      <p className="mt-1 text-lg font-extrabold text-teal-700">
                         {formatINR(profitLoss?.summary?.netGrossProfit)} (
                         {profitLoss?.summary?.marginPercent ?? 0}%)
                       </p>
@@ -2242,7 +2242,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                           onClick={() =>
                             exportRowsToCsv("gross-profit-report.csv", profitLoss.items || [])
                           }
-                          className="text-xs font-semibold text-blue-600 hover:underline"
+                          className="text-xs font-semibold text-emerald-700 hover:underline"
                         >
                           Export CSV
                         </button>
@@ -2311,7 +2311,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         </div>
                         <div className="w-full bg-slate-100 rounded-full h-2 mt-2">
                           <div
-                            className={`h-2 rounded-full transition-all ${isSeatLimitReached ? "bg-amber-500" : "bg-blue-600"}`}
+                            className={`h-2 rounded-full transition-all ${isSeatLimitReached ? "bg-amber-500" : "bg-emerald-600"}`}
                             style={{ width: `${Math.min(100, (currentUsersCount / maxUsers) * 100)}%` }}
                           />
                         </div>
@@ -2321,7 +2321,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
                           Active Login Sessions
                         </span>
-                        <p className="text-2xl font-extrabold text-blue-600 mt-1">
+                        <p className="text-2xl font-extrabold text-emerald-700 mt-1">
                           {activeSessionsCount} / {maxUsers}
                         </p>
                         <p className="text-[11px] text-slate-500 mt-1">
@@ -2336,7 +2336,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                         <p className="text-xs font-mono font-bold text-slate-800 mt-1 truncate">
                           {employeesData?.licenseKey || profileData?.tenant?.licenseKey || "BSG-LIC-TRIAL-3SEATS"}
                         </p>
-                        <span className="inline-block mt-1 rounded bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                        <span className="inline-block mt-1 rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-800 border border-emerald-200">
                           Max 3 Users Quota Enforced
                         </span>
                       </div>
@@ -2540,7 +2540,7 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
                   </div>
                   <button
                     type="submit"
-                    className="rounded-lg bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700"
+                    className="rounded-lg bg-emerald-700 px-5 py-2.5 text-xs font-semibold text-white hover:bg-emerald-800"
                   >
                     Save Business Settings
                   </button>

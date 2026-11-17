@@ -53,7 +53,7 @@ export default function AboutPage() {
             </h2>
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-100 text-blue-700">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
                   <Database className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">ACID Financial Isolation</h3>
@@ -63,7 +63,7 @@ export default function AboutPage() {
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-teal-800">
                   <Lock className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">Multi-Tenant Zero-Leakage</h3>
@@ -73,7 +73,7 @@ export default function AboutPage() {
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
                   <Zap className="h-6 w-6" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">Zero Floor Downtime</h3>
@@ -83,8 +83,8 @@ export default function AboutPage() {
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
-                  <ShieldCheck className="h-6 w-6" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-50 text-emerald-900 border border-emerald-200">
+                  <ShieldCheck className="h-6 w-6 text-emerald-800" />
                 </div>
                 <h3 className="text-lg font-bold text-slate-900">Strict 3-User Seat Governance</h3>
                 <p className="text-xs text-slate-600 leading-relaxed">
@@ -108,7 +108,7 @@ export default function AboutPage() {
           <div className="pt-2">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-7 py-3 text-sm font-bold text-white shadow-lg hover:bg-blue-700 transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-800 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-950/40 hover:from-emerald-700 hover:to-emerald-900 transition"
             >
               <span>Start Free Trial</span>
               <ArrowRight className="h-4 w-4" />

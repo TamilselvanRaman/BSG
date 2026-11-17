@@ -229,7 +229,7 @@ export default function PricingPage() {
                 <tr>
                   <th className="p-4 font-bold">Feature Capability</th>
                   <th className="p-4 font-bold text-center">Starter</th>
-                  <th className="p-4 font-bold text-center text-blue-600">Professional</th>
+                  <th className="p-4 font-bold text-center text-emerald-800">Professional</th>
                   <th className="p-4 font-bold text-center">Enterprise</th>
                 </tr>
               </thead>

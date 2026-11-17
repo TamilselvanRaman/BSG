@@ -286,7 +286,7 @@ export default function FeaturesPage() {
           <div className="pt-2">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-7 py-3 text-sm font-bold text-white shadow-lg hover:bg-blue-700 transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-800 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-950/40 hover:from-emerald-700 hover:to-emerald-900 transition"
             >
               <span>Provision Shop License</span>
               <ArrowRight className="h-4 w-4" />

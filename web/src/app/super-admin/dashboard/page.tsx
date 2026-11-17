@@ -382,7 +382,7 @@ export default function SuperAdminDashboardPage() {
             <BsgIcon size={36} className="rounded-xl shadow-sm shrink-0" />
             <div>
               <span className="block text-sm font-bold">BSG Cloud SaaS</span>
-              <span className="block text-[11px] text-blue-400 font-semibold">Super Admin Master</span>
+              <span className="block text-[11px] text-emerald-400 font-semibold">Super Admin Master</span>
             </div>
           </div>
         </div>
@@ -495,7 +495,7 @@ export default function SuperAdminDashboardPage() {
                       <span className="text-xs font-semibold uppercase text-slate-500">
                         Monthly Recurring Revenue (MRR)
                       </span>
-                      <p className="mt-2 text-2xl font-extrabold text-blue-600">
+                      <p className="mt-2 text-2xl font-extrabold text-emerald-700">
                         {formatINR(m.monthlyRecurringRevenue)}
                       </p>
                       <span className="mt-1 block text-xs text-slate-500">
@@ -542,7 +542,7 @@ export default function SuperAdminDashboardPage() {
                                 {biz.code} • {biz.ownerEmail}
                               </p>
                             </div>
-                            <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700">
+                            <span className="rounded-md bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-800 border border-emerald-200">
                               {biz.status}
                             </span>
                           </div>
@@ -593,7 +593,7 @@ export default function SuperAdminDashboardPage() {
                     </div>
                     <button
                       onClick={() => setShowNewBizModal(true)}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-emerald-800 shadow-sm"
                     >
                       <Plus className="h-3.5 w-3.5" />
                       Provision New Shop
@@ -653,7 +653,7 @@ export default function SuperAdminDashboardPage() {
                                     <button
                                       onClick={() => copyToClipboard(b.licenseKey)}
                                       title="Copy full license key"
-                                      className="rounded p-1 text-slate-400 hover:text-blue-600 hover:bg-slate-100"
+                                      className="rounded p-1 text-slate-400 hover:text-emerald-700 hover:bg-slate-100"
                                     >
                                       {copiedKey === b.licenseKey ? (
                                         <Check className="h-3.5 w-3.5 text-emerald-600" />
@@ -721,7 +721,7 @@ export default function SuperAdminDashboardPage() {
                                     title="Manage License, Max 3 Users & Features"
                                     className="inline-flex items-center gap-1 rounded-lg border border-slate-300 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-400"
                                   >
-                                    <Sliders className="h-3 w-3 text-blue-600" />
+                                    <Sliders className="h-3 w-3 text-emerald-700" />
                                     Manage
                                   </button>
                                   <button
@@ -781,7 +781,7 @@ export default function SuperAdminDashboardPage() {
                               {a.username}
                             </td>
                             <td className="px-4 py-3">{a.fullName}</td>
-                            <td className="px-4 py-3 text-xs font-medium text-blue-700">
+                            <td className="px-4 py-3 text-xs font-medium text-emerald-800">
                               {a.tenant?.name ?? "Unassigned"} ({a.tenant?.code})
                             </td>
                             <td className="px-4 py-3">
@@ -817,7 +817,7 @@ export default function SuperAdminDashboardPage() {
                   <div className="grid gap-6 md:grid-cols-3">
                     {plans.map((p) => (
                       <div key={p.id} className="rounded-xl border border-slate-200 bg-white p-6">
-                        <span className="rounded bg-blue-50 px-2 py-0.5 font-mono text-xs font-semibold text-blue-700">
+                        <span className="rounded bg-emerald-50 px-2 py-0.5 font-mono text-xs font-semibold text-emerald-800 border border-emerald-200">
                           {p.code}
                         </span>
                         <h3 className="mt-2 text-lg font-bold text-slate-900">{p.name}</h3>
@@ -867,7 +867,7 @@ export default function SuperAdminDashboardPage() {
                             <td className="px-4 py-3">{s.plan?.name}</td>
                             <td className="px-4 py-3 text-xs">{s.billingCycle}</td>
                             <td className="px-4 py-3">
-                              <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700">
+                              <span className="rounded-md bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800 border border-emerald-200">
                                 {s.status}
                               </span>
                             </td>
@@ -1016,7 +1016,7 @@ export default function SuperAdminDashboardPage() {
                   </div>
                   <button
                     type="submit"
-                    className="rounded-lg bg-blue-600 px-5 py-2.5 text-xs font-semibold text-white hover:bg-blue-700"
+                    className="rounded-lg bg-emerald-700 px-5 py-2.5 text-xs font-semibold text-white hover:bg-emerald-800"
                   >
                     Save Platform Configuration
                   </button>
@@ -1046,7 +1046,7 @@ export default function SuperAdminDashboardPage() {
                             <td className="px-4 py-2.5 text-xs text-slate-500">
                               {new Date(log.createdAt).toLocaleString()}
                             </td>
-                            <td className="px-4 py-2.5 font-mono text-xs font-semibold text-blue-700">
+                            <td className="px-4 py-2.5 font-mono text-xs font-semibold text-emerald-800">
                               {log.action}
                             </td>
                             <td className="px-4 py-2.5 text-xs">
@@ -1102,7 +1102,7 @@ export default function SuperAdminDashboardPage() {
                   placeholder="e.g. BSG Trading Corp / Lakshmi Vegetable Mandi"
                   value={newBizForm.name}
                   onChange={(e) => setNewBizForm({ ...newBizForm, name: e.target.value })}
-                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                 />
               </div>
 
@@ -1117,7 +1117,7 @@ export default function SuperAdminDashboardPage() {
                     placeholder="e.g. Coimbatore / Madurai"
                     value={newBizForm.city}
                     onChange={(e) => setNewBizForm({ ...newBizForm, city: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1130,7 +1130,7 @@ export default function SuperAdminDashboardPage() {
                     placeholder="e.g. Gandhi Market / Koyambedu"
                     value={newBizForm.marketLocation}
                     onChange={(e) => setNewBizForm({ ...newBizForm, marketLocation: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
               </div>
@@ -1146,7 +1146,7 @@ export default function SuperAdminDashboardPage() {
                     placeholder="e.g. 9841238910"
                     value={newBizForm.ownerPhone}
                     onChange={(e) => setNewBizForm({ ...newBizForm, ownerPhone: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1159,7 +1159,7 @@ export default function SuperAdminDashboardPage() {
                     placeholder="owner@bsg.com"
                     value={newBizForm.ownerEmail}
                     onChange={(e) => setNewBizForm({ ...newBizForm, ownerEmail: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
               </div>
@@ -1174,7 +1174,7 @@ export default function SuperAdminDashboardPage() {
                   placeholder="Admin Full Name (e.g. Kannan Murugan)"
                   value={newBizForm.adminFullName}
                   onChange={(e) => setNewBizForm({ ...newBizForm, adminFullName: e.target.value })}
-                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                  className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                 />
                 <div className="grid grid-cols-2 gap-3">
                   <input
@@ -1183,7 +1183,7 @@ export default function SuperAdminDashboardPage() {
                     placeholder="Admin Username (e.g. kannan_admin)"
                     value={newBizForm.adminUsername}
                     onChange={(e) => setNewBizForm({ ...newBizForm, adminUsername: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                   <input
                     type="password"
@@ -1191,7 +1191,7 @@ export default function SuperAdminDashboardPage() {
                     placeholder="Admin Password"
                     value={newBizForm.adminPassword}
                     onChange={(e) => setNewBizForm({ ...newBizForm, adminPassword: e.target.value })}
-                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
               </div>
@@ -1207,7 +1207,7 @@ export default function SuperAdminDashboardPage() {
                     max="365"
                     value={newBizForm.trialDays}
                     onChange={(e) => setNewBizForm({ ...newBizForm, trialDays: Number(e.target.value) })}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                   />
                 </div>
                 <div>
@@ -1224,20 +1224,20 @@ export default function SuperAdminDashboardPage() {
                 </div>
               </div>
 
-              <div className="rounded-lg border border-blue-200 bg-blue-50/70 p-3">
-                <label className="flex items-center gap-2 font-semibold text-blue-900 cursor-pointer">
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50/70 p-3">
+                <label className="flex items-center gap-2 font-semibold text-emerald-950 cursor-pointer">
                   <input
                     type="checkbox"
                     checked={newBizForm.enableAllFeatures}
                     onChange={(e) => setNewBizForm({ ...newBizForm, enableAllFeatures: e.target.checked })}
-                    className="h-4 w-4 rounded border-blue-400 text-blue-600 focus:ring-blue-500"
+                    className="h-4 w-4 rounded border-emerald-400 text-emerald-600 focus:ring-emerald-500"
                   />
                   <span className="flex items-center gap-1.5 font-bold text-slate-900">
                     <Zap className="h-4 w-4 text-emerald-600 shrink-0" />
                     <span>1-Click: Enable All 10 Mandi Features by Default</span>
                   </span>
                 </label>
-                <p className="text-[11px] text-blue-700 mt-1 pl-6">
+                <p className="text-[11px] text-emerald-800 mt-1 pl-6">
                   Includes Multi-Product Lots, Multi-Product Billing, Bag Weighment Scale, Smart Chart Auctions, Partner Ledgers, and WhatsApp bills.
                 </p>
               </div>
@@ -1252,7 +1252,7 @@ export default function SuperAdminDashboardPage() {
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-5 py-2 text-xs font-semibold text-white hover:bg-blue-700 shadow"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-5 py-2 text-xs font-semibold text-white hover:bg-emerald-800 shadow"
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   Provision Shop & Issue License
@@ -1301,7 +1301,7 @@ export default function SuperAdminDashboardPage() {
               <div className="rounded-xl border border-slate-200 bg-slate-50 p-3.5 space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
-                    <Key className="h-3.5 w-3.5 text-blue-600" />
+                    <Key className="h-3.5 w-3.5 text-emerald-700" />
                     License Key & Quota Limits
                   </span>
                   <span className="text-[11px] font-bold text-slate-600">
@@ -1394,7 +1394,7 @@ export default function SuperAdminDashboardPage() {
                           type="button"
                           onClick={() => handleToggleFeature(selectedBizForLicense.id, feat.key)}
                           className={`relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
-                            isEnabled ? "bg-blue-600" : "bg-slate-300"
+                            isEnabled ? "bg-emerald-600" : "bg-slate-300"
                           }`}
                         >
                           <span
@@ -1451,7 +1451,7 @@ export default function SuperAdminDashboardPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <h4 className="font-bold text-slate-900 text-sm flex items-center gap-1.5">
-                      <UserCheck className="h-4 w-4 text-blue-600" />
+                      <UserCheck className="h-4 w-4 text-emerald-700" />
                       Active Concurrent User Sessions
                     </h4>
                     <p className="text-[11px] text-slate-500">
@@ -1538,7 +1538,7 @@ export default function SuperAdminDashboardPage() {
                   </div>
                   <div>
                     <span className="text-[10px] uppercase font-bold text-slate-400 block">Authorized Seat Quota</span>
-                    <strong className="text-xs text-blue-700">Max {certData.maxUsers} Users (1 Admin + 2 Staff)</strong>
+                    <strong className="text-xs text-emerald-800">Max {certData.maxUsers} Users (1 Admin + 2 Staff)</strong>
                   </div>
                 </div>
 

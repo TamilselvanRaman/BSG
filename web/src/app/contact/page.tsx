@@ -62,14 +62,14 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm">Direct Phone & WhatsApp</h3>
                     <p className="text-xs text-slate-500 mt-0.5">Quick consultation & instant demo</p>
-                    <p className="text-sm font-bold text-blue-600 mt-1">+91 98412 38910</p>
+                    <p className="text-sm font-bold text-emerald-700 mt-1">+91 98412 38910</p>
                   </div>
                 </div>
               </div>
 
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-indigo-100 text-indigo-700">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-teal-100 text-teal-800">
                     <Mail className="h-6 w-6" />
                   </div>
                   <div>
@@ -82,7 +82,7 @@ export default function ContactPage() {
 
               <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
                     <Clock className="h-6 w-6" />
                   </div>
                   <div>
@@ -93,12 +93,12 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="rounded-2xl border border-blue-200 bg-blue-50/70 p-6 space-y-2">
-                <div className="flex items-center gap-2 font-bold text-blue-900 text-xs">
-                  <ShieldCheck className="h-4 w-4 text-blue-700" />
+              <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-6 space-y-2">
+                <div className="flex items-center gap-2 font-bold text-emerald-950 text-xs">
+                  <ShieldCheck className="h-4 w-4 text-emerald-700" />
                   <span>30-Day Free Trial Guarantee</span>
                 </div>
-                <p className="text-[11px] text-blue-800 leading-relaxed">
+                <p className="text-[11px] text-emerald-800 leading-relaxed">
                   No credit card required. Receive a fully activated shop license key with 3 login seats (1 Store Admin + 2 Staff Cashiers) and all 10 features unlocked.
                 </p>
               </div>
@@ -145,7 +145,7 @@ export default function ContactPage() {
                           placeholder="e.g. Kannan Murugan"
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                       <div>
@@ -157,7 +157,7 @@ export default function ContactPage() {
                           placeholder="e.g. Lakshmi Vegetable Mandi"
                           value={formData.shopName}
                           onChange={(e) => setFormData({ ...formData, shopName: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                     </div>
@@ -173,7 +173,7 @@ export default function ContactPage() {
                           placeholder="10-digit mobile number"
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                       <div>
@@ -185,7 +185,7 @@ export default function ContactPage() {
                           placeholder="name@example.com"
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                          className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
                         />
                       </div>
                     </div>

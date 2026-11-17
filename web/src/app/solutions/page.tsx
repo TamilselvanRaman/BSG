@@ -99,7 +99,7 @@ export default function SolutionsPage() {
                   className="rounded-3xl border border-slate-200 bg-white p-8 lg:p-12 shadow-sm hover:shadow-md transition"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
                       <Icon className="h-7 w-7" />
                     </div>
                     <div>
@@ -152,7 +152,7 @@ export default function SolutionsPage() {
       <section className="py-20 bg-white border-t border-slate-200">
         <div className="mx-auto max-w-5xl px-6">
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-widest text-emerald-800">
               Operational Comparison
             </span>
             <h2 className="mt-2 text-3xl font-black text-slate-900">
@@ -169,7 +169,7 @@ export default function SolutionsPage() {
                 <tr>
                   <th className="p-4 font-bold">Operational Aspect</th>
                   <th className="p-4 font-bold text-red-700">Old Manual Paper Bookkeeping</th>
-                  <th className="p-4 font-bold text-blue-700">Mandi OS Cloud Platform</th>
+                  <th className="p-4 font-bold text-emerald-800">Mandi OS Cloud Platform</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
@@ -216,7 +216,7 @@ export default function SolutionsPage() {
           <div className="pt-2">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-7 py-3 text-sm font-bold text-white shadow-lg hover:bg-blue-700 transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-800 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-950/40 hover:from-emerald-700 hover:to-emerald-900 transition"
             >
               <span>Start 30-Day Free Trial</span>
               <ArrowRight className="h-4 w-4" />

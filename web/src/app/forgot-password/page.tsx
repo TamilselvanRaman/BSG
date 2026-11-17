@@ -54,7 +54,7 @@ export default function ForgotPasswordPage() {
           </p>
 
           {message && (
-            <div className="mt-4 rounded-lg bg-blue-50 p-3 text-xs font-medium text-blue-800">
+            <div className="mt-4 rounded-lg bg-emerald-50 border border-emerald-200 p-3 text-xs font-medium text-emerald-800">
               {message}
             </div>
           )}
@@ -73,11 +73,11 @@ export default function ForgotPasswordPage() {
               required
               value={usernameOrEmail}
               onChange={(e) => setUsernameOrEmail(e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
             />
             <button
               type="submit"
-              className="w-full rounded-lg bg-slate-900 py-2 text-xs font-semibold text-white"
+              className="w-full rounded-lg bg-slate-900 py-2.5 text-xs font-semibold text-white hover:bg-slate-800 transition"
             >
               Generate Reset Token
             </button>
@@ -95,7 +95,7 @@ export default function ForgotPasswordPage() {
                 required
                 value={token}
                 onChange={(e) => setToken(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
               />
             </div>
             <div>
@@ -108,19 +108,19 @@ export default function ForgotPasswordPage() {
                 minLength={6}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm"
+                className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 focus:outline-none"
               />
             </div>
             <button
               type="submit"
-              className="w-full rounded-lg bg-blue-600 py-2 text-xs font-semibold text-white"
+              className="w-full rounded-lg bg-emerald-700 py-2.5 text-xs font-semibold text-white hover:bg-emerald-800 transition"
             >
               Confirm New Password
             </button>
           </form>
 
           <div className="mt-5 text-center">
-            <Link href="/login" className="text-xs font-semibold text-blue-600 hover:underline">
+            <Link href="/login" className="text-xs font-semibold text-emerald-700 hover:underline">
               Back to Sign In
             </Link>
           </div>
