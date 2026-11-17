@@ -123,32 +123,27 @@ export function BsgLogo({
   return (
     <div className={`flex items-center gap-3 ${className}`}>
       <BsgIcon size={px} className="shrink-0 shadow-sm rounded-xl" />
-      <div>
-        <div className="flex items-center gap-1.5 leading-none">
-          <span
-            className={`font-black tracking-tight ${
-              size === "sm"
-                ? "text-lg"
-                : size === "lg"
-                ? "text-2xl"
-                : size === "xl"
-                ? "text-3xl"
-                : "text-xl"
-            } ${isDark ? "text-white" : "text-slate-900"}`}
-          >
-            BSG
-          </span>
-          <span className="rounded-md bg-emerald-600/10 border border-emerald-600/20 px-1.5 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-emerald-700">
-            Mandi OS
-          </span>
-        </div>
-        <p
-          className={`font-medium tracking-wide mt-0.5 ${
+      <div className="flex flex-col">
+        <span
+          className={`font-black tracking-tight leading-none ${
+            size === "sm"
+              ? "text-lg"
+              : size === "lg"
+              ? "text-2xl"
+              : size === "xl"
+              ? "text-3xl"
+              : "text-xl"
+          } ${isDark ? "text-white" : "text-slate-900"}`}
+        >
+          BSG
+        </span>
+        <span
+          className={`font-medium tracking-tight mt-1 leading-none ${
             size === "sm" ? "text-[10px]" : "text-[11px]"
           } ${isDark ? "text-emerald-400/80" : "text-slate-500"}`}
         >
           Buyer • Seller • Goods Platform
-        </p>
+        </span>
       </div>
     </div>
   );

@@ -29,44 +29,47 @@ export function PublicNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md transition-all">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
+    <header className="sticky top-0 z-50 w-full border-b border-slate-200/80 bg-white/95 backdrop-blur-md transition-all shadow-xs">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center group">
+        <Link href="/" className="flex items-center group transition-opacity hover:opacity-95">
           <BsgLogo size="md" />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden items-center gap-1 lg:flex bg-slate-100/70 p-1.5 rounded-full border border-slate-200/60">
+        <nav className="hidden items-center gap-1 lg:flex">
           {NAV_LINKS.map((item) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-3.5 py-1.5 text-xs font-semibold rounded-full transition-all ${
+                className={`relative px-3.5 py-2 text-sm font-medium transition-all rounded-lg ${
                   active
-                    ? "bg-white text-emerald-700 shadow-xs font-bold"
-                    : "text-slate-600 hover:text-emerald-700 hover:bg-white/60"
+                    ? "text-emerald-800 font-semibold bg-emerald-50/80"
+                    : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/70"
                 }`}
               >
                 {item.label}
+                {active && (
+                  <span className="absolute bottom-1 left-3.5 right-3.5 h-0.5 bg-emerald-600 rounded-full" />
+                )}
               </Link>
             );
           })}
         </nav>
 
         {/* Auth CTA */}
-        <div className="hidden items-center gap-3 sm:flex">
+        <div className="hidden items-center gap-2.5 sm:flex">
           <Link
             href="/login"
-            className="rounded-lg border border-slate-300 px-4 py-2 text-xs font-bold text-slate-700 hover:bg-slate-100 hover:border-slate-400 transition"
+            className="rounded-lg px-3.5 py-2 text-sm font-semibold text-slate-700 hover:text-slate-900 hover:bg-slate-100/80 transition"
           >
             Sign In
           </Link>
           <Link
             href="/register"
-            className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-2 text-xs font-bold text-white shadow-md shadow-emerald-600/20 hover:from-emerald-700 hover:to-teal-800 transition hover:shadow-lg"
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-700 px-4 py-2.5 text-xs font-bold text-white shadow-sm shadow-emerald-900/10 hover:bg-emerald-800 active:scale-[0.98] transition-all"
           >
             <span>Start Free Trial</span>
             <ArrowRight className="h-3.5 w-3.5" />
@@ -76,7 +79,7 @@ export function PublicNavbar() {
         {/* Mobile Menu Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 lg:hidden"
+          className="rounded-lg p-2 text-slate-600 hover:bg-slate-100 hover:text-slate-900 lg:hidden"
           aria-label="Toggle Menu"
         >
           {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -85,34 +88,34 @@ export function PublicNavbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="border-b border-slate-200 bg-white px-6 py-4 shadow-xl lg:hidden">
-          <nav className="flex flex-col space-y-2">
+        <div className="border-b border-slate-200 bg-white/95 px-6 py-4 shadow-xl backdrop-blur-md lg:hidden">
+          <nav className="flex flex-col space-y-1.5">
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className={`rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                className={`rounded-lg px-3.5 py-2 text-sm font-semibold transition ${
                   pathname === item.href
-                    ? "bg-emerald-50 text-emerald-700 font-bold"
+                    ? "bg-emerald-50 text-emerald-800 font-bold"
                     : "text-slate-700 hover:bg-slate-100"
                 }`}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="pt-3 border-t border-slate-100 flex flex-col gap-2">
+            <div className="pt-3.5 border-t border-slate-100 flex flex-col gap-2">
               <Link
                 href="/login"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center rounded-lg border border-slate-300 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50"
+                className="w-full text-center rounded-lg border border-slate-300 py-2.5 text-xs font-bold text-slate-700 hover:bg-slate-50 transition"
               >
                 Sign In to Portal
               </Link>
               <Link
                 href="/register"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full text-center rounded-lg bg-emerald-600 py-2.5 text-xs font-bold text-white shadow hover:bg-emerald-700"
+                className="w-full text-center rounded-xl bg-emerald-700 py-2.5 text-xs font-bold text-white shadow hover:bg-emerald-800 transition"
               >
                 Register New Business
               </Link>
