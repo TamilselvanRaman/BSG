@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PublicNavbar, PublicFooter } from "@/components/PublicLayout";
 import { apiFetch, saveStoredSession, performDirectLogin } from "@/lib/api";
+import { BsgLogo } from "@/components/BsgLogo";
 import {
   ArrowRight,
   BarChart3,
@@ -105,17 +106,12 @@ export default function LoginPage() {
           {/* Left: Brand showcase */}
           <div className="hidden lg:flex lg:col-span-5 flex-col justify-between bg-gradient-to-br from-slate-900 via-slate-900 to-blue-950 p-8 text-white">
             <div>
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white">
-                  <BarChart3 className="h-5 w-5" />
-                </div>
-                <span className="font-extrabold text-base tracking-tight">CLICK Smart Chart</span>
-              </div>
+              <BsgLogo size="md" theme="dark" />
 
               <div className="mt-12 space-y-4">
                 <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-900/60 border border-blue-700/60 px-3 py-1 text-[11px] font-bold text-blue-300">
                   <Sparkles className="h-3 w-3" />
-                  Mandi OS Cloud Portal
+                  BSG Mandi OS Cloud Portal
                 </span>
                 <h2 className="text-2xl font-bold leading-tight">
                   Single Sign-On for Your Entire Mandi Operations

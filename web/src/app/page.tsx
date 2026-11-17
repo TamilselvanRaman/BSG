@@ -176,15 +176,15 @@ export default function HomePage() {
             {/* Pill Banner */}
             <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/80 px-4 py-1.5 text-xs font-bold text-blue-700 shadow-sm backdrop-blur-sm">
               <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Mandi OS v1.1 • Multi-Product Billing & Bag Weighment Live</span>
+              <span>BSG Mandi OS v1.1 • Multi-Product Billing & Bag Weighment Live</span>
               <Sparkles className="h-3.5 w-3.5 text-blue-600" />
             </div>
 
             {/* Headline */}
             <h1 className="mt-7 text-4xl font-black tracking-tight text-slate-900 sm:text-5xl lg:text-6xl leading-[1.12]">
-              Run Your Entire Mandi, Smart Chart & Billing Operations in{" "}
+              Run Your Entire Goods Inward, Mandi Trade & Billing in{" "}
               <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 bg-clip-text text-transparent">
-                One Platform
+                One BSG Platform
               </span>
             </h1>
 

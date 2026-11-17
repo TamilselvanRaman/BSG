@@ -86,7 +86,7 @@ export default function SolutionsPage() {
             Built for Your Specific Commodity Workflow
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Whether you trade perishable vegetables, graded fruits, or bulk grains, CLICK Smart Chart adapts to your trade conventions, units, and credit cycles.
+            Whether you trade perishable vegetables, graded fruits, or bulk grains, BSG adapts to your trade conventions, units, and credit cycles.
           </p>
         </div>
       </section>

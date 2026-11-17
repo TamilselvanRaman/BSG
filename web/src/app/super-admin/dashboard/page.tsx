@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { apiFetch, clearStoredSession, formatINR, getStoredSession, performDirectLogin } from "@/lib/api";
+import { BsgIcon } from "@/components/BsgLogo";
 import {
   Activity,
   AlertTriangle,
@@ -377,12 +378,12 @@ export default function SuperAdminDashboardPage() {
     <div className="flex min-h-screen bg-slate-100">
       {/* Sidebar */}
       <aside className="flex w-64 flex-col bg-slate-900 text-slate-200">
-        <div className="border-b border-slate-800 px-6 py-5">
-          <div className="flex items-center gap-2.5 text-white">
-            <Shield className="h-6 w-6 text-blue-400" />
+        <div className="border-b border-slate-800 px-5 py-4">
+          <div className="flex items-center gap-3 text-white">
+            <BsgIcon size={36} className="rounded-xl shadow-sm shrink-0" />
             <div>
-              <span className="block text-sm font-bold">CLICK Smart Chart</span>
-              <span className="block text-[11px] text-blue-400">Super Admin Control Plane</span>
+              <span className="block text-sm font-bold">BSG Cloud SaaS</span>
+              <span className="block text-[11px] text-blue-400 font-semibold">Super Admin Master</span>
             </div>
           </div>
         </div>

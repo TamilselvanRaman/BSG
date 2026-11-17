@@ -30,7 +30,7 @@ export default function AboutPage() {
             Building the Operating System for Agricultural Trade
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            CLICK Smart Chart transforms traditional mandi chaos into high-speed, verifiable digital commerce with zero math errors and complete financial audit integrity.
+            BSG (Buyer Seller Goods) transforms traditional mandi chaos into high-speed, verifiable digital commerce with zero math errors and complete financial audit integrity.
           </p>
         </div>
       </section>
@@ -41,13 +41,13 @@ export default function AboutPage() {
           {/* Story & Background */}
           <div className="rounded-3xl border border-slate-200 bg-white p-8 lg:p-12 shadow-sm space-y-4">
             <h2 className="text-2xl font-bold text-slate-900">
-              Why We Built CLICK Smart Chart
+              Why We Built BSG
             </h2>
             <p className="text-sm text-slate-600 leading-relaxed">
               Wholesale agricultural mandis are India's economic lifeblood. Yet every day, commission agents and traders juggle hundreds of handwritten slips, complex bag tare deductions, fast auctions, and cash reconciliations late into the night.
             </p>
             <p className="text-sm text-slate-600 leading-relaxed">
-              We engineered CLICK Smart Chart from the mandi floor up. We observed how weighment operators write bag weights on pieces of cardboard, how auctioneers call out bids, and how cashiers balance physical notes against sales registers. Every feature in our software mirrors these exact rituals while automating the math, ledger balances, and WhatsApp dispatch.
+              We engineered BSG from the mandi floor up. We observed how weighment operators write bag weights on pieces of cardboard, how auctioneers call out bids, and how cashiers balance physical notes against sales registers. Every feature in our software mirrors these exact rituals while automating the math, ledger balances, and WhatsApp dispatch.
             </p>
           </div>
 

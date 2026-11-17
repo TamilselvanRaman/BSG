@@ -1,7 +1,7 @@
 export const openApiSpec = {
   openapi: "3.0.3",
   info: {
-    title: "CLICK Smart Chart — Multi-Tenant Goods Management SaaS API",
+    title: "BSG — Multi-Tenant Goods Management & Mandi SaaS API",
     version: "1.0.0",
     description:
       "Production REST API for Super Admin, Business Admin, and Business Employees across Next.js Web and Flutter Mobile applications.",

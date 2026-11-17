@@ -165,7 +165,7 @@ export default function FeaturesPage() {
             Engineered for High-Volume Mandis
           </h1>
           <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Every module in CLICK Smart Chart is purpose-built for the unique speed, weighment methods, and financial credit rituals of agricultural wholesale markets.
+            Every module in BSG is purpose-built for the unique speed, weighment methods, and financial credit rituals of agricultural wholesale markets.
           </p>
 
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">

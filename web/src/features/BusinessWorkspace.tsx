@@ -10,6 +10,7 @@ import {
   getStoredSession,
   performDirectLogin,
 } from "@/lib/api";
+import { BsgIcon } from "@/components/BsgLogo";
 import {
   AlertTriangle,
   BarChart3,
@@ -600,15 +601,15 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
     <div className="flex min-h-screen bg-slate-100">
       {/* Sidebar */}
       <aside className="flex w-64 flex-col bg-slate-900 text-slate-200">
-        <div className="border-b border-slate-800 px-6 py-5">
-          <div className="flex items-center gap-2.5 text-white">
-            <BarChart3 className="h-6 w-6 text-blue-400" />
-            <div>
-              <span className="block text-sm font-bold">
-                {user?.tenantName || "Business Workspace"}
+        <div className="border-b border-slate-800 px-5 py-4">
+          <div className="flex items-center gap-3 text-white">
+            <BsgIcon size={36} className="rounded-xl shadow-sm shrink-0" />
+            <div className="min-w-0">
+              <span className="block text-sm font-bold truncate">
+                {user?.tenantName || "BSG Mandi Workspace"}
               </span>
-              <span className="block text-[11px] text-blue-400">
-                {mode === "ADMIN" ? "Business Admin Portal" : "Employee Operator Workspace"}
+              <span className="block text-[11px] text-blue-400 font-semibold">
+                {mode === "ADMIN" ? "BSG Sub Admin Portal" : "BSG Staff Cashier"}
               </span>
             </div>
           </div>

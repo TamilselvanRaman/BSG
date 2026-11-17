@@ -41,7 +41,7 @@ const PERMISSIONS = [
 ];
 
 async function main() {
-  console.log("Seeding CLICK Smart Chart Multi-Tenant SaaS Database...");
+  console.log("Seeding BSG Multi-Tenant Goods Management SaaS Database...");
 
   // 1. Seed Roles
   const superAdminRole = await prisma.role.upsert({

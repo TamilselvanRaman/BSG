@@ -17,7 +17,7 @@ export function createMockUser(role: "SUPER_ADMIN" | "ADMIN" | "BUSINESS_USER", 
       : isSubAdmin
       ? "Ramesh Kumar (Store Sub Admin)"
       : "Suresh Babu (Cashier / Staff)",
-    email: isSuper ? "superadmin@clicksmartchart.io" : "admin@vinayakaagro.in",
+    email: isSuper ? "superadmin@bsgmandi.io" : "admin@vinayakaagro.in",
     phone: "+91-9845012345",
     role: role,
     tenantId: isSuper ? null : "biz_mock_vinayaka",
@@ -422,7 +422,7 @@ export const MOCK_SUPER_ADMINS = [
     id: "adm-01",
     username: "superadmin",
     fullName: "Platform Super Administrator",
-    email: "superadmin@clicksmartchart.io",
+    email: "superadmin@bsgmandi.io",
     status: "ACTIVE",
     createdAt: new Date().toISOString(),
     role: { code: "SUPER_ADMIN", name: "Super Admin" },
@@ -501,8 +501,8 @@ export const MOCK_SUPER_PAYMENTS = [
 ];
 
 export const MOCK_SUPER_SETTINGS = {
-  platformName: "CLICK Smart Chart Cloud Mandi SaaS",
-  supportEmail: "support@clicksmartchart.io",
+  platformName: "BSG Mandi Cloud SaaS",
+  supportEmail: "support@bsgmandi.io",
   supportPhone: "+91-9000000001",
   currency: "INR",
   defaultTrialDays: 30,
@@ -596,7 +596,7 @@ export function getMockFallbackData<T = any>(endpoint: string, options: RequestI
       maxUsers: 3,
       status: "ACTIVE",
       trialEndsAt: new Date(Date.now() + 28 * 24 * 3600 * 1000).toISOString(),
-      qrCodeData: "https://clicksmartchart.io/verify/BSG-LIC-TRIAL-3SEATS-ACTIVE",
+      qrCodeData: "https://bsgmandi.io/verify/BSG-LIC-TRIAL-3SEATS-ACTIVE",
     } as unknown as T;
   }
 

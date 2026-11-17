@@ -38,7 +38,7 @@ const authLimiter = rateLimit({
 app.get("/health", (_req, res) => {
   res.json({
     status: "healthy",
-    service: "click-smart-chart-api",
+    service: "bsg-saas-api",
     timestamp: new Date().toISOString(),
   });
 });

@@ -80,7 +80,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold text-slate-900 text-sm">Email Support</h3>
                     <p className="text-xs text-slate-500 mt-0.5">Formal onboarding & technical queries</p>
-                    <p className="text-sm font-bold text-slate-800 mt-1">support@clicksmartchart.io</p>
+                    <p className="text-sm font-bold text-slate-800 mt-1">support@bsgmandi.io</p>
                   </div>
                 </div>
               </div>

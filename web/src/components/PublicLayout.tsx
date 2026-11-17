@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { BsgLogo } from "@/components/BsgLogo";
 import {
   BarChart3,
   ShieldCheck,
@@ -32,18 +33,8 @@ export function PublicNavbar() {
     <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-md transition-all">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3.5">
         {/* Brand Logo */}
-        <Link href="/" className="flex items-center gap-3 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform">
-            <BarChart3 className="h-5 w-5" />
-          </div>
-          <div>
-            <span className="block text-base font-extrabold tracking-tight text-slate-900 group-hover:text-blue-600 transition-colors">
-              CLICK Smart Chart
-            </span>
-            <span className="block text-[11px] font-semibold text-slate-500 tracking-wide">
-              Mandi OS • Multi-Tenant SaaS
-            </span>
-          </div>
+        <Link href="/" className="flex items-center group">
+          <BsgLogo size="md" />
         </Link>
 
         {/* Desktop Navigation */}
@@ -141,14 +132,9 @@ export function PublicFooter() {
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-3 text-white">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white">
-                <BarChart3 className="h-5 w-5" />
-              </div>
-              <span className="text-lg font-extrabold tracking-tight">CLICK Smart Chart</span>
-            </div>
+            <BsgLogo size="md" theme="dark" />
             <p className="text-xs text-slate-400 leading-relaxed max-w-sm">
-              The premier Cloud SaaS & Handheld Operating System for APMC Mandis, Wholesale Vegetable & Fruit Traders, Commission Agents, and Multi-Crop Enterprises.
+              BSG (Buyer Seller Goods) is the premier Cloud Mandi SaaS & Handheld Operating System for APMC Mandis, Wholesale Vegetable & Fruit Traders, Commission Agents, and Multi-Crop Enterprises.
             </p>
             <div className="flex items-center gap-2 pt-2 text-xs font-semibold text-emerald-400">
               <CheckCircle className="h-4 w-4" />
@@ -192,7 +178,7 @@ export function PublicFooter() {
         </div>
 
         <div className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-slate-900 pt-8 text-[11px] text-slate-500">
-          <p>© {new Date().getFullYear()} CLICK Smart Chart Corp. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} BSG Platform Technologies Pvt Ltd. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link href="/privacy" className="hover:text-slate-300">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-slate-300">Terms of Service</Link>

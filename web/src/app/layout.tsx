@@ -2,9 +2,12 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "CLICK Smart Chart — Multi-Tenant Goods Management SaaS Platform",
+  title: "BSG — Buyer Seller Goods Management & Mandi SaaS Platform",
   description:
-    "Enterprise SaaS Goods, Arrival Lot, Smart Chart, Auction, Purchase & Sales Billing, Partner Ledgers, and Inventory Platform.",
+    "Enterprise Cloud SaaS Platform for Goods Inward Lots, Digital Weighment, Live Auctions, Multi-Product Billing, Partner Ledgers, and Cash Drawer Management.",
+  icons: {
+    icon: "/bsg-icon.svg",
+  },
 };
 
 export default function RootLayout({

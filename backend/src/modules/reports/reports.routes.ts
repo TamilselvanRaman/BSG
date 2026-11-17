@@ -396,7 +396,7 @@ documentsRouter.post(
       const body = schema.parse(req.body);
 
       const profile = await prisma.businessProfile.findUnique({ where: { tenantId } });
-      const businessName = profile?.businessName ?? "CLICK Smart Chart Business";
+      const businessName = profile?.businessName ?? "BSG Mandi Business";
       const businessAddress = [profile?.addressLine1, profile?.city, profile?.state]
         .filter(Boolean)
         .join(", ");
