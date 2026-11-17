@@ -13,65 +13,40 @@
   }
 
   body {
-    @apply bg-slate-50 text-slate-900 antialiased selection:bg-emerald-600 selection:text-white;
+    background-color: #F4FAF5;
+    color: #123B29;
+    antialiased: true;
+  }
+
+  ::selection {
+    background-color: #10A66A;
+    color: #FFFFFF;
   }
 }
 
-/* Custom keyframes & motion animations */
-@keyframes float {
+/* Custom animations for agricultural SaaS enterprise feel */
+@keyframes subtleFloat {
   0%, 100% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-8px);
+    transform: translateY(-6px);
   }
 }
 
-@keyframes pulseGlow {
+@keyframes gentlePulse {
   0%, 100% {
-    opacity: 0.4;
-    transform: scale(1);
+    opacity: 0.3;
   }
   50% {
-    opacity: 0.8;
-    transform: scale(1.05);
+    opacity: 0.6;
   }
 }
 
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
+.animate-subtle-float {
+  animation: subtleFloat 5s ease-in-out infinite;
 }
 
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.animate-pulse-glow {
-  animation: pulseGlow 3s ease-in-out infinite;
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradientShift 6s ease infinite;
-}
-
-/* Glassmorphism helpers */
-.glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(226, 232, 240, 0.8);
-}
-
-.glass-dark {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.6);
+.animate-gentle-pulse {
+  animation: gentlePulse 4s ease-in-out infinite;
 }

@@ -6,7 +6,6 @@ import {
   Boxes,
   CheckCircle2,
   Coins,
-  Cpu,
   PackagePlus,
   Scale,
   ShieldCheck,
@@ -71,16 +70,19 @@ const SOLUTIONS = [
 
 export default function SolutionsPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* Header */}
-      <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <h1 className="text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-[#F4FAF5] to-[#E8F5EC] py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
+            Agricultural Wholesale Verticals
+          </span>
+          <h1 className="mt-3 text-4xl font-black text-[#063D2E] sm:text-5xl lg:text-6xl tracking-tight">
             Built for Your Specific Commodity Workflow
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-base sm:text-lg text-[#47785C] max-w-2xl mx-auto leading-relaxed">
             Whether you trade perishable vegetables, graded fruits, or bulk grains, BSG adapts to your trade conventions, units, and credit cycles.
           </p>
         </div>
@@ -88,7 +90,7 @@ export default function SolutionsPage() {
 
       {/* Solutions Cards */}
       <section className="py-20">
-        <div className="mx-auto max-w-7xl px-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="space-y-12">
             {SOLUTIONS.map((sol) => {
               const Icon = sol.icon;
@@ -96,49 +98,60 @@ export default function SolutionsPage() {
               return (
                 <div
                   key={sol.title}
-                  className="rounded-3xl border border-slate-200 bg-white p-8 lg:p-12 shadow-sm hover:shadow-md transition"
+                  className="rounded-3xl border border-[#CDE8D5] bg-white p-8 lg:p-12 shadow-xs hover:border-[#10A66A] transition-all"
                 >
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
-                      <Icon className="h-7 w-7" />
+                  <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between border-b border-[#DCEEE1] pb-6">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E8F5EC] text-[#087A50]">
+                        <Icon className="h-7 w-7" />
+                      </div>
+                      <div>
+                        <h2 className="text-xl sm:text-2xl font-bold text-[#063D2E]">
+                          {sol.title}
+                        </h2>
+                        <p className="text-xs sm:text-sm text-[#47785C] mt-1 font-medium">
+                          {sol.tagline}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold text-slate-900">{sol.title}</h2>
-                      <p className="text-xs text-slate-500 mt-1">{sol.tagline}</p>
-                    </div>
+                    <Link
+                      href="/register"
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A50] hover:bg-[#063D2E] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition"
+                    >
+                      <span>Start 30-Day Free Trial</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
 
-                  <div className="mt-8 grid gap-8 md:grid-cols-2 pt-4 border-t border-slate-100">
-                    {/* The Problem */}
-                    <div className="rounded-2xl border border-red-100 bg-red-50/50 p-6 space-y-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-red-700 flex items-center gap-1.5">
-                        <XCircle className="h-4 w-4 text-red-500" />
-                        Common Industry Challenges
-                      </span>
-                      <div className="space-y-2.5 pt-1 text-xs text-red-900">
+                  <div className="mt-8 grid gap-8 lg:grid-cols-2">
+                    {/* Traditional Inefficiencies */}
+                    <div className="rounded-2xl border border-red-200 bg-red-50/40 p-6 space-y-3">
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-[#C2413B]">
+                        Traditional Mandi Inefficiencies
+                      </h3>
+                      <ul className="space-y-2.5 text-xs text-[#123B29]">
                         {sol.challenges.map((c) => (
-                          <div key={c} className="flex items-start gap-2">
-                            <span className="text-red-400 font-bold">•</span>
+                          <li key={c} className="flex items-start gap-2">
+                            <span className="text-[#C2413B] font-bold text-sm leading-none mt-0.5">•</span>
                             <span>{c}</span>
-                          </div>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
 
-                    {/* Mandi OS Solution */}
-                    <div className="rounded-2xl border border-emerald-100 bg-emerald-50/50 p-6 space-y-3">
-                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                        Mandi OS Solves This With
-                      </span>
-                      <div className="space-y-2.5 pt-1 text-xs text-emerald-950 font-medium">
+                    {/* BSG Solution */}
+                    <div className="rounded-2xl border border-emerald-200 bg-[#E8F5EC]/60 p-6 space-y-3">
+                      <h3 className="text-xs font-bold uppercase tracking-wider text-[#087A50]">
+                        BSG Enterprise Solution
+                      </h3>
+                      <ul className="space-y-2.5 text-xs text-[#123B29]">
                         {sol.mandiOsSolution.map((s) => (
-                          <div key={s} className="flex items-start gap-2">
-                            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                          <li key={s} className="flex items-start gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-[#10A66A] shrink-0 mt-0.5" />
                             <span>{s}</span>
-                          </div>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   </div>
                 </div>
@@ -148,78 +161,30 @@ export default function SolutionsPage() {
         </div>
       </section>
 
-      {/* Comparison: Traditional Paper Mandi vs Mandi OS */}
-      <section className="py-20 bg-white border-t border-slate-200">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="text-xs font-bold uppercase tracking-widest text-emerald-800">
-              Operational Comparison
-            </span>
-            <h2 className="mt-2 text-3xl font-black text-slate-900">
-              Manual Paper Bookkeeping vs Mandi OS Cloud
-            </h2>
-            <p className="mt-2 text-xs text-slate-500">
-              Why leading commission shops across India are replacing paper diaries with Mandi OS.
-            </p>
-          </div>
-
-          <div className="mt-12 overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-slate-200 bg-slate-50 uppercase tracking-wider text-[11px] text-slate-600">
-                <tr>
-                  <th className="p-4 font-bold">Operational Aspect</th>
-                  <th className="p-4 font-bold text-red-700">Old Manual Paper Bookkeeping</th>
-                  <th className="p-4 font-bold text-emerald-800">Mandi OS Cloud Platform</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Bag Weighment Calculation</td>
-                  <td className="p-4 text-red-600">Manual paper additions prone to math mistakes</td>
-                  <td className="p-4 font-bold text-emerald-700">Digital scale table summing bags & weights instantly</td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Day-End Cash Reconciliation</td>
-                  <td className="p-4 text-red-600">1-2 hours of manual ledger counting with cash leaks</td>
-                  <td className="p-4 font-bold text-emerald-700">3-minute currency denomination counter with audit log</td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Buyer Bill Dispatch</td>
-                  <td className="p-4 text-red-600">Handwritten slips easily lost or disputed</td>
-                  <td className="p-4 font-bold text-emerald-700">1-click WhatsApp bill PDF & thermal printed receipt</td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Multi-User Seat Security</td>
-                  <td className="p-4 text-red-600">No audit trail of who modified rates or received cash</td>
-                  <td className="p-4 font-bold text-emerald-700">Strict 3-seat quota with immutable operator audit trail</td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Floor Mobility & Power Outage</td>
-                  <td className="p-4 text-red-600">Tied to a bulky physical desk or unorganized paper slips</td>
-                  <td className="p-4 font-bold text-emerald-700">Rugged Android handheld tablet with offline local sync</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-20 bg-slate-900 text-white text-center border-t border-slate-800">
-        <div className="mx-auto max-w-4xl px-6 space-y-6">
-          <h2 className="text-3xl font-black sm:text-4xl">
-            Modernize Your Mandi Operations Today
+      {/* Conversion Banner */}
+      <section className="py-20 bg-[#063D2E] text-white">
+        <div className="mx-auto max-w-4xl px-4 text-center space-y-6">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
+            Tailored Industry Onboarding
+          </span>
+          <h2 className="text-3xl font-black sm:text-5xl">
+            Modernize Your Mandi Workflow in 24 Hours
           </h2>
-          <p className="text-sm text-slate-400 max-w-xl mx-auto">
-            Join hundreds of APMC commission agents and wholesale commodity merchants who save 2 hours every evening with Mandi OS.
+          <p className="text-sm text-[#C4E2CF] max-w-xl mx-auto">
+            Get your shop setup with commodity masters, electronic scale hooks, and mobile tablets.
           </p>
-          <div className="pt-2">
+          <div className="pt-2 flex flex-wrap justify-center gap-4">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-800 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-950/40 hover:from-emerald-700 hover:to-emerald-900 transition"
+              className="rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
             >
-              <span>Start 30-Day Free Trial</span>
-              <ArrowRight className="h-4 w-4" />
+              Start 30-Day Free Trial
+            </Link>
+            <Link
+              href="/contact"
+              className="rounded-xl border border-[#0A503B] bg-[#0A503B] hover:bg-[#0E664C] px-7 py-3.5 text-sm font-bold text-white transition"
+            >
+              Schedule Mandi Consultation
             </Link>
           </div>
         </div>

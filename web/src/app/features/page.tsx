@@ -2,11 +2,9 @@ import Link from "next/link";
 import { PublicNavbar, PublicFooter } from "@/components/PublicLayout";
 import {
   ArrowRight,
-  BarChart3,
   Boxes,
   CheckCircle2,
   Coins,
-  Cpu,
   Database,
   FileSpreadsheet,
   FileText,
@@ -150,146 +148,141 @@ const FEATURE_PILLARS = [
 
 export default function FeaturesPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* Header */}
-      <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <h1 className="text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-[#F4FAF5] to-[#E8F5EC] py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
+            Enterprise Architecture & Capabilities
+          </span>
+          <h1 className="mt-3 text-4xl font-black text-[#063D2E] sm:text-5xl lg:text-6xl tracking-tight">
             Engineered for High-Volume Mandis
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="mx-auto mt-6 max-w-3xl text-base sm:text-lg text-[#47785C] leading-relaxed">
             Every module in BSG is purpose-built for the unique speed, weighment methods, and financial credit rituals of agricultural wholesale markets.
           </p>
-
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-700 px-6 py-3.5 text-xs font-bold text-white shadow-md hover:from-emerald-700 hover:to-teal-800 transition"
+              className="rounded-xl bg-[#087A50] hover:bg-[#063D2E] px-7 py-3.5 text-sm font-bold text-white shadow-md transition"
             >
-              <span>Start 30-Day Free Trial</span>
-              <ArrowRight className="h-4 w-4" />
+              Start 30-Day Free Trial
             </Link>
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3.5 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50"
+              className="rounded-xl border border-[#CDE8D5] bg-white hover:bg-[#E8F5EC] px-7 py-3.5 text-sm font-bold text-[#063D2E] transition"
             >
-              <span>View Pricing Plans</span>
+              View Pricing Plans
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Feature Deep Dive Grid */}
-      <section className="py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="space-y-12">
-            {FEATURE_PILLARS.map((feat, idx) => {
-              const Icon = feat.icon;
-              const isEven = idx % 2 === 0;
-
-              return (
-                <div
-                  key={feat.id}
-                  id={feat.id}
-                  className="rounded-3xl border border-slate-200 bg-white p-8 lg:p-12 shadow-sm hover:shadow-md transition"
-                >
-                  <div className="grid gap-8 lg:grid-cols-12 items-center">
-                    {/* Left Info */}
-                    <div className="lg:col-span-7 space-y-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-800">
-                          <Icon className="h-6 w-6" />
-                        </div>
-                        <div>
-                          <span className="text-[11px] font-bold text-emerald-800 uppercase tracking-wider block">
-                            {feat.badge}
-                          </span>
-                          <h2 className="text-2xl font-bold text-slate-900 mt-0.5">
-                            {feat.title}
-                          </h2>
-                        </div>
-                      </div>
-
-                      <p className="text-sm text-slate-600 leading-relaxed pt-1">
-                        {feat.summary}
-                      </p>
-
-                      <div className="space-y-2.5 pt-2">
-                        {feat.details.map((point) => (
-                          <div key={point} className="flex items-start gap-2.5 text-xs text-slate-700">
-                            <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                            <span>{point}</span>
-                          </div>
-                        ))}
-                      </div>
-
-                      <div className="pt-3">
-                        <span className="inline-flex items-center gap-2 rounded-lg bg-emerald-50 border border-emerald-200 px-3 py-1.5 text-xs font-bold text-emerald-800">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-                          {feat.metric}
-                        </span>
-                      </div>
+      {/* Deep-Dive Alternating Modules */}
+      <section className="py-20 space-y-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+          {FEATURE_PILLARS.map((feat, idx) => {
+            const Icon = feat.icon;
+            const isEven = idx % 2 === 0;
+            return (
+              <div
+                key={feat.id}
+                className={`grid gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#CDE8D5] p-8 sm:p-10 shadow-xs transition ${
+                  isEven ? "bg-white" : "bg-[#E8F5EC]/50"
+                }`}
+              >
+                {/* Content */}
+                <div className={`space-y-4 lg:col-span-7 ${isEven ? "" : "lg:order-2"}`}>
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#DDF2E4] text-[#087A50]">
+                      <Icon className="h-5 w-5" />
                     </div>
+                    <span className="rounded-full bg-[#E8F5EC] border border-[#CDE8D5] px-3 py-0.5 text-[11px] font-bold text-[#063D2E] uppercase tracking-wider">
+                      {feat.badge}
+                    </span>
+                  </div>
 
-                    {/* Right Visual Card */}
-                    <div className="lg:col-span-5">
-                      <div className="rounded-2xl border border-slate-200 bg-slate-900 p-6 text-white shadow-inner">
-                        <div className="flex items-center justify-between border-b border-slate-800 pb-3 text-xs">
-                          <span className="font-mono text-emerald-400">BSG_OPERATIONS::{feat.id.toUpperCase()}</span>
-                          <span className="rounded bg-emerald-500/20 text-emerald-400 px-2 py-0.5 text-[10px] font-bold">
-                            ONLINE / LIVE
-                          </span>
-                        </div>
-                        <div className="py-6 space-y-3 font-mono text-xs">
-                          <div className="flex justify-between text-slate-400">
-                            <span>Processing Mode</span>
-                            <span className="text-white">ACID Multi-Tenant</span>
-                          </div>
-                          <div className="flex justify-between text-slate-400">
-                            <span>Hardware Hook</span>
-                            <span className="text-white">Thermal & Weighbridge</span>
-                          </div>
-                          <div className="flex justify-between text-slate-400">
-                            <span>Platform Security</span>
-                            <span className="text-white">AES-256 / Max 3 Seats</span>
-                          </div>
-                          <div className="flex justify-between text-slate-400">
-                            <span>Mobile Mirroring</span>
-                            <span className="text-emerald-400 font-bold">Sync Enabled</span>
-                          </div>
-                        </div>
-                        <div className="border-t border-slate-800 pt-3 flex justify-between text-[11px] text-slate-500">
-                          <span>Audit Verified</span>
-                          <span className="text-slate-400">APMC Mandi Standard</span>
-                        </div>
+                  <h2 className="text-2xl sm:text-3xl font-bold text-[#063D2E]">
+                    {feat.title}
+                  </h2>
+                  <p className="text-sm text-[#47785C] leading-relaxed">
+                    {feat.summary}
+                  </p>
+
+                  <div className="pt-2 grid gap-2.5 sm:grid-cols-2">
+                    {feat.details.map((d) => (
+                      <div key={d} className="flex items-start gap-2 text-xs text-[#123B29]">
+                        <CheckCircle2 className="h-4 w-4 text-[#10A66A] shrink-0 mt-0.5" />
+                        <span>{d}</span>
                       </div>
+                    ))}
+                  </div>
+
+                  <div className="pt-4 flex items-center justify-between border-t border-[#DCEEE1]">
+                    <span className="font-bold text-xs text-[#087A50]">
+                      {feat.metric}
+                    </span>
+                    <Link
+                      href="/contact"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#063D2E] hover:text-[#087A50] transition"
+                    >
+                      <span>Request Live Walkthrough</span>
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Right Interactive Mock Display */}
+                <div className={`lg:col-span-5 ${isEven ? "" : "lg:order-1"}`}>
+                  <div className="rounded-2xl border border-[#0A503B] bg-[#063D2E] p-6 text-[#C4E2CF] font-mono text-xs shadow-xl space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#0A503B] pb-2 text-[10px] text-[#71917B]">
+                      <span>MANDI OS :: {feat.badge.toUpperCase()}</span>
+                      <span className="text-[#10A66A] font-bold">ONLINE / LIVE</span>
+                    </div>
+                    <div className="space-y-1.5 font-sans">
+                      <div className="text-white font-bold text-sm">{feat.title}</div>
+                      <p className="text-[11px] text-[#C4E2CF] leading-relaxed">
+                        Continuous ACID transactional integrity with automated tare verification and receipt generation.
+                      </p>
+                    </div>
+                    <div className="pt-3 border-t border-[#0A503B] flex justify-between text-[11px]">
+                      <span>Telemetry Health:</span>
+                      <span className="text-[#10A66A] font-bold">SHA256:VERIFIED</span>
                     </div>
                   </div>
                 </div>
-              );
-            })}
-          </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-slate-900 text-white text-center border-t border-slate-800">
-        <div className="mx-auto max-w-4xl px-6 space-y-6">
-          <h2 className="text-3xl font-black sm:text-4xl">
-            Experience the Complete Mandi OS Suite
+      {/* CTA Box */}
+      <section className="py-20 bg-[#063D2E] text-white">
+        <div className="mx-auto max-w-4xl px-4 text-center space-y-6">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
+            Deploy to Your Market Yard
+          </span>
+          <h2 className="text-3xl font-black sm:text-5xl">
+            Upgrade Your Mandi with Enterprise Software Today
           </h2>
-          <p className="text-sm text-slate-400 max-w-xl mx-auto">
-            Get instant access to all 8 modules for your shop. Provision your 30-day trial license in 60 seconds.
+          <p className="text-sm text-[#C4E2CF] max-w-2xl mx-auto">
+            Get instant access for 1 Store Admin and 2 Staff Cashiers with our 30-day full feature trial.
           </p>
-          <div className="pt-2">
+          <div className="pt-3 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-800 px-7 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-950/40 hover:from-emerald-700 hover:to-emerald-900 transition"
+              className="rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
             >
-              <span>Provision Shop License</span>
-              <ArrowRight className="h-4 w-4" />
+              Start 30-Day Free Trial
+            </Link>
+            <Link
+              href="/contact"
+              className="rounded-xl border border-[#0A503B] bg-[#0A503B] hover:bg-[#0E664C] px-7 py-3.5 text-sm font-bold text-white transition"
+            >
+              Schedule Guided Demo
             </Link>
           </div>
         </div>

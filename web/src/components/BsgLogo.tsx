@@ -18,36 +18,36 @@ export function BsgIcon({ size = 36, className = "" }: { size?: number; classNam
       className={className}
     >
       <defs>
-        {/* Emerald & Green Gradients */}
+        {/* Enterprise Green & Emerald Gradients */}
         <linearGradient id="bsg-emerald-primary" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#10B981" />
-          <stop offset="100%" stopColor="#047857" />
+          <stop offset="0%" stopColor="#10A66A" />
+          <stop offset="100%" stopColor="#087A50" />
         </linearGradient>
-        <linearGradient id="bsg-teal-secondary" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#14B8A6" />
-          <stop offset="100%" stopColor="#0F766E" />
+        <linearGradient id="bsg-mint-secondary" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#DDF2E4" />
+          <stop offset="100%" stopColor="#10A66A" />
         </linearGradient>
         <linearGradient id="bsg-box-top" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#6EE7B7" />
-          <stop offset="100%" stopColor="#34D399" />
+          <stop offset="0%" stopColor="#DDF2E4" />
+          <stop offset="100%" stopColor="#A8E2BD" />
         </linearGradient>
         <linearGradient id="bsg-box-left" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#047857" />
-          <stop offset="100%" stopColor="#064E3B" />
+          <stop offset="0%" stopColor="#087A50" />
+          <stop offset="100%" stopColor="#063D2E" />
         </linearGradient>
         <linearGradient id="bsg-box-right" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#059669" />
-          <stop offset="100%" stopColor="#047857" />
+          <stop offset="0%" stopColor="#10A66A" />
+          <stop offset="100%" stopColor="#087A50" />
         </linearGradient>
         <filter id="bsg-shadow" x="-10%" y="-10%" width="130%" height="130%">
-          <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#064E3B" floodOpacity="0.3" />
+          <feDropShadow dx="0" dy="2" stdDeviation="2.5" floodColor="#063D2E" floodOpacity="0.4" />
         </filter>
       </defs>
 
-      {/* Rounded container with deep forest background */}
-      <rect width="48" height="48" rx="12" fill="#061C14" />
+      {/* Rounded container with Deep Forest Green */}
+      <rect width="48" height="48" rx="12" fill="#063D2E" />
 
-      {/* BUYING ARROW (Mint-Emerald Inflow / Procurement) */}
+      {/* BUYING ARROW (Procurement / Inward) */}
       <path
         d="M 10 18 A 16 16 0 0 1 36 12"
         stroke="url(#bsg-emerald-primary)"
@@ -56,22 +56,22 @@ export function BsgIcon({ size = 36, className = "" }: { size?: number; classNam
       />
       <polygon
         points="37,8 41,13 35,16"
-        fill="#10B981"
+        fill="#10A66A"
       />
 
-      {/* SELLING ARROW (Teal-Jade Outflow / Sales) */}
+      {/* SELLING ARROW (Sales / Outflow) */}
       <path
         d="M 38 30 A 16 16 0 0 1 12 36"
-        stroke="url(#bsg-teal-secondary)"
+        stroke="url(#bsg-mint-secondary)"
         strokeWidth="3.2"
         strokeLinecap="round"
       />
       <polygon
         points="11,40 7,35 13,32"
-        fill="#14B8A6"
+        fill="#10A66A"
       />
 
-      {/* CENTER PRODUCT / GOODS MANAGEMENT CUBE */}
+      {/* CENTER GOODS MANAGEMENT CUBE */}
       <g filter="url(#bsg-shadow)">
         {/* Isometric Cube Top Face */}
         <polygon
@@ -89,12 +89,12 @@ export function BsgIcon({ size = 36, className = "" }: { size?: number; classNam
           fill="url(#bsg-box-right)"
         />
 
-        {/* Goods box seam lines */}
-        <line x1="20" y1="16.25" x2="28" y2="20.75" stroke="#A7F3D0" strokeWidth="1" strokeOpacity="0.9" />
-        <line x1="24" y1="23" x2="24" y2="32" stroke="#34D399" strokeWidth="0.8" strokeOpacity="0.7" />
+        {/* Seam lines */}
+        <line x1="20" y1="16.25" x2="28" y2="20.75" stroke="#CDE8D5" strokeWidth="1" strokeOpacity="0.9" />
+        <line x1="24" y1="23" x2="24" y2="32" stroke="#10A66A" strokeWidth="0.8" strokeOpacity="0.7" />
 
-        {/* Precision scale pip */}
-        <circle cx="24" cy="23" r="1.5" fill="#ECFDF5" />
+        {/* Center node */}
+        <circle cx="24" cy="23" r="1.5" fill="#FFFFFF" />
       </g>
     </svg>
   );
@@ -133,14 +133,14 @@ export function BsgLogo({
               : size === "xl"
               ? "text-3xl"
               : "text-xl"
-          } ${isDark ? "text-white" : "text-slate-900"}`}
+          } ${isDark ? "text-white" : "text-[#123B29]"}`}
         >
           BSG
         </span>
         <span
           className={`font-medium tracking-tight mt-1 leading-none ${
             size === "sm" ? "text-[10px]" : "text-[11px]"
-          } ${isDark ? "text-emerald-400/80" : "text-slate-500"}`}
+          } ${isDark ? "text-[#C4E2CF]" : "text-[#47785C]"}`}
         >
           Buyer • Seller • Goods Platform
         </span>

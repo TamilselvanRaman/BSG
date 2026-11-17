@@ -5,7 +5,6 @@ import Link from "next/link";
 import { PublicNavbar, PublicFooter } from "@/components/PublicLayout";
 import {
   ArrowRight,
-  Check,
   CheckCircle2,
   HelpCircle,
   PhoneCall,
@@ -21,11 +20,11 @@ export default function PricingPage() {
       id: "STARTER",
       name: "Starter Mandi",
       tagline: "Essential digital scale billing & ledgers for single commission shops",
-      monthlyPrice: 1499,
-      annualPrice: 14990,
+      monthlyPrice: 999,
+      annualPrice: 9990,
       popular: false,
       features: [
-        "Up to 3 Login Users (1 Admin + 2 Staff)",
+        "Up to 2 User Seats (1 Admin + 1 Staff)",
         "Multi-Product Inward Lot Arrival",
         "Bag-by-Bag Weighment Scale Billing",
         "Instant Cash & Credit Sales Bills",
@@ -41,11 +40,11 @@ export default function PricingPage() {
       id: "PROFESSIONAL",
       name: "Professional Mandi Suite",
       tagline: "Full-speed auctions & offline handheld mobility for busy mandi merchants",
-      monthlyPrice: 2999,
-      annualPrice: 29990,
+      monthlyPrice: 1999,
+      annualPrice: 19990,
       popular: true,
       features: [
-        "Up to 3 Login Users (1 Admin + 2 Staff)",
+        "Up to 3 User Seats (1 Admin + 2 Staff)",
         "Everything in Starter Mandi, plus:",
         "Smart Chart Live Auction & Bidding Board",
         "Offline-First Android Handheld Sync",
@@ -62,13 +61,13 @@ export default function PricingPage() {
       id: "ENTERPRISE",
       name: "Enterprise Multi-Branch",
       tagline: "Custom integrations, dedicated servers & high-volume mandi corporations",
-      monthlyPrice: 5999,
-      annualPrice: 59990,
+      monthlyPrice: 4999,
+      annualPrice: 49990,
       popular: false,
       features: [
-        "Custom User Seat Capacity (Multi-Staff)",
+        "Up to 10 Concurrent Device Seats",
         "Multi-Branch & Inter-Mandi Transfers",
-        "Dedicated Database Instance & Custom Backups",
+        "Dedicated Database Schema & Custom Backups",
         "Weighbridge Digital Serial Port Integration",
         "Custom APMC Cess / Market Tax Templates",
         "Automated Daily Financial Audits",
@@ -80,210 +79,192 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* Hero Header */}
-      <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <h1 className="text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-[#F4FAF5] to-[#E8F5EC] py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
+            Transparent Subscriptions
+          </span>
+          <h1 className="mt-3 text-4xl font-black text-[#063D2E] sm:text-5xl lg:text-6xl tracking-tight">
             Simple, Predictable Plans for Every Mandi Shop
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Every plan includes our strict 3-user license protection, multi-product weighment tables, and instant WhatsApp billing. No surprise transaction fees.
+          <p className="mt-4 text-base sm:text-lg text-[#47785C] max-w-2xl mx-auto leading-relaxed">
+            Every plan includes our strict multi-user license protection, digital bag weighment tables, and instant WhatsApp billing. Zero hidden commissions.
           </p>
 
           {/* Billing Cycle Toggle */}
           <div className="mt-10 flex items-center justify-center gap-3">
-            <span className={`text-xs font-bold ${!annualBilling ? "text-slate-900" : "text-slate-500"}`}>
+            <span className={`text-xs font-bold ${!annualBilling ? "text-[#063D2E]" : "text-[#71917B]"}`}>
               Monthly Billing
             </span>
             <button
               onClick={() => setAnnualBilling(!annualBilling)}
-              className="relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent bg-slate-900 transition-colors duration-200 ease-in-out"
+              className="relative h-7 w-12 rounded-full bg-[#087A50] transition-colors focus:outline-none"
+              aria-label="Toggle annual billing"
             >
               <span
-                className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
-                  annualBilling ? "translate-x-6" : "translate-x-0"
+                className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                  annualBilling ? "translate-x-6" : "translate-x-1"
                 }`}
               />
             </button>
-            <span className={`text-xs font-bold flex items-center gap-1.5 ${annualBilling ? "text-slate-900" : "text-slate-500"}`}>
-              <span>Annual Billing</span>
-              <span className="rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold px-2 py-0.5">
-                Save 20%
-              </span>
+            <span className={`text-xs font-bold ${annualBilling ? "text-[#063D2E]" : "text-[#71917B]"}`}>
+              Annual Billing
+            </span>
+            <span className="rounded-full bg-[#DDF2E4] border border-[#CDE8D5] px-2.5 py-0.5 text-[10px] font-bold text-[#087A50]">
+              Save 2 Months Free
             </span>
           </div>
         </div>
       </section>
 
-      {/* Pricing Cards Grid */}
+      {/* Pricing Cards */}
       <section className="py-20">
-        <div className="mx-auto max-w-7xl px-6">
-          <div className="grid gap-8 lg:grid-cols-3 items-stretch">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-8 lg:grid-cols-3 max-w-6xl mx-auto">
             {PLANS.map((plan) => {
-              const price = annualBilling
-                ? Math.round(plan.annualPrice / 12)
-                : plan.monthlyPrice;
+              const price = annualBilling ? Math.round(plan.annualPrice / 12) : plan.monthlyPrice;
 
               return (
                 <div
                   key={plan.id}
-                  className={`relative flex flex-col justify-between rounded-3xl p-8 transition-all ${
+                  className={`relative flex flex-col justify-between rounded-3xl p-8 sm:p-9 transition-all ${
                     plan.popular
-                      ? "border-2 border-emerald-600 bg-white shadow-xl shadow-emerald-600/10 lg:-translate-y-2"
-                      : "border border-slate-200 bg-white shadow-sm hover:shadow-md"
+                      ? "border-2 border-[#10A66A] bg-white shadow-xl lg:-translate-y-2"
+                      : "border border-[#CDE8D5] bg-[#F4FAF5] shadow-xs hover:border-[#10A66A]"
                   }`}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-emerald-600 to-teal-700 px-4 py-1 text-[11px] font-extrabold text-white shadow-md uppercase tracking-wider">
-                      Most Popular in Mandis
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[#10A66A] px-4 py-1 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-sm">
+                      Recommended for Mandis
                     </div>
                   )}
 
                   <div>
-                    <h3 className="text-xl font-bold text-slate-900">{plan.name}</h3>
-                    <p className="mt-2 text-xs text-slate-500 leading-relaxed min-h-[36px]">
-                      {plan.tagline}
-                    </p>
+                    <div className="space-y-1">
+                      <h3 className="text-xl font-bold text-[#063D2E]">{plan.name}</h3>
+                      <p className="text-xs text-[#47785C] min-h-[32px]">{plan.tagline}</p>
+                    </div>
 
                     <div className="mt-6 flex items-baseline gap-1">
-                      <span className="text-4xl font-black text-slate-900">
-                        ₹{price.toLocaleString()}
-                      </span>
-                      <span className="text-xs font-semibold text-slate-500">/ month</span>
+                      <span className="text-4xl font-black text-[#063D2E]">₹{price.toLocaleString("en-IN")}</span>
+                      <span className="text-xs font-semibold text-[#71917B]">/ month</span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mt-1">
-                      {annualBilling
-                        ? `Billed ₹${plan.annualPrice.toLocaleString()} annually`
-                        : "Billed monthly"}
-                    </p>
+                    {annualBilling && (
+                      <p className="mt-1 text-[11px] font-semibold text-[#087A50]">
+                        Billed annually at ₹{plan.annualPrice.toLocaleString("en-IN")} / year
+                      </p>
+                    )}
 
-                    <div className="my-8 border-t border-slate-100" />
-
-                    <div className="space-y-3 text-xs">
-                      {plan.features.map((feat) => (
-                        <div key={feat} className="flex items-start gap-2.5 text-slate-700">
-                          <Check className="h-4 w-4 text-emerald-600 shrink-0 mt-0.5" />
-                          <span>{feat}</span>
-                        </div>
-                      ))}
+                    <div className="mt-8 space-y-3 border-t border-[#DCEEE1] pt-6">
+                      <p className="text-xs font-bold uppercase tracking-wider text-[#47785C]">
+                        Included Features
+                      </p>
+                      <ul className="space-y-2.5 text-xs text-[#123B29]">
+                        {plan.features.map((f) => (
+                          <li key={f} className="flex items-start gap-2.5">
+                            <CheckCircle2 className="h-4 w-4 text-[#10A66A] shrink-0 mt-0.5" />
+                            <span>{f}</span>
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </div>
 
-                  <div className="mt-8 pt-4">
-                    {plan.id === "ENTERPRISE" ? (
-                      <Link
-                        href="/contact"
-                        className="w-full flex items-center justify-center gap-2 rounded-xl border border-slate-300 py-3 text-xs font-bold text-slate-800 hover:bg-slate-50 transition"
-                      >
-                        <PhoneCall className="h-3.5 w-3.5 text-emerald-600" />
-                        <span>{plan.buttonLabel}</span>
-                      </Link>
-                    ) : (
-                      <Link
-                        href="/register"
-                        className={`w-full flex items-center justify-center gap-2 rounded-xl py-3 text-xs font-bold transition shadow-sm ${
-                          plan.popular
-                            ? "bg-gradient-to-r from-emerald-600 to-teal-700 text-white hover:from-emerald-700 hover:to-teal-800 shadow-emerald-600/20"
-                            : "bg-slate-900 text-white hover:bg-slate-800"
-                        }`}
-                      >
-                        <span>{plan.buttonLabel}</span>
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    )}
+                  <div className="mt-10 pt-6 border-t border-[#DCEEE1]">
+                    <Link
+                      href={plan.id === "ENTERPRISE" ? "/contact" : "/register"}
+                      className={`block w-full text-center rounded-xl py-3 text-xs font-bold transition shadow-xs ${
+                        plan.popular
+                          ? "bg-[#087A50] hover:bg-[#063D2E] text-white"
+                          : "border border-[#CDE8D5] bg-white hover:bg-[#E8F5EC] text-[#063D2E]"
+                      }`}
+                    >
+                      {plan.buttonLabel}
+                    </Link>
+                    <p className="mt-2 text-center text-[10px] text-[#71917B]">
+                      {plan.id === "ENTERPRISE" ? "Custom multi-branch quote" : "30-day free trial • No credit card required"}
+                    </p>
                   </div>
                 </div>
               );
             })}
           </div>
+        </div>
+      </section>
 
-          {/* Guarantee Pill */}
-          <div className="mt-14 mx-auto max-w-xl rounded-2xl border border-slate-200 bg-white p-5 text-center shadow-sm">
-            <div className="flex items-center justify-center gap-2 text-xs font-bold text-slate-800">
-              <ShieldCheck className="h-4 w-4 text-emerald-600" />
-              <span>30-Day Risk-Free Evaluation Period</span>
-            </div>
-            <p className="mt-1 text-xs text-slate-500">
-              Try the full Mandi OS suite with your actual daily arrivals, weighments, and bills for 30 days. No credit card required to begin.
+      {/* Feature Comparison Matrix */}
+      <section className="py-20 bg-white border-t border-[#CDE8D5]">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[#063D2E]">
+              Detailed Plan Capabilities Comparison
+            </h2>
+            <p className="mt-2 text-xs sm:text-sm text-[#47785C]">
+              Compare all features and limits across the Starter, Professional, and Enterprise plans.
             </p>
+          </div>
+
+          <div className="overflow-x-auto rounded-2xl border border-[#CDE8D5]">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-[#E8F5EC] text-[#063D2E] font-bold border-b border-[#CDE8D5]">
+                <tr>
+                  <th className="px-4 py-3">Platform Capability</th>
+                  <th className="px-4 py-3 text-center">Starter</th>
+                  <th className="px-4 py-3 text-center bg-[#DDF2E4]">Professional</th>
+                  <th className="px-4 py-3 text-center">Enterprise</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#DCEEE1] text-[#123B29]">
+                {[
+                  { name: "Concurrent User Seats", starter: "2 Seats", pro: "3 Seats", ent: "Up to 10 Seats" },
+                  { name: "Multi-Product Inward Lots", starter: "Yes", pro: "Yes", ent: "Yes" },
+                  { name: "Bag Weighment Digital Scale", starter: "Yes", pro: "Yes", ent: "Yes" },
+                  { name: "POS Cash & Credit Bills", starter: "Yes", pro: "Yes", ent: "Yes" },
+                  { name: "Daily Cash Tally & Drawer", starter: "Yes", pro: "Yes", ent: "Yes" },
+                  { name: "Double-Entry ACID Ledgers", starter: "Yes", pro: "Yes", ent: "Yes" },
+                  { name: "Smart Chart Live Auctions", starter: "—", pro: "Yes", ent: "Yes" },
+                  { name: "Offline Android Mobile Sync", starter: "—", pro: "Yes", ent: "Yes" },
+                  { name: "Farmer Pre-Season Advances", starter: "—", pro: "Yes", ent: "Yes" },
+                  { name: "Weighbridge Serial Hook", starter: "—", pro: "—", ent: "Yes" },
+                  { name: "Database Context", starter: "Schema Isolated", pro: "Schema Isolated", ent: "Dedicated Schema / DB" },
+                ].map((row) => (
+                  <tr key={row.name} className="hover:bg-[#F4FAF5]">
+                    <td className="px-4 py-3 font-semibold text-[#063D2E]">{row.name}</td>
+                    <td className="px-4 py-3 text-center text-[#47785C]">{row.starter}</td>
+                    <td className="px-4 py-3 text-center font-bold text-[#087A50] bg-[#DDF2E4]/40">{row.pro}</td>
+                    <td className="px-4 py-3 text-center font-bold text-[#063D2E]">{row.ent}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
 
-      {/* Comparison Matrix */}
-      <section className="py-20 bg-white border-t border-slate-200">
-        <div className="mx-auto max-w-5xl px-6">
-          <div className="text-center max-w-2xl mx-auto">
-            <h2 className="text-3xl font-black text-slate-900">Feature Comparison Matrix</h2>
-            <p className="mt-2 text-sm text-slate-600">
-              Compare capabilities across Starter, Professional, and Enterprise plans.
-            </p>
-          </div>
-
-          <div className="mt-12 overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="border-b border-slate-200 bg-slate-50 uppercase tracking-wider text-[11px] text-slate-600">
-                <tr>
-                  <th className="p-4 font-bold">Feature Capability</th>
-                  <th className="p-4 font-bold text-center">Starter</th>
-                  <th className="p-4 font-bold text-center text-emerald-800">Professional</th>
-                  <th className="p-4 font-bold text-center">Enterprise</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100 text-slate-700">
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">User Login Seats Allowed</td>
-                  <td className="p-4 text-center">3 Seats (1 Admin + 2 Staff)</td>
-                  <td className="p-4 text-center font-bold text-emerald-800">3 Seats (1 Admin + 2 Staff)</td>
-                  <td className="p-4 text-center">Custom / Unlimited</td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Multi-Product Inward Lots</td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Bag-by-Bag Digital Weighment Scale</td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Smart Chart Live Lot Auctions</td>
-                  <td className="p-4 text-center text-slate-400">—</td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Daily Cash Tally & Denominations Counter</td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Handheld Android Mobile Offline Sync</td>
-                  <td className="p-4 text-center text-slate-400">—</td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">WhatsApp 1-Click Bill Sharing</td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                </tr>
-                <tr>
-                  <td className="p-4 font-semibold text-slate-900">Dedicated Technical Account Manager</td>
-                  <td className="p-4 text-center text-slate-400">—</td>
-                  <td className="p-4 text-center text-slate-400">—</td>
-                  <td className="p-4 text-center text-emerald-700 font-semibold"><span className="inline-flex items-center gap-1"><Check className="h-4 w-4 text-emerald-600 inline" /> Included</span></td>
-                </tr>
-              </tbody>
-            </table>
+      {/* CTA Section */}
+      <section className="py-20 bg-[#063D2E] text-white">
+        <div className="mx-auto max-w-4xl px-4 text-center space-y-6">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
+            Risk-Free Guarantee
+          </span>
+          <h2 className="text-3xl font-black sm:text-5xl">
+            Test Drive BSG in Your Mandi for 30 Days
+          </h2>
+          <p className="text-sm text-[#C4E2CF] max-w-xl mx-auto">
+            Experience the clarity of digital bag weighments, live smart charts, and daily cash tallies with full feature access.
+          </p>
+          <div className="pt-2">
+            <Link
+              href="/register"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
+            >
+              <span>Start 30-Day Free Trial</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
           </div>
         </div>
       </section>

@@ -7,17 +7,29 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        navy: {
-          800: "#1E293B",
-          900: "#0F172A",
-          950: "#020617",
-        },
-        brand: {
-          50: "#EFF6FF",
-          100: "#DBEAFE",
-          500: "#3B82F6",
-          600: "#2563EB",
-          700: "#1D4ED8",
+        // Deep Green Enterprise Brand Tokens
+        bsg: {
+          forest: "#063D2E",     // Deep Forest Green
+          forestSec: "#0A503B",  // Dark Section Secondary
+          darkGreen: "#145A3B",  // Dark Green
+          enterprise: "#087A50", // Enterprise Green (Primary Button)
+          hover: "#063D2E",      // Primary Hover
+          emerald: "#10A66A",    // Emerald Green
+          pageBg: "#F4FAF5",     // Main Page Background
+          surface: "#FFFFFF",    // Primary Surface
+          surfaceSec: "#E8F5EC", // Secondary Surface
+          mint: "#DDF2E4",       // Mint Surface
+          textPrimary: "#123B29",// Primary Text
+          textSec: "#47785C",    // Secondary Text
+          textMuted: "#71917B",  // Muted Text
+          darkText: "#FFFFFF",   // Text on Dark Background
+          darkSecText: "#C4E2CF",// Secondary Dark Section Text
+          border: "#CDE8D5",     // Default Border
+          borderSubtle: "#DCEEE1", // Subtle Border
+          borderActive: "#10A66A", // Active Border
+          statusSuccess: "#087A50",
+          statusWarning: "#B7791F",
+          statusError: "#C2413B",
         },
       },
     },

@@ -57,11 +57,11 @@ const FAQ_SECTIONS = [
     items: [
       {
         q: "Can our weighment staff record bills on the mandi auction floor without Wi-Fi?",
-        a: "Yes. The Flutter Android mobile app uses an offline-first local queue. Staff can weigh bags, print thermal receipts via Bluetooth, and save bills on the floor. All entries sync to the cloud database when Wi-Fi or 4G connectivity resumes.",
+        a: "Yes. The Android mobile app uses an offline-first local queue. Staff can weigh bags, print thermal receipts via Bluetooth, and save bills on the floor. All entries sync to the cloud database when Wi-Fi or 4G connectivity resumes.",
       },
       {
         q: "What printers and hardware are supported?",
-        a: "Mandi OS supports all standard ESC/POS 3-inch (80mm) and 2-inch (58mm) Bluetooth and USB thermal printers, standard A4/A5 laser office printers, and digital serial weighbridges.",
+        a: "BSG supports all standard ESC/POS 3-inch (80mm) and 2-inch (58mm) Bluetooth and USB thermal printers, standard A4/A5 laser office printers, and digital serial weighbridges.",
       },
     ],
   },
@@ -83,47 +83,51 @@ const FAQ_SECTIONS = [
 
 export default function FaqPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* Header */}
-      <section className="border-b border-slate-200/80 bg-white py-16 lg:py-24">
-        <div className="mx-auto max-w-7xl px-6 text-center">
-          <h1 className="text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl tracking-tight">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-[#F4FAF5] to-[#E8F5EC] py-16 lg:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#087A50]">
+            Mandi Help & Knowledge Base
+          </span>
+          <h1 className="mt-3 text-4xl font-black text-[#063D2E] sm:text-5xl lg:text-6xl tracking-tight">
             Frequently Asked Questions
           </h1>
-          <p className="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-base sm:text-lg text-[#47785C] max-w-2xl mx-auto leading-relaxed">
             Detailed answers regarding multi-user licensing, bag-by-bag weighment tables, offline floor mobility, and daily cash reconciliations.
           </p>
         </div>
       </section>
 
-      {/* FAQ Categories */}
+      {/* FAQ Sections */}
       <section className="py-20">
-        <div className="mx-auto max-w-4xl px-6 space-y-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 space-y-16">
           {FAQ_SECTIONS.map((sec) => {
             const Icon = sec.icon;
 
             return (
               <div key={sec.category} className="space-y-6">
-                <div className="flex items-center gap-3 border-b border-slate-200 pb-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
+                <div className="flex items-center gap-3 border-b border-[#CDE8D5] pb-3">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#E8F5EC] text-[#087A50]">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <h2 className="text-xl font-bold text-slate-900">{sec.category}</h2>
+                  <h2 className="text-xl font-bold text-[#063D2E]">
+                    {sec.category}
+                  </h2>
                 </div>
 
                 <div className="space-y-4">
                   {sec.items.map((item) => (
                     <div
                       key={item.q}
-                      className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-md transition"
+                      className="rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-xs space-y-2 hover:border-[#10A66A] transition-all"
                     >
-                      <h3 className="font-bold text-slate-900 text-base flex items-start gap-2.5">
-                        <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0 mt-1" />
-                        <span>{item.q}</span>
+                      <h3 className="text-base font-bold text-[#063D2E]">
+                        {item.q}
                       </h3>
-                      <p className="mt-2 text-xs sm:text-sm text-slate-600 pl-6 leading-relaxed">
+                      <p className="text-xs text-[#47785C] leading-relaxed">
                         {item.a}
                       </p>
                     </div>
@@ -135,27 +139,30 @@ export default function FaqPage() {
         </div>
       </section>
 
-      {/* Still have questions? */}
-      <section className="py-16 bg-white border-t border-slate-200 text-center">
-        <div className="mx-auto max-w-2xl px-6 space-y-4">
-          <h3 className="text-2xl font-bold text-slate-900">Still have a question?</h3>
-          <p className="text-sm text-slate-600">
-            Our mandi implementation team can answer your specific questions regarding commodities, weighment printers, and APMC market cess.
+      {/* Still Have Questions */}
+      <section className="py-20 bg-[#063D2E] text-white text-center">
+        <div className="mx-auto max-w-3xl px-4 space-y-4">
+          <span className="text-xs font-bold uppercase tracking-widest text-[#10A66A]">
+            Direct Mandi Support
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-bold">
+            Still Have Questions About Mandi Operations?
+          </h2>
+          <p className="text-xs sm:text-sm text-[#C4E2CF] max-w-xl mx-auto">
+            Our solution specialists can walk you through live weighment scales, bill printing, and cash tally setups.
           </p>
-          <div className="pt-3 flex justify-center gap-3">
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-6 py-3 text-xs font-bold text-white hover:bg-slate-800 transition"
+              className="rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-6 py-3 text-xs font-bold text-white shadow transition"
             >
-              <PhoneCall className="h-4 w-4 text-emerald-400" />
-              <span>Contact Support Desk</span>
+              Contact Specialist
             </Link>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-800 px-6 py-3 text-xs font-bold text-white shadow-md shadow-emerald-950/30 hover:from-emerald-700 hover:to-emerald-900 transition"
+              className="rounded-xl border border-[#0A503B] bg-[#0A503B] hover:bg-[#0E664C] px-6 py-3 text-xs font-bold text-white transition"
             >
-              <span>Start 30-Day Free Trial</span>
-              <ArrowRight className="h-4 w-4" />
+              Start 30-Day Free Trial
             </Link>
           </div>
         </div>
