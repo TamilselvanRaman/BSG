@@ -23,6 +23,9 @@ import {
   reportsRouter,
   documentsRouter,
 } from "../modules/reports/reports.routes";
+import { publicRouter } from "../modules/public/public.routes";
+import { dailyTallyRouter } from "../modules/daily-tally/dailyTally.routes";
+import { mobileSyncRouter } from "../modules/mobile-sync/mobileSync.routes";
 import { prisma } from "../config/prisma";
 import { sendSuccess } from "../utils/response";
 
@@ -45,6 +48,7 @@ apiV1Router.get("/public/plans", async (_req, res, next) => {
   }
 });
 
+apiV1Router.use("/public", publicRouter);
 apiV1Router.use("/auth", authRouter);
 apiV1Router.use("/super-admin", superAdminRouter);
 apiV1Router.use("/business", businessRouter);
@@ -62,3 +66,5 @@ apiV1Router.use("/payments", paymentsRouter);
 apiV1Router.use("/advances", advancesRouter);
 apiV1Router.use("/reports", reportsRouter);
 apiV1Router.use("/documents", documentsRouter);
+apiV1Router.use("/daily-tally", dailyTallyRouter);
+apiV1Router.use("/mobile-sync", mobileSyncRouter);

@@ -200,6 +200,7 @@ model Tenant {
   auctions             Auction[]
   purchaseBills        PurchaseBill[]
   salesBills           SalesBill[]
+  dailyTallies         DailyTally[]
   payments             Payment[]
   buyerLedgerEntries   BuyerLedgerEntry[]
   sellerLedgerEntries  SellerLedgerEntry[]
@@ -729,6 +730,7 @@ model GoodsLot {
   unit              String             @default("KG")
   unitPrice         Decimal            @db.Decimal(12, 2)
   totalValue        Decimal            @db.Decimal(14, 2)
+  multiCropItems    Json?              // [{ cropName: "Tomato", bags: 44, gross: 2450, tare: 250, net: 2200 }]
   status            LotStatus          @default(OPEN)
   notes             String?            @db.Text
   createdAt         DateTime           @default(now())
@@ -926,6 +928,7 @@ model PurchaseBillItem {
   unit           String       @default("KG")
   unitPrice      Decimal      @db.Decimal(12, 2)
   lineTotal      Decimal      @db.Decimal(14, 2)
+  bagWeights     Json?        // [{ sNo: 1, weight: 52 }, ...]
 
   purchaseBill   PurchaseBill @relation(fields: [purchaseBillId], references: [id], onDelete: Cascade)
   goods          Goods        @relation(fields: [goodsId], references: [id])
@@ -990,6 +993,7 @@ model SalesBillItem {
   costPrice   Decimal   @default(0.00) @db.Decimal(12, 2) // For Gross Profit calculation
   unitPrice   Decimal   @db.Decimal(12, 2)
   lineTotal   Decimal   @db.Decimal(14, 2)
+  bagWeights  Json?     // [{ sNo: 1, weight: 52 }, ...]
 
   salesBill   SalesBill @relation(fields: [salesBillId], references: [id], onDelete: Cascade)
   goods       Goods     @relation(fields: [goodsId], references: [id])
@@ -1160,4 +1164,66 @@ model BusinessDocument {
 
   @@index([tenantId, documentType, createdAt])
   @@map("business_documents")
+}
+
+// ============================================================================
+// 7. PUBLIC WEBSITE & MANDI LEAD CAPTURE
+// ============================================================================
+
+model ContactInquiry {
+  id              String    @id @default(uuid())
+  fullName        String
+  businessName    String
+  phone           String
+  email           String
+  businessDomain  String    // e.g. "Vegetable & Fruit Mandi", "APMC Commission Agent", "Wholesale Grain & Spices", "Multi-Yard Enterprise"
+  marketYardCity  String
+  notes           String?   @db.Text
+  status          String    @default("NEW") // "NEW", "CONTACTED", "DEMO_SCHEDULED", "CONVERTED"
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status, createdAt])
+  @@map("contact_inquiries")
+}
+
+// ============================================================================
+// 8. DAILY CASH TALLY & CASH DRAWER DENOMINATION RECONCILIATION
+// ============================================================================
+
+model DailyTally {
+  id                   String    @id @default(uuid())
+  tenantId             String
+  tallyNumber          String
+  tallyDate            DateTime  @default(now())
+  openingCash          Decimal   @db.Decimal(14, 2)
+  cashSales            Decimal   @default(0.00) @db.Decimal(14, 2)
+  outstandingReceived  Decimal   @default(0.00) @db.Decimal(14, 2)
+  otherCashReceived    Decimal   @default(0.00) @db.Decimal(14, 2)
+  gpay1Received        Decimal   @default(0.00) @db.Decimal(14, 2)
+  gpay2Received        Decimal   @default(0.00) @db.Decimal(14, 2)
+  labourExpense        Decimal   @default(0.00) @db.Decimal(12, 2)
+  transportExpense     Decimal   @default(0.00) @db.Decimal(12, 2)
+  rentExpense          Decimal   @default(0.00) @db.Decimal(12, 2)
+  teaExpense           Decimal   @default(0.00) @db.Decimal(12, 2)
+  otherExpense         Decimal   @default(0.00) @db.Decimal(12, 2)
+  partyPayments        Json?     // [{ partyName, amount, mode, reference }]
+  bankDeposit          Decimal   @default(0.00) @db.Decimal(14, 2)
+  actualCashCounted    Decimal   @db.Decimal(14, 2)
+  pettyCashInHand      Decimal   @default(0.00) @db.Decimal(14, 2)
+  denominations        Json?     // { "2000": 0, "500": 10, "200": 5, "100": 20, "50": 10, "coins": 50 }
+  expectedCashClosing  Decimal   @db.Decimal(14, 2)
+  cashDifference       Decimal   @default(0.00) @db.Decimal(14, 2)
+  status               String    @default("BALANCED") // "BALANCED", "SURPLUS", "SHORTAGE"
+  auditedBy            String?
+  notes                String?   @db.Text
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+  createdBy            String?
+
+  tenant               Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, tallyNumber])
+  @@index([tenantId, tallyDate])
+  @@map("daily_tallies")
 }

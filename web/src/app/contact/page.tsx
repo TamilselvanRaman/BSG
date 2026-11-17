@@ -90,6 +90,7 @@ export default function ContactPage() {
 
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function toggleRequirement(req: string) {
     setFormData((prev) => {
@@ -106,9 +107,45 @@ export default function ContactPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setSubmitting(true);
-    await new Promise((r) => setTimeout(r, 600));
-    setSubmitting(false);
-    setSubmitted(true);
+    setErrorMessage("");
+
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000/api/v1";
+      const domainLabel =
+        DOMAIN_OPTIONS.find((d) => d.id === formData.businessDomain)?.name || formData.businessDomain;
+      const combinedNotes = [
+        `Requirements: ${formData.selectedRequirements.join(", ")}`,
+        `Daily Volume: ${formData.dailyVolume}`,
+        formData.message ? `Notes: ${formData.message}` : null,
+      ]
+        .filter(Boolean)
+        .join(" | ");
+
+      const res = await fetch(`${apiUrl}/public/contact-inquiries`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: formData.name,
+          businessName: formData.businessName,
+          phone: formData.phone,
+          email: formData.email,
+          businessDomain: domainLabel,
+          marketYardCity: formData.location || "Not specified",
+          notes: combinedNotes,
+        }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.message || "Failed to submit inquiry. Please check your inputs.");
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setErrorMessage(err.message || "An error occurred while transmitting your request.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   const selectedDomainObj =
@@ -494,6 +531,14 @@ export default function ContactPage() {
                         className="w-full rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] p-3 text-xs text-[#063D2E] focus:border-[#087A50] focus:ring-1 focus:ring-[#087A50] focus:outline-none transition leading-relaxed"
                       />
                     </div>
+
+                    {/* Error Banner */}
+                    {errorMessage && (
+                      <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 flex items-center gap-2">
+                        <AlertTriangle className="h-4 w-4 shrink-0 text-red-500" />
+                        <span>{errorMessage}</span>
+                      </div>
+                    )}
 
                     {/* Submit Action */}
                     <button
