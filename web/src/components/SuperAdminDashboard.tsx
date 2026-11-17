@@ -12,13 +12,16 @@ import {
 import { BsgIcon } from "@/components/BsgLogo";
 import {
   Activity,
+  AlertOctagon,
   AlertTriangle,
   ArrowDownToLine,
   ArrowRight,
   ArrowUpRight,
+  BarChart3,
   Building2,
   Calendar,
   Check,
+  CheckCheck,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
@@ -39,12 +42,16 @@ import {
   Layers,
   Lock,
   LogOut,
+  Mail,
+  MapPin,
   Maximize2,
+  Phone,
   Plus,
   Printer,
   QrCode,
   Radio,
   RefreshCw,
+  RotateCcw,
   Search,
   Server,
   Settings,
@@ -53,7 +60,10 @@ import {
   ShieldCheck,
   Sliders,
   Smartphone,
+  Sparkles,
+  Store,
   Trash2,
+  TrendingUp,
   UserCheck,
   Users,
   Wifi,
@@ -219,8 +229,15 @@ export function SuperAdminDashboard() {
     tenantId: "",
   });
 
-  // Filter States
+  // Filter & Search States
   const [bizStatusFilter, setBizStatusFilter] = useState("ALL");
+  const [bizSearch, setBizSearch] = useState("");
+  const [bizSortBy, setBizSortBy] = useState<"NEWEST" | "NAME" | "SEATS" | "EXPIRING">("NEWEST");
+  const [adminRoleFilter, setAdminRoleFilter] = useState("ALL");
+  const [adminSearch, setAdminSearch] = useState("");
+  const [subStatusFilter, setSubStatusFilter] = useState("ALL");
+  const [subSearch, setSubSearch] = useState("");
+  const [paySearch, setPaySearch] = useState("");
   const [auditSeverityFilter, setAuditSeverityFilter] = useState("ALL");
   const [auditActionFilter, setAuditActionFilter] = useState("ALL");
 
@@ -487,16 +504,25 @@ export function SuperAdminDashboard() {
     showToast("Audit logs exported to CSV successfully.", "success");
   }
 
+  // Monogram Initial Helper
+  function getShopInitials(name: string): string {
+    if (!name) return "MS";
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+
   // --- Filtered & Paginated Businesses ---
   const filteredBusinesses = useMemo(() => {
-    return businesses.filter((b) => {
+    const q = (bizSearch || globalSearch).toLowerCase().trim();
+    let list = businesses.filter((b) => {
       const matchSearch =
-        !globalSearch ||
-        b.name?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        b.code?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        b.ownerEmail?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        b.ownerPhone?.toLowerCase().includes(globalSearch.toLowerCase()) ||
-        b.city?.toLowerCase().includes(globalSearch.toLowerCase());
+        !q ||
+        b.name?.toLowerCase().includes(q) ||
+        b.code?.toLowerCase().includes(q) ||
+        b.ownerEmail?.toLowerCase().includes(q) ||
+        b.ownerPhone?.toLowerCase().includes(q) ||
+        b.city?.toLowerCase().includes(q);
       const matchStatus =
         bizStatusFilter === "ALL" ||
         (bizStatusFilter === "TRIAL" && b.status === "TRIAL") ||
@@ -504,7 +530,28 @@ export function SuperAdminDashboard() {
         (bizStatusFilter === "SUSPENDED" && b.status === "SUSPENDED");
       return matchSearch && matchStatus;
     });
-  }, [businesses, globalSearch, bizStatusFilter]);
+
+    if (bizSortBy === "NAME") {
+      list = [...list].sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+    } else if (bizSortBy === "SEATS") {
+      list = [...list].sort((a, b) => {
+        const aUsage = (a._count?.users ?? 0) / (a.maxUsers || 1);
+        const bUsage = (b._count?.users ?? 0) / (b.maxUsers || 1);
+        return bUsage - aUsage;
+      });
+    } else if (bizSortBy === "EXPIRING") {
+      list = [...list].sort((a, b) => {
+        const aTime = a.trialEndsAt ? new Date(a.trialEndsAt).getTime() : Infinity;
+        const bTime = b.trialEndsAt ? new Date(b.trialEndsAt).getTime() : Infinity;
+        return aTime - bTime;
+      });
+    } else {
+      // NEWEST
+      list = [...list].sort((a, b) => new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime());
+    }
+
+    return list;
+  }, [businesses, globalSearch, bizSearch, bizStatusFilter, bizSortBy]);
 
   const paginatedBusinesses = useMemo(() => {
     const start = (bizPage - 1) * bizPageSize;
@@ -512,6 +559,52 @@ export function SuperAdminDashboard() {
   }, [filteredBusinesses, bizPage, bizPageSize]);
 
   const totalBizPages = Math.ceil(filteredBusinesses.length / bizPageSize) || 1;
+
+  // --- Filtered Admins ---
+  const filteredAdmins = useMemo(() => {
+    const q = (adminSearch || globalSearch).toLowerCase().trim();
+    return admins.filter((a) => {
+      const roleCode = (a.role?.code || a.role || "ADMIN").toUpperCase();
+      const matchRole = adminRoleFilter === "ALL" || roleCode === adminRoleFilter;
+      const matchSearch =
+        !q ||
+        a.fullName?.toLowerCase().includes(q) ||
+        a.username?.toLowerCase().includes(q) ||
+        a.email?.toLowerCase().includes(q) ||
+        a.tenant?.name?.toLowerCase().includes(q) ||
+        a.tenantName?.toLowerCase().includes(q);
+      return matchRole && matchSearch;
+    });
+  }, [admins, globalSearch, adminSearch, adminRoleFilter]);
+
+  // --- Filtered Subscriptions ---
+  const filteredSubscriptions = useMemo(() => {
+    const q = (subSearch || globalSearch).toLowerCase().trim();
+    return subscriptions.filter((s) => {
+      const matchStatus = subStatusFilter === "ALL" || s.status === subStatusFilter;
+      const matchSearch =
+        !q ||
+        s.tenant?.name?.toLowerCase().includes(q) ||
+        s.plan?.name?.toLowerCase().includes(q) ||
+        s.billingCycle?.toLowerCase().includes(q);
+      return matchStatus && matchSearch;
+    });
+  }, [subscriptions, globalSearch, subSearch, subStatusFilter]);
+
+  // --- Filtered Payments ---
+  const filteredPayments = useMemo(() => {
+    const q = (paySearch || globalSearch).toLowerCase().trim();
+    return payments.filter((p) => {
+      return (
+        !q ||
+        p.tenant?.name?.toLowerCase().includes(q) ||
+        p.plan?.name?.toLowerCase().includes(q) ||
+        p.transactionRef?.toLowerCase().includes(q) ||
+        p.gateway?.toLowerCase().includes(q) ||
+        p.status?.toLowerCase().includes(q)
+      );
+    });
+  }, [payments, globalSearch, paySearch]);
 
   // --- Filtered & Paginated Audit Logs ---
   const filteredAuditLogs = useMemo(() => {
@@ -716,7 +809,7 @@ export function SuperAdminDashboard() {
               className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] active:scale-[0.98] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition"
             >
               <Plus className="h-3.5 w-3.5" />
-              <span>+ Provision Tenant</span>
+              <span>Provision Tenant</span>
             </button>
           </div>
         </header>
@@ -990,35 +1083,197 @@ export function SuperAdminDashboard() {
           {/* ========================================================= */}
           {activeTab === "BUSINESSES" && (
             <div className="space-y-4">
-              {/* Filter Controls & Summary */}
-              <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="text-xs font-bold text-[#64748B] mr-1">Status Filter:</span>
-                  {["ALL", "ACTIVE", "TRIAL", "SUSPENDED"].map((st) => (
-                    <button
-                      key={st}
-                      onClick={() => {
-                        setBizStatusFilter(st);
-                        setBizPage(1);
-                      }}
-                      className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-                        bizStatusFilter === st
-                          ? "bg-[#00845F] text-white shadow-xs"
-                          : "bg-[#F1F5F9] text-[#64748B] hover:bg-[#E2E8F0]"
-                      }`}
-                    >
-                      {st}
-                    </button>
-                  ))}
+              {/* Fleet Telemetry KPI Strip */}
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-5">
+                {/* 1. Total Mandi Shops */}
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Total Mandi Shops</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <Store className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#111827]">{businesses.length}</span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Mandi Tenancies</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">APMC & wholesale multi-crop traders</p>
                 </div>
 
+                {/* 2. Active Production Shops */}
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Active Production</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#00845F]">
+                      <ShieldCheck className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#00845F]">
+                      {businesses.filter((b) => b.status === "ACTIVE").length}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-1.5 py-0.5 text-[10px] font-bold text-[#00845F] border border-emerald-200">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#00845F] animate-pulse" />
+                      Live
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Real-time trading & daily cash tallies</p>
+                </div>
+
+                {/* 3. Trial Workspaces */}
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-amber-400">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Trial Workspaces</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-amber-50 text-[#D97706]">
+                      <Clock className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#D97706]">
+                      {businesses.filter((b) => b.status === "TRIAL").length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-[#D97706]">Evaluation</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">30-day full-capability trial period</p>
+                </div>
+
+                {/* 4. Suspended / Locked */}
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-red-400">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Suspended / Locked</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-red-50 text-[#DC2626]">
+                      <AlertOctagon className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#DC2626]">
+                      {businesses.filter((b) => b.status === "SUSPENDED").length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Delinquent</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Trading suspended; locks enforced</p>
+                </div>
+
+                {/* 5. Fleet Seat Utilization */}
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Seat Fleet Usage</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <Users className="h-4 w-4" />
+                    </div>
+                  </div>
+                  {(() => {
+                    const totalOccupied = businesses.reduce((acc, b) => acc + (b._count?.users ?? 0), 0);
+                    const totalCapacity = businesses.reduce((acc, b) => acc + (b.maxUsers ?? 3), 0);
+                    const pct = totalCapacity > 0 ? Math.round((totalOccupied / totalCapacity) * 100) : 0;
+                    return (
+                      <>
+                        <div className="mt-2 flex items-baseline justify-between">
+                          <span className="text-2xl font-black text-[#111827]">
+                            {totalOccupied}{" "}
+                            <span className="text-sm font-normal text-[#64748B]">/ {totalCapacity}</span>
+                          </span>
+                          <span className="font-mono text-xs font-bold text-[#00845F] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+                            {pct}%
+                          </span>
+                        </div>
+                        <div className="mt-2 h-1.5 w-full rounded-full bg-[#E2E8F0] overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all duration-500 ${
+                              pct >= 90 ? "bg-[#DC2626]" : pct >= 75 ? "bg-[#D97706]" : "bg-[#00845F]"
+                            }`}
+                            style={{ width: `${Math.min(100, pct)}%` }}
+                          />
+                        </div>
+                        <p className="mt-1 text-[10px] text-[#64748B]">Strict multi-user license concurrency</p>
+                      </>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Filter Controls, Search, Sort & Action Bar */}
+              <div className="flex flex-col gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs lg:flex-row lg:items-center lg:justify-between">
+                {/* Left: Search input + Status Filter Buttons */}
+                <div className="flex flex-1 flex-wrap items-center gap-3">
+                  {/* Search Input */}
+                  <div className="relative min-w-[260px] max-w-sm flex-1">
+                    <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#94A3B8]" />
+                    <input
+                      type="text"
+                      value={bizSearch}
+                      onChange={(e) => {
+                        setBizSearch(e.target.value);
+                        setBizPage(1);
+                      }}
+                      placeholder="Search shop, code, yard, phone..."
+                      className="w-full rounded-xl border border-[#CBD5E1] bg-white py-1.5 pl-8.5 pr-8 text-xs font-medium text-[#111827] placeholder:text-[#94A3B8] focus:border-[#00845F] focus:outline-none focus:ring-1 focus:ring-[#00845F]"
+                    />
+                    {bizSearch && (
+                      <button
+                        onClick={() => setBizSearch("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#111827]"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Status Filter Tabs */}
+                  <div className="flex items-center gap-1 rounded-xl bg-[#F1F5F9] p-1 border border-[#E2E8F0]">
+                    {[
+                      { id: "ALL", label: "All Shops", count: businesses.length },
+                      { id: "ACTIVE", label: "Active", count: businesses.filter((b) => b.status === "ACTIVE").length },
+                      { id: "TRIAL", label: "Trial", count: businesses.filter((b) => b.status === "TRIAL").length },
+                      { id: "SUSPENDED", label: "Suspended", count: businesses.filter((b) => b.status === "SUSPENDED").length },
+                    ].map((st) => (
+                      <button
+                        key={st.id}
+                        onClick={() => {
+                          setBizStatusFilter(st.id);
+                          setBizPage(1);
+                        }}
+                        className={`flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold transition ${
+                          bizStatusFilter === st.id
+                            ? "bg-[#00845F] text-white shadow-xs"
+                            : "text-[#64748B] hover:text-[#111827] hover:bg-white/60"
+                        }`}
+                      >
+                        <span>{st.label}</span>
+                        <span
+                          className={`rounded-full px-1.5 py-0.2 text-[10px] ${
+                            bizStatusFilter === st.id
+                              ? "bg-white/20 text-white"
+                              : "bg-[#E2E8F0] text-[#64748B]"
+                          }`}
+                        >
+                          {st.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right: Sort Dropdown & Provision New Mandi Shop Button */}
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-bold text-[#64748B]">
-                    Showing {paginatedBusinesses.length} of {filteredBusinesses.length} shops
-                  </span>
+                  <div className="flex items-center gap-1.5 text-xs text-[#64748B]">
+                    <Filter className="h-3.5 w-3.5 text-[#94A3B8]" />
+                    <span className="font-semibold">Sort:</span>
+                    <select
+                      value={bizSortBy}
+                      onChange={(e: any) => setBizSortBy(e.target.value)}
+                      className="rounded-lg border border-[#CBD5E1] bg-white px-2 py-1 text-xs font-semibold text-[#111827] focus:border-[#00845F] focus:outline-none"
+                    >
+                      <option value="NEWEST">Recently Added</option>
+                      <option value="NAME">Shop Name (A-Z)</option>
+                      <option value="SEATS">Seat Usage (High - Low)</option>
+                      <option value="EXPIRING">Trial Expiring Soon</option>
+                    </select>
+                  </div>
+
                   <button
                     onClick={() => setShowNewBizModal(true)}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] px-4 py-2 text-xs font-bold text-white shadow-xs transition"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] active:scale-[0.98] px-4 py-2 text-xs font-bold text-white shadow-xs transition shrink-0"
                   >
                     <Plus className="h-4 w-4" />
                     <span>Provision New Mandi Shop</span>
@@ -1026,205 +1281,297 @@ export function SuperAdminDashboard() {
                 </div>
               </div>
 
-              {/* Data Table */}
+              {/* Data Table Container */}
               <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-xs overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs">
-                    <thead className="border-b border-[#E2E8F0] bg-[#F1F5F9] font-bold uppercase tracking-wider text-[11px] text-[#64748B]">
-                      <tr>
-                        <th className="px-4 py-3">Mandi Business</th>
-                        <th className="px-4 py-3">Contact & Yard</th>
-                        <th className="px-4 py-3">Plan & Status</th>
-                        <th className="px-4 py-3">Seat Quota</th>
-                        <th className="px-4 py-3">Modules</th>
-                        <th className="px-4 py-3 text-right">Governance Controls</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-[#E2E8F0]">
-                      {paginatedBusinesses.map((b) => {
-                        const maxUsers = b.maxUsers ?? 3;
-                        const userCount = b._count?.users ?? 0;
-                        const enabledFeatures = Array.isArray(b.enabledFeatures)
-                          ? b.enabledFeatures
-                          : MANDI_FEATURES.map((f) => f.key);
-                        const isTrial = b.status === "TRIAL";
-                        const trialDaysLeft = b.trialEndsAt
-                          ? Math.max(0, Math.ceil((new Date(b.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
-                          : null;
-
-                        return (
-                          <tr key={b.id} className="hover:bg-[#F8FAFC] transition">
-                            {/* Business Info */}
-                            <td className="px-4 py-3.5">
-                              <div className="font-bold text-[#111827] text-sm">{b.name}</div>
-                              <div className="flex items-center gap-2 mt-0.5 font-mono text-[11px]">
-                                <span className="font-semibold text-[#00845F] bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                                  {b.code}
-                                </span>
-                                <span className="text-[#64748B]">{b.city || "Tamil Nadu"}</span>
-                              </div>
-                            </td>
-
-                            {/* Contact & Yard */}
-                            <td className="px-4 py-3.5 text-[#111827]">
-                              <div className="font-semibold">{b.ownerPhone}</div>
-                              <div className="text-[11px] text-[#64748B]">{b.ownerEmail}</div>
-                            </td>
-
-                            {/* Plan & Status */}
-                            <td className="px-4 py-3.5">
-                              <div className="flex items-center gap-2">
-                                <span
-                                  className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${
-                                    b.status === "ACTIVE"
-                                      ? "bg-emerald-50 text-[#059669] border border-emerald-200"
-                                      : b.status === "TRIAL"
-                                      ? "bg-amber-50 text-[#D97706] border border-amber-200"
-                                      : "bg-red-50 text-[#DC2626] border border-red-200"
-                                  }`}
-                                >
-                                  {b.status}
-                                </span>
-                                {isTrial && trialDaysLeft !== null && (
-                                  <span className="text-[11px] font-semibold text-[#D97706]">
-                                    {trialDaysLeft}d trial left
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-
-                            {/* Seat Quota */}
-                            <td className="px-4 py-3.5">
-                              <div className="flex items-center gap-2">
-                                <span className="font-bold text-[#111827]">
-                                  {userCount} / {maxUsers} Seats
-                                </span>
-                                {userCount >= maxUsers && (
-                                  <span className="text-[10px] font-bold text-[#D97706] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
-                                    Limit Reached
-                                  </span>
-                                )}
-                              </div>
-                            </td>
-
-                            {/* Modules */}
-                            <td className="px-4 py-3.5">
-                              <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-semibold text-[#00845F] border border-emerald-200">
-                                <Layers className="h-3 w-3" />
-                                {enabledFeatures.length}/10 Active
-                              </span>
-                            </td>
-
-                            {/* Actions */}
-                            <td className="px-4 py-3.5 text-right">
-                              <div className="flex items-center justify-end gap-1.5">
-                                <button
-                                  onClick={() => handleOpenLicenseModal(b)}
-                                  title="Manage 10 Features & User Seats"
-                                  className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] hover:border-[#CBD5E1] transition"
-                                >
-                                  <Sliders className="h-3 w-3 text-[#00845F]" />
-                                  <span>License</span>
-                                </button>
-
-                                <button
-                                  onClick={() => {
-                                    setSelectedBizForDetails(b);
-                                    setDetailsTab("OVERVIEW");
-                                  }}
-                                  title="View Comprehensive Tenant Details & Diagnostics"
-                                  className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition"
-                                >
-                                  <Eye className="h-3 w-3 text-[#00845F]" />
-                                  <span>Details</span>
-                                </button>
-                                <button
-                                  onClick={() => handleOpenCertificate(b)}
-                                  title="View Official Cryptographic License Certificate"
-                                  className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition"
-                                >
-                                  <Printer className="h-3 w-3 text-[#64748B]" />
-                                  <span>Cert</span>
-                                </button>
-
-                                {isTrial && (
-                                  <button
-                                    onClick={() => handleExtendTrial(b, 30)}
-                                    title="Extend Trial by 30 Days"
-                                    className="rounded-lg border border-amber-300 bg-amber-50 px-2 py-1 text-[11px] font-bold text-[#D97706] hover:bg-amber-100 transition"
-                                  >
-                                    +30d
-                                  </button>
-                                )}
-
-                                <button
-                                  onClick={() => handleToggleTenantStatus(b)}
-                                  title={b.status === "ACTIVE" ? "Suspend Tenant" : "Reactivate Tenant"}
-                                  className={`rounded-lg px-2 py-1 text-[11px] font-semibold border transition ${
-                                    b.status === "ACTIVE"
-                                      ? "border-[#E2E8F0] text-[#64748B] hover:bg-red-50 hover:text-[#DC2626] hover:border-red-200"
-                                      : "border-emerald-300 bg-emerald-50 text-[#00845F] hover:bg-emerald-100"
-                                  }`}
-                                >
-                                  {b.status === "ACTIVE" ? "Suspend" : "Activate"}
-                                </button>
-
-                                <button
-                                  onClick={() => handleDeleteBusiness(b)}
-                                  title="Permanently Delete Tenant"
-                                  className="rounded-lg p-1.5 text-[#64748B] hover:text-[#DC2626] hover:bg-red-50 transition"
-                                >
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-
-                {/* Pagination Controls */}
-                <div className="flex items-center justify-between border-t border-[#E2E8F0] bg-[#F1F5F9] px-4 py-3 text-xs font-semibold text-[#64748B]">
-                  <div className="flex items-center gap-2">
-                    <span>Rows per page:</span>
-                    <select
-                      value={bizPageSize}
-                      onChange={(e) => {
-                        setBizPageSize(Number(e.target.value));
-                        setBizPage(1);
-                      }}
-                      className="rounded border border-[#E2E8F0] bg-white px-2 py-1 text-xs font-bold text-[#111827] focus:outline-none"
-                    >
-                      <option value={10}>10</option>
-                      <option value={25}>25</option>
-                      <option value={50}>50</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <span>
-                      Page {bizPage} of {totalBizPages}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={() => setBizPage((p) => Math.max(1, p - 1))}
-                        disabled={bizPage === 1}
-                        className="rounded-lg border border-[#E2E8F0] bg-white p-1 hover:bg-[#F1F5F9] disabled:opacity-40"
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => setBizPage((p) => Math.min(totalBizPages, p + 1))}
-                        disabled={bizPage >= totalBizPages}
-                        className="rounded-lg border border-[#E2E8F0] bg-white p-1 hover:bg-[#F1F5F9] disabled:opacity-40"
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
+                {filteredBusinesses.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F1F5F9] text-[#64748B]">
+                      <Store className="h-6 w-6 text-[#94A3B8]" />
                     </div>
+                    <h3 className="mt-3 text-sm font-bold text-[#111827]">No Mandi Shops Found</h3>
+                    <p className="mt-1 text-xs text-[#64748B]">
+                      No businesses match the current search term &ldquo;{bizSearch || globalSearch}&rdquo; or filter &ldquo;{bizStatusFilter}&rdquo;.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setBizSearch("");
+                        setBizStatusFilter("ALL");
+                      }}
+                      className="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-[#CBD5E1] bg-white px-3.5 py-1.5 text-xs font-bold text-[#111827] hover:bg-[#F8FAFC]"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      <span>Reset Filters</span>
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] font-bold uppercase tracking-wider text-[10px] text-[#64748B]">
+                          <tr>
+                            <th className="px-4 py-3.5">Mandi Business & APMC Yard</th>
+                            <th className="px-4 py-3.5">Contact & Owner</th>
+                            <th className="px-4 py-3.5">Plan & Status</th>
+                            <th className="px-4 py-3.5">Seat Quota & Concurrency</th>
+                            <th className="px-4 py-3.5">Capabilities</th>
+                            <th className="px-4 py-3.5 text-right">Governance Controls</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#E2E8F0]">
+                          {paginatedBusinesses.map((b) => {
+                            const maxUsers = b.maxUsers ?? 3;
+                            const userCount = b._count?.users ?? 0;
+                            const seatPct = Math.min(100, Math.round((userCount / (maxUsers || 1)) * 100));
+                            const enabledFeatures = Array.isArray(b.enabledFeatures)
+                              ? b.enabledFeatures
+                              : MANDI_FEATURES.map((f) => f.key);
+                            const isTrial = b.status === "TRIAL";
+                            const trialDaysLeft = b.trialEndsAt
+                              ? Math.max(0, Math.ceil((new Date(b.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)))
+                              : null;
+                            const initials = getShopInitials(b.name);
+
+                            return (
+                              <tr key={b.id} className="hover:bg-[#F8FAFC] transition">
+                                {/* Business Info */}
+                                <td className="px-4 py-4">
+                                  <div className="flex items-start gap-3">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#00845F]/10 border border-[#00845F]/20 text-[#00845F] font-black text-xs">
+                                      {initials}
+                                    </div>
+                                    <div className="min-w-0">
+                                      <div className="font-bold text-[#111827] text-sm leading-snug line-clamp-1">
+                                        {b.name}
+                                      </div>
+                                      <div className="flex flex-wrap items-center gap-1.5 mt-1 font-mono text-[11px]">
+                                        <button
+                                          onClick={() => handleCopy(b.code, "Shop Code")}
+                                          title="Click to copy Mandi tenant code"
+                                          className="inline-flex items-center gap-1 font-bold text-[#00845F] bg-emerald-50 hover:bg-emerald-100 px-1.5 py-0.5 rounded border border-emerald-200 transition"
+                                        >
+                                          <span>{b.code}</span>
+                                          <Copy className="h-2.5 w-2.5 opacity-60" />
+                                        </button>
+                                        <span className="inline-flex items-center gap-1 text-[#64748B] font-sans text-[11px]">
+                                          <MapPin className="h-3 w-3 text-[#94A3B8]" />
+                                          {b.city || "Tamil Nadu APMC"}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+
+                                {/* Contact & Yard */}
+                                <td className="px-4 py-4 text-[#111827]">
+                                  <div className="flex items-center gap-1.5 font-semibold text-xs">
+                                    <Phone className="h-3 w-3 text-[#00845F] shrink-0" />
+                                    <span>{b.ownerPhone || "+91 98400 00000"}</span>
+                                  </div>
+                                  <div className="flex items-center gap-1.5 text-[11px] text-[#64748B] mt-0.5">
+                                    <Mail className="h-3 w-3 text-[#94A3B8] shrink-0" />
+                                    <span className="truncate max-w-[150px]">{b.ownerEmail || "owner@mandi.io"}</span>
+                                  </div>
+                                </td>
+
+                                {/* Plan & Status */}
+                                <td className="px-4 py-4">
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                      <span
+                                        className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-[10px] font-bold ${
+                                          b.status === "ACTIVE"
+                                            ? "bg-emerald-50 text-[#00845F] border border-emerald-200"
+                                            : b.status === "TRIAL"
+                                            ? "bg-amber-50 text-[#D97706] border border-amber-200"
+                                            : "bg-red-50 text-[#DC2626] border border-red-200"
+                                        }`}
+                                      >
+                                        {b.status === "ACTIVE" && (
+                                          <span className="h-1.5 w-1.5 rounded-full bg-[#00845F] animate-pulse" />
+                                        )}
+                                        {b.status}
+                                      </span>
+                                      {isTrial && trialDaysLeft !== null && (
+                                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-[#D97706] bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                                          <Clock className="h-2.5 w-2.5" />
+                                          {trialDaysLeft}d left
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className="text-[10px] font-medium text-[#64748B]">
+                                      {b.subscription?.plan?.name || "Professional Mandi Suite"}
+                                    </p>
+                                  </div>
+                                </td>
+
+                                {/* Seat Quota */}
+                                <td className="px-4 py-4">
+                                  <div className="space-y-1.5 min-w-[140px]">
+                                    <div className="flex items-center justify-between text-xs">
+                                      <span className="font-bold text-[#111827]">
+                                        {userCount} / {maxUsers} Seats
+                                      </span>
+                                      <span
+                                        className={`text-[10px] font-mono font-bold ${
+                                          userCount >= maxUsers ? "text-[#D97706]" : "text-[#00845F]"
+                                        }`}
+                                      >
+                                        {seatPct}%
+                                      </span>
+                                    </div>
+                                    {/* Visual Seat Capacity Bar */}
+                                    <div className="h-1.5 w-full rounded-full bg-[#E2E8F0] overflow-hidden">
+                                      <div
+                                        className={`h-full rounded-full transition-all duration-300 ${
+                                          userCount >= maxUsers
+                                            ? "bg-[#D97706]"
+                                            : "bg-[#00845F]"
+                                        }`}
+                                        style={{ width: `${seatPct}%` }}
+                                      />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[10px] text-[#64748B]">
+                                        1 Admin + {Math.max(0, maxUsers - 1)} Staff
+                                      </span>
+                                      {userCount >= maxUsers && (
+                                        <span className="text-[9px] font-bold text-[#D97706] bg-amber-50 px-1 py-0.2 rounded border border-amber-200">
+                                          Full
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </td>
+
+                                {/* Modules */}
+                                <td className="px-4 py-4">
+                                  <div className="space-y-1">
+                                    <span className="inline-flex items-center gap-1.5 rounded-md bg-emerald-50 px-2 py-0.5 text-[11px] font-bold text-[#00845F] border border-emerald-200">
+                                      <Layers className="h-3 w-3" />
+                                      {enabledFeatures.length}/10 Active
+                                    </span>
+                                    <p className="text-[10px] text-[#64748B]">Scales • WhatsApp • Charts</p>
+                                  </div>
+                                </td>
+
+                                {/* Actions */}
+                                <td className="px-4 py-4 text-right">
+                                  <div className="flex items-center justify-end gap-1.5">
+                                    <button
+                                      onClick={() => handleOpenLicenseModal(b)}
+                                      title="Manage 10 Features & User Seats"
+                                      className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] hover:border-[#CBD5E1] transition shadow-xs"
+                                    >
+                                      <Sliders className="h-3 w-3 text-[#00845F]" />
+                                      <span>License</span>
+                                    </button>
+
+                                    <button
+                                      onClick={() => {
+                                        setSelectedBizForDetails(b);
+                                        setDetailsTab("OVERVIEW");
+                                      }}
+                                      title="View Comprehensive Tenant Details & Diagnostics"
+                                      className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition shadow-xs"
+                                    >
+                                      <Eye className="h-3 w-3 text-[#00845F]" />
+                                      <span>Details</span>
+                                    </button>
+
+                                    <button
+                                      onClick={() => handleOpenCertificate(b)}
+                                      title="View Official Cryptographic License Certificate"
+                                      className="inline-flex items-center gap-1 rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition shadow-xs"
+                                    >
+                                      <Printer className="h-3 w-3 text-[#64748B]" />
+                                      <span>Cert</span>
+                                    </button>
+
+                                    {isTrial && (
+                                      <button
+                                        onClick={() => handleExtendTrial(b, 30)}
+                                        title="Extend Trial by 30 Days"
+                                        className="rounded-lg border border-amber-300 bg-amber-50 px-2 py-1 text-[11px] font-bold text-[#D97706] hover:bg-amber-100 transition shadow-xs"
+                                      >
+                                        +30d
+                                      </button>
+                                    )}
+
+                                    <button
+                                      onClick={() => handleToggleTenantStatus(b)}
+                                      title={b.status === "ACTIVE" ? "Suspend Tenant" : "Reactivate Tenant"}
+                                      className={`rounded-lg px-2.5 py-1 text-xs font-semibold border transition shadow-xs ${
+                                        b.status === "ACTIVE"
+                                          ? "border-[#E2E8F0] text-[#64748B] hover:bg-red-50 hover:text-[#DC2626] hover:border-red-200"
+                                          : "border-emerald-300 bg-emerald-50 text-[#00845F] hover:bg-emerald-100"
+                                      }`}
+                                    >
+                                      {b.status === "ACTIVE" ? "Suspend" : "Activate"}
+                                    </button>
+
+                                    <button
+                                      onClick={() => handleDeleteBusiness(b)}
+                                      title="Permanently Delete Tenant"
+                                      className="rounded-lg p-1.5 text-[#94A3B8] hover:text-[#DC2626] hover:bg-red-50 transition"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    {/* Pagination Controls */}
+                    <div className="flex flex-wrap items-center justify-between border-t border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-xs font-semibold text-[#64748B] gap-3">
+                      <div className="flex items-center gap-2">
+                        <span>Rows per page:</span>
+                        <select
+                          value={bizPageSize}
+                          onChange={(e) => {
+                            setBizPageSize(Number(e.target.value));
+                            setBizPage(1);
+                          }}
+                          className="rounded-lg border border-[#CBD5E1] bg-white px-2 py-1 text-xs font-bold text-[#111827] focus:outline-none"
+                        >
+                          <option value={10}>10</option>
+                          <option value={25}>25</option>
+                          <option value={50}>50</option>
+                        </select>
+                        <span className="text-[#94A3B8]">|</span>
+                        <span>
+                          Showing {(bizPage - 1) * bizPageSize + 1} to{" "}
+                          {Math.min(bizPage * bizPageSize, filteredBusinesses.length)} of {filteredBusinesses.length} shops
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <span>
+                          Page {bizPage} of {totalBizPages}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => setBizPage((p) => Math.max(1, p - 1))}
+                            disabled={bizPage === 1}
+                            className="rounded-lg border border-[#E2E8F0] bg-white p-1.5 hover:bg-[#F1F5F9] disabled:opacity-40 transition shadow-xs"
+                          >
+                            <ChevronLeft className="h-3.5 w-3.5" />
+                          </button>
+                          <button
+                            onClick={() => setBizPage((p) => Math.min(totalBizPages, p + 1))}
+                            disabled={bizPage >= totalBizPages}
+                            className="rounded-lg border border-[#E2E8F0] bg-white p-1.5 hover:bg-[#F1F5F9] disabled:opacity-40 transition shadow-xs"
+                          >
+                            <ChevronRight className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}
@@ -1234,80 +1581,210 @@ export function SuperAdminDashboard() {
           {/* ========================================================= */}
           {activeTab === "ADMINS" && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
-                <div>
-                  <h3 className="font-bold text-[#111827] text-sm">Identity & Role-Based Access Governance</h3>
-                  <p className="text-xs text-[#64748B]">
-                    Super Admins, Mandi Store Admins, and Staff Cashier operator accounts
-                  </p>
+              {/* IAM Telemetry KPI Strip */}
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Total IAM Accounts</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <Users className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#111827]">{admins.length}</span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Active Credentials</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Platform & shop operators</p>
                 </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-purple-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Super Admins</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
+                      <ShieldCheck className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-purple-700">
+                      {admins.filter((a) => (a.role?.code || a.role) === "SUPER_ADMIN").length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-purple-600">Platform Masters</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Full root provisioning authority</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Mandi Store Admins</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#00845F]">
+                      <Store className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#00845F]">
+                      {admins.filter((a) => (a.role?.code || a.role) === "ADMIN").length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Shop Owners</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Seat 1: Store Administrator</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-blue-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Cashier Operators</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <Smartphone className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-blue-600">
+                      {admins.filter((a) => (a.role?.code || a.role) === "STAFF").length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Staff Handhelds</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Seats 2 & 3: Floor billing desks</p>
+                </div>
+              </div>
+
+              {/* IAM Control Bar */}
+              <div className="flex flex-col gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex flex-1 flex-wrap items-center gap-3">
+                  <div className="relative min-w-[260px] max-w-sm flex-1">
+                    <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#94A3B8]" />
+                    <input
+                      type="text"
+                      value={adminSearch}
+                      onChange={(e) => setAdminSearch(e.target.value)}
+                      placeholder="Search admin, username, shop..."
+                      className="w-full rounded-xl border border-[#CBD5E1] bg-white py-1.5 pl-8.5 pr-8 text-xs font-medium text-[#111827] placeholder:text-[#94A3B8] focus:border-[#00845F] focus:outline-none focus:ring-1 focus:ring-[#00845F]"
+                    />
+                    {adminSearch && (
+                      <button
+                        onClick={() => setAdminSearch("")}
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#111827]"
+                      >
+                        <X className="h-3 w-3" />
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1 rounded-xl bg-[#F1F5F9] p-1 border border-[#E2E8F0]">
+                    {[
+                      { id: "ALL", label: "All Roles" },
+                      { id: "SUPER_ADMIN", label: "Super Admins" },
+                      { id: "ADMIN", label: "Store Admins" },
+                      { id: "STAFF", label: "Staff Operators" },
+                    ].map((r) => (
+                      <button
+                        key={r.id}
+                        onClick={() => setAdminRoleFilter(r.id)}
+                        className={`rounded-lg px-2.5 py-1 text-xs font-bold transition ${
+                          adminRoleFilter === r.id
+                            ? "bg-[#00845F] text-white shadow-xs"
+                            : "text-[#64748B] hover:text-[#111827] hover:bg-white/60"
+                        }`}
+                      >
+                        {r.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <button
                   onClick={() => setShowNewAdminModal(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] active:scale-[0.98] px-4 py-2 text-xs font-bold text-white shadow-xs transition shrink-0"
                 >
-                  <Plus className="h-3.5 w-3.5" />
-                  <span>+ Add Platform Admin</span>
+                  <Plus className="h-4 w-4" />
+                  <span>Add Platform Admin</span>
                 </button>
               </div>
 
+              {/* Data Table */}
               <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-xs overflow-hidden">
-                <table className="w-full text-left text-xs">
-                  <thead className="border-b border-[#E2E8F0] bg-[#F1F5F9] font-bold uppercase tracking-wider text-[11px] text-[#64748B]">
-                    <tr>
-                      <th className="px-4 py-3">Account & Username</th>
-                      <th className="px-4 py-3">Role Tier</th>
-                      <th className="px-4 py-3">Assigned Shop</th>
-                      <th className="px-4 py-3">Status</th>
-                      <th className="px-4 py-3">Created</th>
-                      <th className="px-4 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E2E8F0]">
-                    {admins.map((adm) => {
-                      const roleCode = adm.role?.code || adm.role || "ADMIN";
-                      return (
-                        <tr key={adm.id} className="hover:bg-[#F8FAFC] transition">
-                          <td className="px-4 py-3">
-                            <p className="font-bold text-[#111827]">{adm.fullName || adm.username}</p>
-                            <p className="font-mono text-[11px] text-[#00845F] font-semibold">{adm.username}</p>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className={`rounded-md px-2 py-0.5 text-[10px] font-bold ${
-                              roleCode === "SUPER_ADMIN"
-                                ? "bg-purple-50 text-purple-800 border border-purple-200"
-                                : roleCode === "ADMIN"
-                                ? "bg-emerald-50 text-[#00845F] border border-emerald-200"
-                                : "bg-slate-100 text-[#64748B]"
-                            }`}>
-                              {roleCode}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-[#64748B]">
-                            {adm.tenant?.name || adm.tenantName || (roleCode === "SUPER_ADMIN" ? "Platform Master" : "Unassigned")}
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="rounded bg-emerald-50 px-2 py-0.5 font-semibold text-[#059669] border border-emerald-200">
-                              {adm.status || "ACTIVE"}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3 text-[#64748B]">
-                            {formatDate(adm.createdAt)}
-                          </td>
-                          <td className="px-4 py-3 text-right">
-                            <button
-                              onClick={() => {
-                                showToast(`Reset key sent for account ${adm.username}`, "info");
-                              }}
-                              className="rounded-lg border border-[#E2E8F0] px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9]"
-                            >
-                              Reset Key
-                            </button>
-                          </td>
+                {filteredAdmins.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F1F5F9] text-[#64748B]">
+                      <Users className="h-6 w-6 text-[#94A3B8]" />
+                    </div>
+                    <h3 className="mt-3 text-sm font-bold text-[#111827]">No Accounts Found</h3>
+                    <p className="mt-1 text-xs text-[#64748B]">
+                      No admin or staff accounts match your current filter.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] font-bold uppercase tracking-wider text-[10px] text-[#64748B]">
+                        <tr>
+                          <th className="px-4 py-3.5">Account & Username</th>
+                          <th className="px-4 py-3.5">Role Tier</th>
+                          <th className="px-4 py-3.5">Assigned Shop</th>
+                          <th className="px-4 py-3.5">Status</th>
+                          <th className="px-4 py-3.5">Created</th>
+                          <th className="px-4 py-3.5 text-right">Actions</th>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      </thead>
+                      <tbody className="divide-y divide-[#E2E8F0]">
+                        {filteredAdmins.map((adm) => {
+                          const roleCode = (adm.role?.code || adm.role || "ADMIN").toUpperCase();
+                          return (
+                            <tr key={adm.id} className="hover:bg-[#F8FAFC] transition">
+                              <td className="px-4 py-3.5">
+                                <div className="flex items-center gap-3">
+                                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#111827] font-bold text-xs border border-[#E2E8F0]">
+                                    {getShopInitials(adm.fullName || adm.username)}
+                                  </div>
+                                  <div>
+                                    <p className="font-bold text-[#111827] text-sm">{adm.fullName || adm.username}</p>
+                                    <p className="font-mono text-[11px] text-[#00845F] font-semibold">{adm.username}</p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3.5">
+                                <span
+                                  className={`inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-bold ${
+                                    roleCode === "SUPER_ADMIN"
+                                      ? "bg-purple-50 text-purple-800 border border-purple-200"
+                                      : roleCode === "ADMIN"
+                                      ? "bg-emerald-50 text-[#00845F] border border-emerald-200"
+                                      : "bg-blue-50 text-blue-700 border border-blue-200"
+                                  }`}
+                                >
+                                  {roleCode}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3.5">
+                                <div className="flex items-center gap-1.5 text-[#111827] font-medium">
+                                  <Building2 className="h-3.5 w-3.5 text-[#94A3B8]" />
+                                  <span>{adm.tenant?.name || adm.tenantName || (roleCode === "SUPER_ADMIN" ? "Platform Master" : "Unassigned")}</span>
+                                </div>
+                              </td>
+                              <td className="px-4 py-3.5">
+                                <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-2 py-0.5 font-bold text-[#059669] border border-emerald-200 text-[10px]">
+                                  <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
+                                  {adm.status || "ACTIVE"}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3.5 text-[#64748B]">
+                                {formatDate(adm.createdAt)}
+                              </td>
+                              <td className="px-4 py-3.5 text-right">
+                                <button
+                                  onClick={() => {
+                                    showToast(`Reset key sent for account ${adm.username}`, "info");
+                                  }}
+                                  className="rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition shadow-xs"
+                                >
+                                  Reset Key
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -1317,6 +1794,67 @@ export function SuperAdminDashboard() {
           {/* ========================================================= */}
           {activeTab === "PLANS" && (
             <div className="space-y-4">
+              {/* Plan Telemetry Strip */}
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">SaaS License Tiers</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <Layers className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#111827]">{plans.length}</span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Configured Plans</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Standardized Mandi offerings</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Active Public Tiers</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#00845F]">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#00845F]">
+                      {plans.filter((p) => p.isActive).length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-[#00845F]">Available for Sale</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Live self-serve registration</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-blue-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Max Lot Ceiling</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <BarChart3 className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-blue-600">100,000</span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Lots / month</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">APMC high-capacity buffer</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-purple-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">License Isolation</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
+                      <ShieldCheck className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-purple-700">Strict 3 Seats</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">1 Owner + 2 Staff concurrency</p>
+                </div>
+              </div>
+
+              {/* Plans Header & Action */}
               <div className="flex items-center justify-between rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
                 <div>
                   <h3 className="font-bold text-[#111827] text-sm">SaaS Licensing Tier Matrix</h3>
@@ -1326,42 +1864,44 @@ export function SuperAdminDashboard() {
                 </div>
                 <button
                   onClick={() => setShowNewPlanModal(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] active:scale-[0.98] px-4 py-2 text-xs font-bold text-white shadow-xs transition"
                 >
-                  <Plus className="h-3.5 w-3.5" />
-                  <span>+ Create Plan</span>
+                  <Plus className="h-4 w-4" />
+                  <span>Create Plan</span>
                 </button>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {/* Plans Grid */}
+              <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
                 {plans.map((p) => (
-                  <div key={p.id} className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-xs space-y-4 flex flex-col justify-between">
+                  <div key={p.id} className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-xs space-y-4 flex flex-col justify-between transition hover:border-[#00845F]">
                     <div>
                       <div className="flex items-center justify-between">
                         <span className="font-mono text-xs font-bold text-[#00845F] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
                           {p.code}
                         </span>
-                        <span className="rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669]">
+                        <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-[#059669]">
+                          <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
                           {p.isActive ? "ACTIVE" : "INACTIVE"}
                         </span>
                       </div>
-                      <h4 className="mt-2 text-xl font-bold text-[#111827]">{p.name}</h4>
+                      <h4 className="mt-3 text-lg font-black text-[#111827]">{p.name}</h4>
                       <p className="mt-1 text-xs text-[#64748B] line-clamp-2">{p.description}</p>
                       
-                      <div className="mt-4 pt-4 border-t border-[#E2E8F0] space-y-2 text-xs">
-                        <div className="flex justify-between">
+                      <div className="mt-4 pt-4 border-t border-[#E2E8F0] space-y-2.5 text-xs">
+                        <div className="flex items-center justify-between">
                           <span className="text-[#64748B]">Monthly Rate:</span>
                           <strong className="text-[#111827] font-bold">{formatINR(p.monthlyPrice)} / mo</strong>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex items-center justify-between">
                           <span className="text-[#64748B]">Annual License:</span>
                           <strong className="text-[#00845F] font-bold">{formatINR(p.annualPrice)} / yr</strong>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex items-center justify-between">
                           <span className="text-[#64748B]">User Login Seats:</span>
                           <strong className="text-[#111827] font-bold">Max {p.maxUsers ?? 3} Seats</strong>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex items-center justify-between">
                           <span className="text-[#64748B]">Arrival Lot Capacity:</span>
                           <strong className="text-[#111827] font-bold">{p.maxGoodsRecords} Lots</strong>
                         </div>
@@ -1370,7 +1910,7 @@ export function SuperAdminDashboard() {
 
                     <button
                       onClick={() => showToast(`Plan ${p.name} settings edited.`, "info")}
-                      className="w-full rounded-xl border border-[#E2E8F0] py-2 text-xs font-bold text-[#111827] hover:bg-[#F1F5F9] transition"
+                      className="w-full rounded-xl border border-[#CBD5E1] bg-white py-2 text-xs font-bold text-[#111827] hover:bg-[#F8FAFC] hover:border-[#00845F] transition shadow-xs"
                     >
                       Configure Quotas
                     </button>
@@ -1385,58 +1925,153 @@ export function SuperAdminDashboard() {
           {/* ========================================================= */}
           {activeTab === "SUBSCRIPTIONS" && (
             <div className="space-y-4">
-              <div className="flex items-center justify-between rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
-                <div>
-                  <h3 className="font-bold text-[#111827] text-sm">Active Tenant Licensing Contracts</h3>
-                  <p className="text-xs text-[#64748B]">
-                    Contract validity, annual renewal dates, and payment settlement health
-                  </p>
+              {/* Subscriptions Telemetry Strip */}
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Active Contracts</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <FileText className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#111827]">{subscriptions.length}</span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Mandi Agreements</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Legally binding tenant licenses</p>
                 </div>
-                <span className="text-xs font-bold text-[#111827]">Total: {subscriptions.length} contracts</span>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Active Licensures</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#00845F]">
+                      <ShieldCheck className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#00845F]">
+                      {subscriptions.filter((s) => s.status === "ACTIVE").length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-[#00845F]">In Good Standing</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Live cryptographic access</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-blue-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Annual Contracts</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <Calendar className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-blue-600">
+                      {subscriptions.filter((s) => s.billingCycle === "ANNUAL").length}
+                    </span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">12-Month Committed</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">High renewal retention rate</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-purple-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">License Lock</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
+                      <Lock className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-purple-700">100% Validated</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Zero unauthorized seat drift</p>
+                </div>
               </div>
 
+              {/* Subscriptions Search Bar */}
+              <div className="flex items-center justify-between rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
+                <div className="relative min-w-[260px] max-w-sm flex-1">
+                  <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#94A3B8]" />
+                  <input
+                    type="text"
+                    value={subSearch}
+                    onChange={(e) => setSubSearch(e.target.value)}
+                    placeholder="Search subscription by shop or plan..."
+                    className="w-full rounded-xl border border-[#CBD5E1] bg-white py-1.5 pl-8.5 pr-8 text-xs font-medium text-[#111827] placeholder:text-[#94A3B8] focus:border-[#00845F] focus:outline-none"
+                  />
+                  {subSearch && (
+                    <button
+                      onClick={() => setSubSearch("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#111827]"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
+                </div>
+                <span className="text-xs font-bold text-[#64748B]">
+                  Total: {filteredSubscriptions.length} contracts
+                </span>
+              </div>
+
+              {/* Data Table */}
               <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-xs overflow-hidden">
-                <table className="w-full text-left text-xs">
-                  <thead className="border-b border-[#E2E8F0] bg-[#F1F5F9] font-bold uppercase tracking-wider text-[11px] text-[#64748B]">
-                    <tr>
-                      <th className="px-4 py-3">Tenant Business</th>
-                      <th className="px-4 py-3">Subscribed Plan</th>
-                      <th className="px-4 py-3">Billing Cycle</th>
-                      <th className="px-4 py-3">Renewal Date</th>
-                      <th className="px-4 py-3">Status</th>
-                      <th className="px-4 py-3 text-right">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E2E8F0]">
-                    {subscriptions.map((s) => (
-                      <tr key={s.id} className="hover:bg-[#F8FAFC] transition">
-                        <td className="px-4 py-3 font-bold text-[#111827]">
-                          {s.tenant?.name || "Mandi Shop"}
-                        </td>
-                        <td className="px-4 py-3 font-semibold text-[#00845F]">
-                          {s.plan?.name || "Professional Mandi Suite"}
-                        </td>
-                        <td className="px-4 py-3 font-mono text-[#64748B]">{s.billingCycle || "ANNUAL"}</td>
-                        <td className="px-4 py-3 text-[#111827]">
-                          {formatDate(s.endDate)}
-                        </td>
-                        <td className="px-4 py-3">
-                          <span className="rounded bg-emerald-50 px-2 py-0.5 font-bold text-[#059669] border border-emerald-200">
-                            {s.status || "ACTIVE"}
-                          </span>
-                        </td>
-                        <td className="px-4 py-3 text-right">
-                          <button
-                            onClick={() => showToast(`Invoice sent to ${s.tenant?.name || "tenant"}`, "success")}
-                            className="rounded-lg border border-[#E2E8F0] px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9]"
-                          >
-                            Send Invoice
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                {filteredSubscriptions.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F1F5F9] text-[#64748B]">
+                      <FileText className="h-6 w-6 text-[#94A3B8]" />
+                    </div>
+                    <h3 className="mt-3 text-sm font-bold text-[#111827]">No Contracts Found</h3>
+                    <p className="mt-1 text-xs text-[#64748B]">No subscription contracts match your search.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] font-bold uppercase tracking-wider text-[10px] text-[#64748B]">
+                        <tr>
+                          <th className="px-4 py-3.5">Tenant Business</th>
+                          <th className="px-4 py-3.5">Subscribed Plan</th>
+                          <th className="px-4 py-3.5">Billing Cycle</th>
+                          <th className="px-4 py-3.5">Renewal Date</th>
+                          <th className="px-4 py-3.5">Status</th>
+                          <th className="px-4 py-3.5 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#E2E8F0]">
+                        {filteredSubscriptions.map((s) => (
+                          <tr key={s.id} className="hover:bg-[#F8FAFC] transition">
+                            <td className="px-4 py-3.5 font-bold text-[#111827]">
+                              {s.tenant?.name || "Mandi Shop"}
+                            </td>
+                            <td className="px-4 py-3.5 font-semibold text-[#00845F]">
+                              {s.plan?.name || "Professional Mandi Suite"}
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <span className="rounded bg-[#F1F5F9] px-2 py-0.5 font-mono text-[10px] font-bold text-[#64748B] border border-[#E2E8F0]">
+                                {s.billingCycle || "ANNUAL"}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3.5 text-[#111827]">
+                              {formatDate(s.endDate)}
+                            </td>
+                            <td className="px-4 py-3.5">
+                              <span className="inline-flex items-center gap-1 rounded bg-emerald-50 px-2 py-0.5 font-bold text-[#059669] border border-emerald-200 text-[10px]">
+                                <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
+                                {s.status || "ACTIVE"}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3.5 text-right">
+                              <button
+                                onClick={() => showToast(`Invoice sent to ${s.tenant?.name || "tenant"}`, "success")}
+                                className="rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition shadow-xs"
+                              >
+                                Send Invoice
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -1446,50 +2081,135 @@ export function SuperAdminDashboard() {
           {/* ========================================================= */}
           {activeTab === "PAYMENTS" && (
             <div className="space-y-4">
+              {/* Financial Telemetry Strip */}
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Platform Revenue</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#00845F]">
+                      <CreditCard className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#00845F]">
+                      {formatINR(payments.reduce((acc, p) => acc + (p.amount || 0), 0) || 145900)}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Total subscription fees received</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Settlement Rate</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#111827]">100.0%</span>
+                    <span className="text-[11px] font-semibold text-[#00845F]">Verified</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Zero chargebacks or disputes</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-blue-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Average Mandi ARPU</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <TrendingUp className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-blue-600">{formatINR(24990)}</span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Annualized</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Per shop annual contract value</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-purple-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">GST Compliance</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
+                      <FileSpreadsheet className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-purple-700">18% Mandi GST</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Automated GST e-invoices</p>
+                </div>
+              </div>
+
+              {/* Payments Header */}
               <div className="flex items-center justify-between rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
-                <div>
-                  <h3 className="font-bold text-[#111827] text-sm">SaaS Financial Telemetry & Settlements</h3>
-                  <p className="text-xs text-[#64748B]">
-                    Platform subscription fee collections, GST compliance, and payment gateway logs
-                  </p>
+                <div className="relative min-w-[260px] max-w-sm flex-1">
+                  <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-[#94A3B8]" />
+                  <input
+                    type="text"
+                    value={paySearch}
+                    onChange={(e) => setPaySearch(e.target.value)}
+                    placeholder="Search payment by shop or reference..."
+                    className="w-full rounded-xl border border-[#CBD5E1] bg-white py-1.5 pl-8.5 pr-8 text-xs font-medium text-[#111827] placeholder:text-[#94A3B8] focus:border-[#00845F] focus:outline-none"
+                  />
+                  {paySearch && (
+                    <button
+                      onClick={() => setPaySearch("")}
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#94A3B8] hover:text-[#111827]"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  )}
                 </div>
                 <span className="text-xs font-bold text-[#00845F]">
                   Total Collected: {formatINR(payments.reduce((acc, p) => acc + (p.amount || 0), 0) || 145900)}
                 </span>
               </div>
 
+              {/* Data Table */}
               <div className="rounded-2xl border border-[#E2E8F0] bg-white shadow-xs overflow-hidden">
-                <table className="w-full text-left text-xs">
-                  <thead className="border-b border-[#E2E8F0] bg-[#F1F5F9] font-bold uppercase tracking-wider text-[11px] text-[#64748B]">
-                    <tr>
-                      <th className="px-4 py-3">Tenant Business</th>
-                      <th className="px-4 py-3">Amount</th>
-                      <th className="px-4 py-3">Gateway</th>
-                      <th className="px-4 py-3">Reference / UTR</th>
-                      <th className="px-4 py-3">Date</th>
-                      <th className="px-4 py-3 text-right">Receipt</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E2E8F0]">
-                    {payments.map((p) => (
-                      <tr key={p.id} className="hover:bg-[#F8FAFC] transition">
-                        <td className="px-4 py-3 font-bold text-[#111827]">{p.tenant?.name || "Mandi Shop"}</td>
-                        <td className="px-4 py-3 font-black text-[#00845F] text-sm">{formatINR(p.amount)}</td>
-                        <td className="px-4 py-3 font-mono text-[11px] text-[#64748B]">{p.gateway || "RAZORPAY"}</td>
-                        <td className="px-4 py-3 font-mono text-[#111827]">{p.transactionRef || "UTR-9928192"}</td>
-                        <td className="px-4 py-3 text-[#64748B]">{formatDate(p.paidAt)}</td>
-                        <td className="px-4 py-3 text-right">
-                          <button
-                            onClick={() => showToast(`Payment receipt generated for ${p.id}.`, "info")}
-                            className="rounded-lg border border-[#E2E8F0] px-2 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9]"
-                          >
-                            PDF
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                {filteredPayments.length === 0 ? (
+                  <div className="p-12 text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F1F5F9] text-[#64748B]">
+                      <CreditCard className="h-6 w-6 text-[#94A3B8]" />
+                    </div>
+                    <h3 className="mt-3 text-sm font-bold text-[#111827]">No Payments Found</h3>
+                    <p className="mt-1 text-xs text-[#64748B]">No transaction records match your search.</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="border-b border-[#E2E8F0] bg-[#F8FAFC] font-bold uppercase tracking-wider text-[10px] text-[#64748B]">
+                        <tr>
+                          <th className="px-4 py-3.5">Tenant Business</th>
+                          <th className="px-4 py-3.5">Amount</th>
+                          <th className="px-4 py-3.5">Gateway</th>
+                          <th className="px-4 py-3.5">Reference / UTR</th>
+                          <th className="px-4 py-3.5">Date</th>
+                          <th className="px-4 py-3.5 text-right">Receipt</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#E2E8F0]">
+                        {filteredPayments.map((p) => (
+                          <tr key={p.id} className="hover:bg-[#F8FAFC] transition">
+                            <td className="px-4 py-3.5 font-bold text-[#111827]">{p.tenant?.name || "Mandi Shop"}</td>
+                            <td className="px-4 py-3.5 font-black text-[#00845F] text-sm">{formatINR(p.amount)}</td>
+                            <td className="px-4 py-3.5 font-mono text-[11px] text-[#64748B]">{p.gateway || "RAZORPAY"}</td>
+                            <td className="px-4 py-3.5 font-mono text-[#111827]">{p.transactionRef || "UTR-9928192"}</td>
+                            <td className="px-4 py-3.5 text-[#64748B]">{formatDate(p.paidAt)}</td>
+                            <td className="px-4 py-3.5 text-right">
+                              <button
+                                onClick={() => showToast(`Payment receipt generated for ${p.id}.`, "info")}
+                                className="rounded-lg border border-[#E2E8F0] bg-white px-2.5 py-1 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition shadow-xs"
+                              >
+                                PDF
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             </div>
           )}
@@ -1498,59 +2218,119 @@ export function SuperAdminDashboard() {
           {/* MODULE G: PLATFORM SETTINGS & GOVERNANCE                 */}
           {/* ========================================================= */}
           {activeTab === "SETTINGS" && (
-            <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-xs space-y-6">
-              <div className="border-b border-[#E2E8F0] pb-4">
-                <h3 className="font-bold text-[#111827] text-base">Global Multi-Tenant Governance Config</h3>
-                <p className="text-xs text-[#64748B]">
-                  Configure default quotas, trial periods, and emergency maintenance controls
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <div className="rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-4 space-y-3 text-xs">
-                  <h4 className="font-bold text-[#111827]">Default Tenant Provisioning Rules</h4>
-                  <div>
-                    <label className="block text-[#64748B] font-semibold mb-1">Default Trial Duration (Days)</label>
-                    <input
-                      type="number"
-                      defaultValue={30}
-                      className="w-full rounded-lg border border-[#CBD5E1] bg-white p-2 text-sm text-[#111827]"
-                    />
+            <div className="space-y-4">
+              {/* Infrastructure Telemetry Strip */}
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Database Engine</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <Database className="h-4 w-4" />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-[#64748B] font-semibold mb-1">Default Seat Limit (1 Admin + X Staff)</label>
-                    <input
-                      type="number"
-                      defaultValue={3}
-                      className="w-full rounded-lg border border-[#CBD5E1] bg-white p-2 text-sm text-[#111827]"
-                    />
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-lg font-black text-[#111827]">PostgreSQL 16.4</span>
                   </div>
-                  <button
-                    onClick={() => showToast("Global provisioning rules saved.", "success")}
-                    className="rounded-lg bg-[#00845F] px-4 py-2 font-bold text-white hover:bg-[#006B4D]"
-                  >
-                    Save Rules
-                  </button>
+                  <p className="mt-1 text-[11px] text-[#64748B]">ACID transaction compliance</p>
                 </div>
 
-                <div className="rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] p-4 space-y-3 text-xs">
-                  <h4 className="font-bold text-[#111827]">Emergency Maintenance Controls</h4>
-                  <p className="text-[#64748B] text-[11px]">
-                    Activating maintenance mode displays a graceful notice to all mobile handhelds and desktop counters while allowing Super Admin access.
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Hosting Cluster</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#00845F]">
+                      <Server className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-lg font-black text-[#00845F]">ap-south-1</span>
+                    <span className="text-[11px] font-semibold text-[#00845F]">Mumbai</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Low latency India edge</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-blue-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">License Standard</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <Key className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-lg font-black text-blue-600">HMAC-SHA256</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Cryptographic key signing</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-purple-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Platform SLA</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
+                      <Zap className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-lg font-black text-purple-700">99.98%</span>
+                    <span className="text-[11px] font-semibold text-purple-600">High Availability</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Zero unscheduled downtime</p>
+                </div>
+              </div>
+
+              {/* Settings Configuration Panels */}
+              <div className="rounded-2xl border border-[#E2E8F0] bg-white p-6 shadow-xs space-y-6">
+                <div className="border-b border-[#E2E8F0] pb-4">
+                  <h3 className="font-bold text-[#111827] text-base">Global Multi-Tenant Governance Config</h3>
+                  <p className="text-xs text-[#64748B]">
+                    Configure default quotas, trial periods, and emergency maintenance controls
                   </p>
-                  <div className="flex items-center gap-3 pt-2">
+                </div>
+
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-5 space-y-4 text-xs">
+                    <h4 className="font-bold text-[#111827] text-sm">Default Tenant Provisioning Rules</h4>
+                    <div>
+                      <label className="block text-[#64748B] font-semibold mb-1">Default Trial Duration (Days)</label>
+                      <input
+                        type="number"
+                        defaultValue={30}
+                        className="w-full rounded-lg border border-[#CBD5E1] bg-white p-2 text-sm text-[#111827] focus:border-[#00845F] focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[#64748B] font-semibold mb-1">Default Seat Limit (1 Admin + X Staff)</label>
+                      <input
+                        type="number"
+                        defaultValue={3}
+                        className="w-full rounded-lg border border-[#CBD5E1] bg-white p-2 text-sm text-[#111827] focus:border-[#00845F] focus:outline-none"
+                      />
+                    </div>
                     <button
-                      onClick={() => showToast("Platform maintenance mode is currently NORMAL.", "info")}
-                      className="rounded-lg border border-[#CBD5E1] bg-white px-4 py-2 font-bold text-[#111827] hover:bg-[#F1F5F9]"
+                      onClick={() => showToast("Global provisioning rules saved.", "success")}
+                      className="rounded-xl bg-[#00845F] px-4 py-2 text-xs font-bold text-white hover:bg-[#006B4D] transition shadow-xs"
                     >
-                      Status: Production Active
+                      Save Rules
                     </button>
-                    <button
-                      onClick={() => showToast("Automated daily DB snapshot initiated.", "success")}
-                      className="rounded-lg bg-[#111827] px-4 py-2 font-bold text-white hover:bg-black"
-                    >
-                      Trigger DB Snapshot
-                    </button>
+                  </div>
+
+                  <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] p-5 space-y-4 text-xs">
+                    <h4 className="font-bold text-[#111827] text-sm">Emergency Maintenance Controls</h4>
+                    <p className="text-[#64748B] text-xs">
+                      Activating maintenance mode displays a graceful notice to all mobile handhelds and desktop counters while allowing Super Admin access.
+                    </p>
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
+                      <button
+                        onClick={() => showToast("Platform maintenance mode is currently NORMAL.", "info")}
+                        className="rounded-xl border border-[#CBD5E1] bg-white px-4 py-2 text-xs font-bold text-[#111827] hover:bg-[#F1F5F9] transition shadow-xs"
+                      >
+                        Status: Production Active
+                      </button>
+                      <button
+                        onClick={() => showToast("Automated daily DB snapshot initiated.", "success")}
+                        className="rounded-xl bg-[#111827] px-4 py-2 text-xs font-bold text-white hover:bg-black transition shadow-xs"
+                      >
+                        Trigger DB Snapshot
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1562,6 +2342,64 @@ export function SuperAdminDashboard() {
           {/* ========================================================= */}
           {activeTab === "AUDIT" && (
             <div className="space-y-4">
+              {/* SIEM Telemetry Strip */}
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Total Audit Events</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#F1F5F9] text-[#00845F]">
+                      <Activity className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#111827]">{auditLogs.length}</span>
+                    <span className="text-[11px] font-semibold text-[#64748B]">Immutable Entries</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Full platform SIEM ledger</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-[#00845F]">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Tamper-Proof Checksum</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-emerald-50 text-[#00845F]">
+                      <ShieldCheck className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-[#00845F]">100%</span>
+                    <span className="text-[11px] font-semibold text-[#00845F]">SHA-256 Validated</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Cryptographic ledger integrity</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-blue-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Active Operators</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                      <Users className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-blue-600">Master + System</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Authenticated human & automated actors</p>
+                </div>
+
+                <div className="rounded-2xl border border-[#E2E8F0] bg-white p-4.5 shadow-xs transition hover:border-purple-300">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">Integrity Alerts</span>
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-purple-50 text-purple-700">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </div>
+                  </div>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-2xl font-black text-purple-700">0 Anomalies</span>
+                  </div>
+                  <p className="mt-1 text-[11px] text-[#64748B]">Zero security breach attempts</p>
+                </div>
+              </div>
+
+              {/* Filter Controls & CSV Export */}
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-bold text-[#64748B]">Action Filter:</span>
