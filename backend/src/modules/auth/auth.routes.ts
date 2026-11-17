@@ -108,6 +108,44 @@ authRouter.post("/login", async (req: Request, res: Response, next: NextFunction
       );
     }
 
+    // Check maximum 3 users concurrent seat quota per tenant
+    if (user.role.code !== "SUPER_ADMIN" && user.tenantId && user.tenant) {
+      const maxAllowed = user.tenant.maxUsers ?? 3;
+      const staleThreshold = new Date(Date.now() - 24 * 60 * 60 * 1000);
+      await prisma.activeUserSession.deleteMany({
+        where: { tenantId: user.tenantId, lastActiveAt: { lt: staleThreshold } },
+      });
+
+      const currentSessions = await prisma.activeUserSession.findMany({
+        where: { tenantId: user.tenantId },
+      });
+      const activeUserIds = new Set(currentSessions.map((s) => s.userId));
+
+      if (!activeUserIds.has(user.id) && activeUserIds.size >= maxAllowed) {
+        throw new AppError(
+          403,
+          "SEAT_LIMIT_EXCEEDED",
+          `Maximum ${maxAllowed} user seats allowed for this shop license (${activeUserIds.size}/${maxAllowed} active). Please log out on another device or contact Admin.`
+        );
+      }
+
+      await prisma.activeUserSession.upsert({
+        where: { tenantId_userId: { tenantId: user.tenantId, userId: user.id } },
+        create: {
+          tenantId: user.tenantId,
+          userId: user.id,
+          deviceInfo: (req.headers["user-agent"] ?? "Web Browser").slice(0, 190),
+          ipAddress: req.ip ?? null,
+          lastActiveAt: new Date(),
+        },
+        update: {
+          deviceInfo: (req.headers["user-agent"] ?? "Web Browser").slice(0, 190),
+          ipAddress: req.ip ?? null,
+          lastActiveAt: new Date(),
+        },
+      });
+    }
+
     // Compute effective permissions
     const rolePermSet = new Set(
       user.role.rolePermissions.map((rp) => rp.permission.code)
@@ -181,6 +219,19 @@ authRouter.post("/login", async (req: Request, res: Response, next: NextFunction
         role: user.role.code,
         tenantId: user.tenantId,
         tenantName: user.tenant?.name ?? null,
+        tenant: user.tenant
+          ? {
+              id: user.tenant.id,
+              code: user.tenant.code,
+              name: user.tenant.name,
+              status: user.tenant.status,
+              licenseKey: user.tenant.licenseKey,
+              maxUsers: user.tenant.maxUsers,
+              trialEndsAt: user.tenant.trialEndsAt,
+              subscriptionEndsAt: user.tenant.subscriptionEndsAt,
+              enabledFeatures: user.tenant.enabledFeatures,
+            }
+          : null,
         permissions,
       },
     });

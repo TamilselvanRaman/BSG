@@ -187,7 +187,7 @@ businessRouter.get("/search", async (req: Request, res: Response, next: NextFunc
 businessRouter.get("/profile", async (req: Request, res: Response, next: NextFunction) => {
   try {
     const tenantId = req.tenantId!;
-    const [profile, settings, subscription] = await Promise.all([
+    const [profile, settings, subscription, tenant] = await Promise.all([
       prisma.businessProfile.findUnique({ where: { tenantId } }),
       prisma.businessSettings.findUnique({ where: { tenantId } }),
       prisma.subscription.findFirst({
@@ -195,8 +195,24 @@ businessRouter.get("/profile", async (req: Request, res: Response, next: NextFun
         orderBy: { createdAt: "desc" },
         include: { plan: true },
       }),
+      prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: {
+          id: true,
+          code: true,
+          name: true,
+          status: true,
+          maxUsers: true,
+          licenseKey: true,
+          trialEndsAt: true,
+          subscriptionEndsAt: true,
+          enabledFeatures: true,
+          city: true,
+          marketLocation: true,
+        },
+      }),
     ]);
-    return sendSuccess(res, { profile, settings, subscription });
+    return sendSuccess(res, { profile, settings, subscription, tenant });
   } catch (err) {
     next(err);
   }
@@ -253,27 +269,49 @@ businessRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const tenantId = req.tenantId!;
-      const users = await prisma.user.findMany({
-        where: { tenantId, deletedAt: null },
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          username: true,
-          fullName: true,
-          email: true,
-          phone: true,
-          status: true,
-          lastLoginAt: true,
-          createdAt: true,
-          role: { select: { code: true, name: true } },
-          userPermissions: { include: { permission: true } },
-        },
+      const [users, availablePermissions, tenant, activeSessionsCount] = await Promise.all([
+        prisma.user.findMany({
+          where: { tenantId, deletedAt: null },
+          orderBy: { createdAt: "desc" },
+          select: {
+            id: true,
+            username: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            status: true,
+            lastLoginAt: true,
+            createdAt: true,
+            role: { select: { code: true, name: true } },
+            userPermissions: { include: { permission: true } },
+          },
+        }),
+        prisma.permission.findMany({
+          where: { NOT: { module: "PLATFORM" } },
+          orderBy: { code: "asc" },
+        }),
+        prisma.tenant.findUnique({
+          where: { id: tenantId },
+          select: {
+            id: true,
+            maxUsers: true,
+            licenseKey: true,
+            trialEndsAt: true,
+            enabledFeatures: true,
+          },
+        }),
+        prisma.activeUserSession.count({
+          where: { tenantId },
+        }),
+      ]);
+      return sendSuccess(res, {
+        users,
+        availablePermissions,
+        maxUsers: tenant?.maxUsers ?? 3,
+        licenseKey: tenant?.licenseKey,
+        trialEndsAt: tenant?.trialEndsAt,
+        activeSessionsCount,
       });
-      const availablePermissions = await prisma.permission.findMany({
-        where: { NOT: { module: "PLATFORM" } },
-        orderBy: { code: "asc" },
-      });
-      return sendSuccess(res, { users, availablePermissions });
     } catch (err) {
       next(err);
     }

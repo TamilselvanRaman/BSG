@@ -10,11 +10,15 @@ import {
   getStoredSession,
 } from "@/lib/api";
 import {
+  AlertTriangle,
   BarChart3,
   BookOpen,
   Boxes,
+  CheckCircle2,
+  Clock,
   FileSpreadsheet,
   FileText,
+  Key,
   Layers,
   LogOut,
   PackagePlus,
@@ -23,7 +27,9 @@ import {
   RefreshCw,
   Search,
   Settings,
+  ShieldCheck,
   ShoppingBag,
+  Sparkles,
   Users,
   Wallet,
 } from "lucide-react";
@@ -628,16 +634,50 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
       <div className="flex flex-1 flex-col">
         {/* Top Bar with Global Search & Quick Actions */}
         <header className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 py-3.5">
-          <form onSubmit={handleGlobalSearch} className="relative flex w-80 items-center">
-            <Search className="absolute left-3 h-4 w-4 text-slate-400" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search buyer, seller, phone, bill #, lot #..."
-              className="w-full rounded-lg border border-slate-300 py-1.5 pl-9 pr-3 text-xs focus:border-blue-600 focus:outline-none"
-            />
-          </form>
+          <div className="flex items-center gap-4">
+            <form onSubmit={handleGlobalSearch} className="relative flex w-72 lg:w-80 items-center">
+              <Search className="absolute left-3 h-4 w-4 text-slate-400" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search buyer, seller, phone, bill #, lot #..."
+                className="w-full rounded-lg border border-slate-300 py-1.5 pl-9 pr-3 text-xs focus:border-blue-600 focus:outline-none"
+              />
+            </form>
+
+            {/* Trial & License Badge */}
+            {profileData?.tenant?.status === "TRIAL" || employeesData?.trialEndsAt ? (
+              <div className="hidden sm:flex items-center gap-2 rounded-full bg-amber-50 border border-amber-200 px-3 py-1 text-xs font-semibold text-amber-800 shadow-sm">
+                <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+                <span>
+                  Free Trial:{" "}
+                  {Math.max(
+                    0,
+                    Math.ceil(
+                      (new Date(
+                        profileData?.tenant?.trialEndsAt || employeesData?.trialEndsAt || Date.now()
+                      ).getTime() -
+                        Date.now()) /
+                        (1000 * 60 * 60 * 24)
+                    )
+                  )}{" "}
+                  Days Left
+                </span>
+                <span className="rounded bg-amber-200/80 px-1.5 py-0.5 text-[10px] font-bold text-amber-900">
+                  All 10 Features Active
+                </span>
+              </div>
+            ) : (
+              <div className="hidden sm:flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1 text-xs font-semibold text-emerald-800 shadow-sm">
+                <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                <span>Licensed Shop</span>
+                <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] text-emerald-800">
+                  Max 3 Users
+                </span>
+              </div>
+            )}
+          </div>
 
           {/* Quick Actions Bar (Spec Section A) */}
           <div className="flex flex-wrap items-center gap-2">
@@ -2208,75 +2248,143 @@ export function BusinessWorkspace({ mode }: { mode: "ADMIN" | "EMPLOYEE" }) {
               {/* ============================================================
                   SECTION I: EMPLOYEES & GRANULAR RBAC (ADMIN ONLY)
                  ============================================================ */}
-              {activeTab === "USERS" && mode === "ADMIN" && (
-                <div className="space-y-6">
-                  <form
-                    onSubmit={handleCreateEmployee}
-                    className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-5"
-                  >
-                    <input
-                      type="text"
-                      required
-                      placeholder="Employee Username *"
-                      value={empForm.username}
-                      onChange={(e) => setEmpForm({ ...empForm, username: e.target.value })}
-                      className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                    />
-                    <input
-                      type="text"
-                      required
-                      placeholder="Full Name *"
-                      value={empForm.fullName}
-                      onChange={(e) => setEmpForm({ ...empForm, fullName: e.target.value })}
-                      className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Phone"
-                      value={empForm.phone}
-                      onChange={(e) => setEmpForm({ ...empForm, phone: e.target.value })}
-                      className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                    />
-                    <input
-                      type="password"
-                      required
-                      placeholder="Temporary Password *"
-                      value={empForm.password}
-                      onChange={(e) => setEmpForm({ ...empForm, password: e.target.value })}
-                      className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
-                    />
-                    <button
-                      type="submit"
-                      className="rounded-lg bg-slate-900 px-4 py-2 text-xs font-semibold text-white"
-                    >
-                      + Create Employee
-                    </button>
-                  </form>
+              {activeTab === "USERS" && mode === "ADMIN" && (() => {
+                const maxUsers = employeesData?.maxUsers ?? profileData?.tenant?.maxUsers ?? 3;
+                const currentUsersCount = employeesData?.users?.length || 0;
+                const isSeatLimitReached = currentUsersCount >= maxUsers;
+                const activeSessionsCount = employeesData?.activeSessionsCount ?? 0;
 
-                  <div className="rounded-xl border border-slate-200 bg-white p-5">
-                    <h3 className="text-sm font-bold text-slate-900">
-                      Business Users & Staff Accounts ({employeesData?.users?.length || 0})
-                    </h3>
-                    <div className="mt-3 divide-y divide-slate-100 text-xs">
-                      {(employeesData?.users || []).map((u: any) => (
-                        <div key={u.id} className="flex items-center justify-between py-3">
-                          <div>
-                            <p className="font-bold text-slate-900">
-                              {u.fullName} ({u.username})
-                            </p>
-                            <p className="text-slate-500">
-                              Role: {u.role?.name} • Status: {u.status}
-                            </p>
-                          </div>
-                          <span className="rounded-full bg-blue-50 px-2.5 py-1 font-semibold text-blue-700">
-                            {u.role?.code}
+                return (
+                  <div className="space-y-6">
+                    {/* License Seat Quota Overview */}
+                    <div className="grid gap-3 sm:grid-cols-3">
+                      <div className="rounded-xl border border-slate-200 bg-white p-4">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                          Shop User Accounts
+                        </span>
+                        <div className="flex items-baseline gap-2 mt-1">
+                          <p className="text-2xl font-extrabold text-slate-900">
+                            {currentUsersCount} / {maxUsers}
+                          </p>
+                          <span className={`text-xs font-bold ${isSeatLimitReached ? "text-amber-600" : "text-emerald-600"}`}>
+                            {isSeatLimitReached ? "Max Limit Reached" : `${maxUsers - currentUsersCount} Seat(s) Available`}
                           </span>
                         </div>
-                      ))}
+                        <div className="w-full bg-slate-100 rounded-full h-2 mt-2">
+                          <div
+                            className={`h-2 rounded-full transition-all ${isSeatLimitReached ? "bg-amber-500" : "bg-blue-600"}`}
+                            style={{ width: `${Math.min(100, (currentUsersCount / maxUsers) * 100)}%` }}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white p-4">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                          Active Login Sessions
+                        </span>
+                        <p className="text-2xl font-extrabold text-blue-600 mt-1">
+                          {activeSessionsCount} / {maxUsers}
+                        </p>
+                        <p className="text-[11px] text-slate-500 mt-1">
+                          Live authenticated devices (Mobile + Web)
+                        </p>
+                      </div>
+
+                      <div className="rounded-xl border border-slate-200 bg-white p-4">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                          Shop License Key
+                        </span>
+                        <p className="text-xs font-mono font-bold text-slate-800 mt-1 truncate">
+                          {employeesData?.licenseKey || profileData?.tenant?.licenseKey || "BSG-LIC-TRIAL-3SEATS"}
+                        </p>
+                        <span className="inline-block mt-1 rounded bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
+                          Max 3 Users Quota Enforced
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Alert banner if limit reached */}
+                    {isSeatLimitReached ? (
+                      <div className="rounded-xl border border-amber-300 bg-amber-50/80 p-4 text-xs">
+                        <div className="flex items-center gap-2 font-bold text-amber-900">
+                          <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0" />
+                          <span>Tenant License Limit Reached: Maximum {maxUsers} Users Allowed</span>
+                        </div>
+                        <p className="mt-1 text-amber-800 pl-6">
+                          Your current shop license permits a maximum of {maxUsers} users (1 Store Admin + {maxUsers - 1} Staff/Cashiers).
+                          All {maxUsers} accounts are assigned. To add another employee, remove an inactive account or contact Super Admin to upgrade seat capacity.
+                        </p>
+                      </div>
+                    ) : (
+                      <form
+                        onSubmit={handleCreateEmployee}
+                        className="grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-5"
+                      >
+                        <input
+                          type="text"
+                          required
+                          placeholder="Employee Username *"
+                          value={empForm.username}
+                          onChange={(e) => setEmpForm({ ...empForm, username: e.target.value })}
+                          className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                        />
+                        <input
+                          type="text"
+                          required
+                          placeholder="Full Name *"
+                          value={empForm.fullName}
+                          onChange={(e) => setEmpForm({ ...empForm, fullName: e.target.value })}
+                          className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Phone"
+                          value={empForm.phone}
+                          onChange={(e) => setEmpForm({ ...empForm, phone: e.target.value })}
+                          className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                        />
+                        <input
+                          type="password"
+                          required
+                          placeholder="Temporary Password *"
+                          value={empForm.password}
+                          onChange={(e) => setEmpForm({ ...empForm, password: e.target.value })}
+                          className="rounded-lg border border-slate-300 px-3 py-2 text-xs"
+                        />
+                        <button
+                          type="submit"
+                          className="rounded-lg bg-slate-900 px-4 py-2 text-xs font-semibold text-white hover:bg-slate-800"
+                        >
+                          + Create Employee
+                        </button>
+                      </form>
+                    )}
+
+                    <div className="rounded-xl border border-slate-200 bg-white p-5">
+                      <h3 className="text-sm font-bold text-slate-900">
+                        Business Users & Staff Accounts ({employeesData?.users?.length || 0} / {maxUsers})
+                      </h3>
+                      <div className="mt-3 divide-y divide-slate-100 text-xs">
+                        {(employeesData?.users || []).map((u: any) => (
+                          <div key={u.id} className="flex items-center justify-between py-3">
+                            <div>
+                              <p className="font-bold text-slate-900">
+                                {u.fullName} ({u.username})
+                              </p>
+                              <p className="text-slate-500">
+                                Role: {u.role?.name} • Status: {u.status}
+                              </p>
+                            </div>
+                            <span className="rounded-full bg-blue-50 px-2.5 py-1 font-semibold text-blue-700">
+                              {u.role?.code}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                );
+              })()}
 
               {/* ============================================================
                   SECTION J: SETTINGS & CUSTOMIZATION (ADMIN ONLY)

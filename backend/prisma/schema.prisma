@@ -169,6 +169,13 @@ model Tenant {
   status               TenantStatus           @default(TRIAL)
   ownerEmail           String
   ownerPhone           String
+  licenseKey           String?                @unique
+  maxUsers             Int                    @default(3)
+  trialEndsAt          DateTime?
+  subscriptionEndsAt   DateTime?
+  enabledFeatures      Json?
+  city                 String?
+  marketLocation       String?
   createdAt            DateTime               @default(now())
   updatedAt            DateTime               @updatedAt
   deletedAt            DateTime?
@@ -177,6 +184,7 @@ model Tenant {
 
   users                User[]
   tenantUsers          TenantUser[]
+  activeSessions       ActiveUserSession[]
   businessProfile      BusinessProfile?
   businessSettings     BusinessSettings?
   subscriptions        Subscription[]
@@ -233,10 +241,28 @@ model User {
   passwordResetTokens PasswordResetToken[]
   notifications       Notification[]
   auditLogs           AuditLog[]
+  activeSessions      ActiveUserSession[]
 
   @@index([tenantId, status])
   @@index([username])
   @@map("users")
+}
+
+model ActiveUserSession {
+  id           String   @id @default(uuid())
+  tenantId     String
+  userId       String
+  deviceInfo   String?
+  ipAddress    String?
+  lastActiveAt DateTime @default(now())
+  createdAt    DateTime @default(now())
+
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, userId])
+  @@index([tenantId])
+  @@map("active_user_sessions")
 }
 
 model TenantUser {

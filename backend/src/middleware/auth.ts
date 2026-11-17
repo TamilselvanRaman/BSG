@@ -211,11 +211,16 @@ export function enforceSubscriptionQuota(
           const userCount = await prisma.user.count({
             where: { tenantId, deletedAt: null },
           });
-          if (userCount >= plan.maxUsers) {
+          const tenantRecord = await prisma.tenant.findUnique({
+            where: { id: tenantId },
+            select: { maxUsers: true },
+          });
+          const maxAllowedUsers = tenantRecord?.maxUsers ?? plan.maxUsers ?? 3;
+          if (userCount >= maxAllowedUsers) {
             throw new AppError(
-              402,
+              403,
               "QUOTA_EXCEEDED_USERS",
-              `User limit reached (${plan.maxUsers} users on ${plan.name} plan). Upgrade your plan to add more employees.`
+              `Shop user limit reached (${maxAllowedUsers} max users allowed for this license). Please contact Admin to upgrade license seats.`
             );
           }
         } else if (resourceType === "GOODS") {

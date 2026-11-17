@@ -8,6 +8,19 @@ import { AppError, sendSuccess, parsePagination } from "../../utils/response";
 import { recordAuditLog } from "../../utils/auditLogger";
 import { verifyRazorpaySignature } from "../../utils/crypto";
 
+export const ALL_MANDI_FEATURES = [
+  "MULTI_PRODUCT_LOTS",
+  "MULTI_PRODUCT_BILLING",
+  "BAG_WEIGHMENT_SCALE",
+  "DAILY_CASH_TALLY",
+  "SMART_CHART_AUCTION",
+  "PARTNER_LEDGERS",
+  "CUSTOMER_ADVANCES",
+  "FINANCIAL_REPORTS",
+  "WHATSAPP_INVOICES",
+  "MOBILE_APP_SYNC",
+];
+
 export const superAdminRouter = Router();
 
 superAdminRouter.use(authenticate, requireRoles("SUPER_ADMIN"));
@@ -130,7 +143,7 @@ superAdminRouter.get("/businesses", async (req: Request, res: Response, next: Ne
             include: { plan: true },
           },
           _count: {
-            select: { users: true, buyers: true, sellers: true, goods: true },
+            select: { users: true, buyers: true, sellers: true, goods: true, activeSessions: true },
           },
         },
       }),
@@ -158,8 +171,14 @@ superAdminRouter.post("/businesses", async (req: Request, res: Response, next: N
       adminUsername: z.string().min(3),
       adminPassword: z.string().min(6),
       adminFullName: z.string().min(2),
+      city: z.string().optional(),
+      marketLocation: z.string().optional(),
+      trialDays: z.number().int().min(1).max(365).default(30),
+      maxUsers: z.number().int().min(1).max(20).default(3),
+      enableAllFeatures: z.boolean().default(true),
+      enabledFeatures: z.array(z.string()).optional(),
       planId: z.string().optional(),
-      status: z.enum(["ACTIVE", "TRIAL", "SUSPENDED"]).default("ACTIVE"),
+      status: z.enum(["ACTIVE", "TRIAL", "SUSPENDED"]).default("TRIAL"),
     });
     const body = schema.parse(req.body);
 
@@ -172,10 +191,18 @@ superAdminRouter.post("/businesses", async (req: Request, res: Response, next: N
     if (!plan) throw new AppError(404, "PLAN_NOT_FOUND", "Subscription plan not found.");
 
     const passwordHash = await bcrypt.hash(body.adminPassword, 12);
-    const code = `BIZ-${Date.now().toString().slice(-6)}`;
+    const code = `SH-${Date.now().toString().slice(-4)}`;
     const slug = `${body.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}-${crypto
       .randomBytes(2)
       .toString("hex")}`;
+    const licenseKey = `BSG-LIC-${Date.now().toString(36).toUpperCase()}-${crypto
+      .randomBytes(3)
+      .toString("hex")
+      .toUpperCase()}`;
+    const trialEndsAt = new Date(Date.now() + body.trialDays * 24 * 60 * 60 * 1000);
+    const featuresToSave = body.enableAllFeatures
+      ? ALL_MANDI_FEATURES
+      : (body.enabledFeatures ?? ALL_MANDI_FEATURES);
 
     const created = await prisma.$transaction(async (tx) => {
       const tenant = await tx.tenant.create({
@@ -186,6 +213,12 @@ superAdminRouter.post("/businesses", async (req: Request, res: Response, next: N
           status: body.status,
           ownerEmail: body.ownerEmail,
           ownerPhone: body.ownerPhone,
+          licenseKey,
+          maxUsers: body.maxUsers,
+          trialEndsAt,
+          enabledFeatures: featuresToSave,
+          city: body.city ?? null,
+          marketLocation: body.marketLocation ?? null,
           createdBy: req.user!.sub,
         },
       });
@@ -196,6 +229,8 @@ superAdminRouter.post("/businesses", async (req: Request, res: Response, next: N
           businessName: body.name,
           phone: body.ownerPhone,
           email: body.ownerEmail,
+          city: body.city ?? null,
+          addressLine1: body.marketLocation ?? null,
         },
       });
 
@@ -224,7 +259,7 @@ superAdminRouter.post("/businesses", async (req: Request, res: Response, next: N
         data: {
           tenantId: tenant.id,
           userId: adminUser.id,
-          designation: "Business Admin",
+          designation: "Business Admin / Owner",
           isPrimary: true,
         },
       });
@@ -236,7 +271,8 @@ superAdminRouter.post("/businesses", async (req: Request, res: Response, next: N
           status: body.status === "ACTIVE" ? "ACTIVE" : "TRIAL",
           billingCycle: "MONTHLY",
           startDate: new Date(),
-          endDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          endDate: trialEndsAt,
+          trialEndsAt,
         },
       });
 
@@ -390,6 +426,242 @@ superAdminRouter.delete(
         entityId: updated.id,
       });
       return sendSuccess(res, { id: updated.id, deleted: true }, "Business deleted.");
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST /api/v1/super-admin/businesses/:id/features
+superAdminRouter.post(
+  "/businesses/:id/features",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { features, enableAll } = z
+        .object({
+          features: z.array(z.string()).optional(),
+          enableAll: z.boolean().optional(),
+        })
+        .parse(req.body);
+
+      const featuresToSave = enableAll ? ALL_MANDI_FEATURES : (features ?? ALL_MANDI_FEATURES);
+
+      const updated = await prisma.tenant.update({
+        where: { id: req.params.id },
+        data: {
+          enabledFeatures: featuresToSave,
+          updatedBy: req.user!.sub,
+        },
+      });
+
+      await recordAuditLog({
+        userId: req.user!.sub,
+        tenantId: updated.id,
+        action: "TENANT_FEATURES_UPDATED",
+        entityType: "Tenant",
+        entityId: updated.id,
+        metadata: { enabledFeatures: featuresToSave, enableAll },
+      });
+
+      return sendSuccess(res, { id: updated.id, enabledFeatures: updated.enabledFeatures }, "Features updated.");
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST /api/v1/super-admin/businesses/:id/license/extend-trial
+superAdminRouter.post(
+  "/businesses/:id/license/extend-trial",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { additionalDays } = z
+        .object({ additionalDays: z.number().int().min(1).max(365).default(14) })
+        .parse(req.body);
+
+      const tenant = await prisma.tenant.findUnique({ where: { id: req.params.id } });
+      if (!tenant) throw new AppError(404, "TENANT_NOT_FOUND", "Shop not found.");
+
+      const baseDate = tenant.trialEndsAt && tenant.trialEndsAt > new Date()
+        ? tenant.trialEndsAt
+        : new Date();
+      const newTrialEndsAt = new Date(baseDate.getTime() + additionalDays * 24 * 60 * 60 * 1000);
+
+      const updated = await prisma.tenant.update({
+        where: { id: tenant.id },
+        data: {
+          status: "TRIAL",
+          trialEndsAt: newTrialEndsAt,
+          updatedBy: req.user!.sub,
+        },
+      });
+
+      await recordAuditLog({
+        userId: req.user!.sub,
+        tenantId: updated.id,
+        action: "TRIAL_EXTENDED",
+        entityType: "Tenant",
+        entityId: updated.id,
+        metadata: { additionalDays, newTrialEndsAt },
+      });
+
+      return sendSuccess(
+        res,
+        { id: updated.id, status: updated.status, trialEndsAt: updated.trialEndsAt },
+        `Trial extended by ${additionalDays} days.`
+      );
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST /api/v1/super-admin/businesses/:id/license/activate-subscription
+superAdminRouter.post(
+  "/businesses/:id/license/activate-subscription",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { durationMonths, maxUsers } = z
+        .object({
+          durationMonths: z.number().int().min(1).max(60).default(12),
+          maxUsers: z.number().int().min(1).max(20).default(3),
+        })
+        .parse(req.body);
+
+      const tenant = await prisma.tenant.findUnique({ where: { id: req.params.id } });
+      if (!tenant) throw new AppError(404, "TENANT_NOT_FOUND", "Shop not found.");
+
+      const now = new Date();
+      const subscriptionEndsAt = new Date(now.getTime() + durationMonths * 30 * 24 * 60 * 60 * 1000);
+
+      const updated = await prisma.tenant.update({
+        where: { id: tenant.id },
+        data: {
+          status: "ACTIVE",
+          maxUsers,
+          subscriptionEndsAt,
+          updatedBy: req.user!.sub,
+        },
+      });
+
+      await recordAuditLog({
+        userId: req.user!.sub,
+        tenantId: updated.id,
+        action: "SUBSCRIPTION_ACTIVATED_BY_ADMIN",
+        entityType: "Tenant",
+        entityId: updated.id,
+        metadata: { durationMonths, maxUsers, subscriptionEndsAt },
+      });
+
+      return sendSuccess(
+        res,
+        { id: updated.id, status: updated.status, subscriptionEndsAt: updated.subscriptionEndsAt, maxUsers },
+        "Subscription activated successfully."
+      );
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// POST /api/v1/super-admin/businesses/:id/license/regenerate-key
+superAdminRouter.post(
+  "/businesses/:id/license/regenerate-key",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const newKey = `BSG-LIC-${Date.now().toString(36).toUpperCase()}-${crypto
+        .randomBytes(3)
+        .toString("hex")
+        .toUpperCase()}`;
+
+      const updated = await prisma.tenant.update({
+        where: { id: req.params.id },
+        data: { licenseKey: newKey, updatedBy: req.user!.sub },
+      });
+
+      return sendSuccess(res, { id: updated.id, licenseKey: updated.licenseKey }, "License key regenerated.");
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// GET /api/v1/super-admin/businesses/:id/license/certificate
+superAdminRouter.get(
+  "/businesses/:id/license/certificate",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const tenant = await prisma.tenant.findUnique({
+        where: { id: req.params.id },
+        include: { businessProfile: true },
+      });
+      if (!tenant) throw new AppError(404, "TENANT_NOT_FOUND", "Shop not found.");
+
+      const payload = {
+        licenseKey: tenant.licenseKey,
+        shopName: tenant.name,
+        shopCode: tenant.code,
+        ownerName: tenant.businessProfile?.businessName ?? tenant.name,
+        ownerPhone: tenant.ownerPhone,
+        ownerEmail: tenant.ownerEmail,
+        city: tenant.city ?? tenant.businessProfile?.city ?? "Tamil Nadu",
+        marketLocation: tenant.marketLocation ?? tenant.businessProfile?.addressLine1 ?? "Mandi Market",
+        status: tenant.status,
+        maxUsers: tenant.maxUsers,
+        trialEndsAt: tenant.trialEndsAt,
+        subscriptionEndsAt: tenant.subscriptionEndsAt,
+        enabledFeatures: tenant.enabledFeatures ?? ALL_MANDI_FEATURES,
+        issuedAt: tenant.createdAt,
+      };
+
+      return sendSuccess(res, payload, "License certificate data retrieved.");
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// GET /api/v1/super-admin/businesses/:id/active-sessions
+superAdminRouter.get(
+  "/businesses/:id/active-sessions",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const sessions = await prisma.activeUserSession.findMany({
+        where: { tenantId: req.params.id },
+        include: {
+          user: {
+            select: { id: true, username: true, fullName: true, role: { select: { name: true } } },
+          },
+        },
+        orderBy: { lastActiveAt: "desc" },
+      });
+
+      const tenant = await prisma.tenant.findUnique({
+        where: { id: req.params.id },
+        select: { maxUsers: true },
+      });
+
+      return sendSuccess(res, {
+        sessions,
+        maxUsers: tenant?.maxUsers ?? 3,
+        occupiedSeats: sessions.length,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// DELETE /api/v1/super-admin/businesses/:id/active-sessions/:userId
+superAdminRouter.delete(
+  "/businesses/:id/active-sessions/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      await prisma.activeUserSession.deleteMany({
+        where: { tenantId: req.params.id, userId: req.params.userId },
+      });
+
+      return sendSuccess(res, { revoked: true }, "User session revoked and seat freed.");
     } catch (err) {
       next(err);
     }
