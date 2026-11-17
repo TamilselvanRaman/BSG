@@ -23,6 +23,7 @@ import {
   Check,
   CheckCheck,
   CheckCircle2,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   Clock,
@@ -233,6 +234,7 @@ export function SuperAdminDashboard() {
   const [bizStatusFilter, setBizStatusFilter] = useState("ALL");
   const [bizSearch, setBizSearch] = useState("");
   const [bizSortBy, setBizSortBy] = useState<"NEWEST" | "NAME" | "SEATS" | "EXPIRING">("NEWEST");
+  const [isBizSortOpen, setIsBizSortOpen] = useState(false);
   const [adminRoleFilter, setAdminRoleFilter] = useState("ALL");
   const [adminSearch, setAdminSearch] = useState("");
   const [subStatusFilter, setSubStatusFilter] = useState("ALL");
@@ -240,6 +242,7 @@ export function SuperAdminDashboard() {
   const [paySearch, setPaySearch] = useState("");
   const [auditSeverityFilter, setAuditSeverityFilter] = useState("ALL");
   const [auditActionFilter, setAuditActionFilter] = useState("ALL");
+  const [isAuditFilterOpen, setIsAuditFilterOpen] = useState(false);
 
   async function loadAllData() {
     setLoading(true);
@@ -1256,19 +1259,57 @@ export function SuperAdminDashboard() {
 
                 {/* Right: Sort Dropdown & Provision New Mandi Shop Button */}
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 text-xs text-[#64748B]">
-                    <Filter className="h-3.5 w-3.5 text-[#94A3B8]" />
-                    <span className="font-semibold">Sort:</span>
-                    <select
-                      value={bizSortBy}
-                      onChange={(e: any) => setBizSortBy(e.target.value)}
-                      className="rounded-lg border border-[#CBD5E1] bg-white px-2 py-1 text-xs font-semibold text-[#111827] focus:border-[#00845F] focus:outline-none"
+                  {/* Custom Sort Dropdown */}
+                  <div className="relative">
+                    <button
+                      type="button"
+                      onClick={() => setIsBizSortOpen(!isBizSortOpen)}
+                      className="inline-flex items-center gap-1.5 rounded-xl border border-[#CBD5E1] bg-white px-3 py-1.5 text-xs font-semibold text-[#111827] hover:border-[#00845F] transition shadow-xs"
                     >
-                      <option value="NEWEST">Recently Added</option>
-                      <option value="NAME">Shop Name (A-Z)</option>
-                      <option value="SEATS">Seat Usage (High - Low)</option>
-                      <option value="EXPIRING">Trial Expiring Soon</option>
-                    </select>
+                      <Filter className="h-3.5 w-3.5 text-[#00845F]" />
+                      <span>
+                        Sort:{" "}
+                        {bizSortBy === "NEWEST"
+                          ? "Recently Added"
+                          : bizSortBy === "NAME"
+                          ? "Shop Name (A-Z)"
+                          : bizSortBy === "SEATS"
+                          ? "Seat Usage"
+                          : "Expiring Soon"}
+                      </span>
+                      <ChevronDown
+                        className={`h-3 w-3 text-[#94A3B8] transition-transform ${
+                          isBizSortOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+                    {isBizSortOpen && (
+                      <div className="absolute right-0 top-full mt-1.5 z-30 w-48 rounded-2xl border border-[#E2E8F0] bg-white p-1.5 shadow-xl animate-in fade-in zoom-in-95">
+                        {[
+                          { id: "NEWEST", label: "Recently Added" },
+                          { id: "NAME", label: "Shop Name (A-Z)" },
+                          { id: "SEATS", label: "Seat Usage (High - Low)" },
+                          { id: "EXPIRING", label: "Trial Expiring Soon" },
+                        ].map((opt) => (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => {
+                              setBizSortBy(opt.id as any);
+                              setIsBizSortOpen(false);
+                            }}
+                            className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition ${
+                              bizSortBy === opt.id
+                                ? "bg-emerald-50 text-[#00845F] font-bold"
+                                : "text-[#111827] hover:bg-[#F8FAFC]"
+                            }`}
+                          >
+                            <span>{opt.label}</span>
+                            {bizSortBy === opt.id && <Check className="h-3.5 w-3.5 text-[#00845F]" />}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   <button
@@ -1529,18 +1570,25 @@ export function SuperAdminDashboard() {
                     <div className="flex flex-wrap items-center justify-between border-t border-[#E2E8F0] bg-[#F8FAFC] px-4 py-3 text-xs font-semibold text-[#64748B] gap-3">
                       <div className="flex items-center gap-2">
                         <span>Rows per page:</span>
-                        <select
-                          value={bizPageSize}
-                          onChange={(e) => {
-                            setBizPageSize(Number(e.target.value));
-                            setBizPage(1);
-                          }}
-                          className="rounded-lg border border-[#CBD5E1] bg-white px-2 py-1 text-xs font-bold text-[#111827] focus:outline-none"
-                        >
-                          <option value={10}>10</option>
-                          <option value={25}>25</option>
-                          <option value={50}>50</option>
-                        </select>
+                        <div className="flex items-center gap-1 rounded-xl bg-white p-0.5 border border-[#CBD5E1]">
+                          {[10, 25, 50].map((sz) => (
+                            <button
+                              key={sz}
+                              type="button"
+                              onClick={() => {
+                                setBizPageSize(sz);
+                                setBizPage(1);
+                              }}
+                              className={`rounded-lg px-2.5 py-0.5 text-xs font-bold transition ${
+                                bizPageSize === sz
+                                  ? "bg-[#00845F] text-white shadow-xs"
+                                  : "text-[#64748B] hover:text-[#111827] hover:bg-[#F8FAFC]"
+                              }`}
+                            >
+                              {sz}
+                            </button>
+                          ))}
+                        </div>
                         <span className="text-[#94A3B8]">|</span>
                         <span>
                           Showing {(bizPage - 1) * bizPageSize + 1} to{" "}
@@ -2401,24 +2449,56 @@ export function SuperAdminDashboard() {
 
               {/* Filter Controls & CSV Export */}
               <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#E2E8F0] bg-white p-4 shadow-xs">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-[#64748B]">Action Filter:</span>
-                  <select
-                    value={auditActionFilter}
-                    onChange={(e) => {
-                      setAuditActionFilter(e.target.value);
-                      setAuditPage(1);
-                    }}
-                    className="rounded-lg border border-[#CBD5E1] bg-white px-3 py-1.5 text-xs font-semibold focus:border-[#00845F] focus:outline-none"
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setIsAuditFilterOpen(!isAuditFilterOpen)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-[#CBD5E1] bg-white px-3 py-1.5 text-xs font-semibold text-[#111827] hover:border-[#00845F] transition shadow-xs"
                   >
-                    <option value="ALL">All Actions ({auditLogs.length})</option>
-                    <option value="TENANT_CREATED">TENANT_CREATED</option>
-                    <option value="ALL_FEATURES_UNLOCKED">ALL_FEATURES_UNLOCKED</option>
-                    <option value="LICENSE_QUOTA_AUDITED">LICENSE_QUOTA_AUDITED</option>
-                    <option value="DEVICE_SEAT_REVOKED">DEVICE_SEAT_REVOKED</option>
-                    <option value="FEATURE_TOGGLED">FEATURE_TOGGLED</option>
-                    <option value="PASSWORD_RESET">PASSWORD_RESET</option>
-                  </select>
+                    <Filter className="h-3.5 w-3.5 text-[#00845F]" />
+                    <span>
+                      Action:{" "}
+                      {auditActionFilter === "ALL"
+                        ? `All Actions (${auditLogs.length})`
+                        : auditActionFilter}
+                    </span>
+                    <ChevronDown
+                      className={`h-3 w-3 text-[#94A3B8] transition-transform ${
+                        isAuditFilterOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  {isAuditFilterOpen && (
+                    <div className="absolute left-0 top-full mt-1.5 z-30 w-60 rounded-2xl border border-[#E2E8F0] bg-white p-1.5 shadow-xl animate-in fade-in zoom-in-95">
+                      {[
+                        { id: "ALL", label: `All Actions (${auditLogs.length})` },
+                        { id: "TENANT_CREATED", label: "TENANT_CREATED" },
+                        { id: "ALL_FEATURES_UNLOCKED", label: "ALL_FEATURES_UNLOCKED" },
+                        { id: "LICENSE_QUOTA_AUDITED", label: "LICENSE_QUOTA_AUDITED" },
+                        { id: "DEVICE_SEAT_REVOKED", label: "DEVICE_SEAT_REVOKED" },
+                        { id: "FEATURE_TOGGLED", label: "FEATURE_TOGGLED" },
+                        { id: "PASSWORD_RESET", label: "PASSWORD_RESET" },
+                      ].map((opt) => (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => {
+                            setAuditActionFilter(opt.id);
+                            setAuditPage(1);
+                            setIsAuditFilterOpen(false);
+                          }}
+                          className={`flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold transition ${
+                            auditActionFilter === opt.id
+                              ? "bg-emerald-50 text-[#00845F] font-bold"
+                              : "text-[#111827] hover:bg-[#F8FAFC]"
+                          }`}
+                        >
+                          <span className="font-mono text-[11px]">{opt.label}</span>
+                          {auditActionFilter === opt.id && <Check className="h-3.5 w-3.5 text-[#00845F]" />}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -2794,33 +2874,94 @@ export function SuperAdminDashboard() {
                     ))}
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 pt-2">
+                  <div className="space-y-3 pt-2">
                     <div>
-                      <label className="block font-bold text-[#111827] mb-1">Seat Quota Limit (Concurrent Devices)</label>
-                      <select
-                        value={newBizForm.maxUsers}
-                        onChange={(e) => setNewBizForm({ ...newBizForm, maxUsers: Number(e.target.value) })}
-                        className="w-full rounded-xl border border-[#CBD5E1] bg-white p-2.5 text-sm"
-                      >
-                        <option value={1}>1 Seat (Sole Admin Only)</option>
-                        <option value={2}>2 Seats (Admin + 1 Staff)</option>
-                        <option value={3}>3 Seats (Admin + 2 Staff) - Recommended</option>
-                        <option value={5}>5 Seats (Admin + 4 Staff Cashiers)</option>
-                        <option value={10}>10 Seats (Multi-Floor Operations)</option>
-                      </select>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block font-bold text-[#111827] text-xs">
+                          Seat Quota Limit (Concurrent Devices)
+                        </label>
+                        <span className="text-[11px] font-semibold text-[#00845F]">
+                          Selected: {newBizForm.maxUsers} Seats
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                        {[
+                          { value: 1, label: "1 Seat", sub: "Sole Admin" },
+                          { value: 2, label: "2 Seats", sub: "Admin + 1 Staff" },
+                          { value: 3, label: "3 Seats", sub: "Admin + 2 Staff", recommended: true },
+                          { value: 5, label: "5 Seats", sub: "Multi-Counter" },
+                          { value: 10, label: "10 Seats", sub: "APMC Enterprise" },
+                        ].map((opt) => {
+                          const active = newBizForm.maxUsers === opt.value;
+                          return (
+                            <div
+                              key={opt.value}
+                              onClick={() => setNewBizForm({ ...newBizForm, maxUsers: opt.value })}
+                              className={`cursor-pointer rounded-xl border p-2 text-center transition ${
+                                active
+                                  ? "border-[#00845F] bg-emerald-50/50 shadow-xs ring-1 ring-[#00845F]"
+                                  : "border-[#E2E8F0] bg-white hover:border-[#CBD5E1] hover:bg-[#F8FAFC]"
+                              }`}
+                            >
+                              <div className="flex items-center justify-center gap-1">
+                                <span className={`font-bold text-xs ${active ? "text-[#00845F]" : "text-[#111827]"}`}>
+                                  {opt.label}
+                                </span>
+                                {opt.recommended && (
+                                  <span className="rounded bg-[#00845F] px-1 py-0.2 text-[8px] font-black uppercase text-white">
+                                    Rec
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-[10px] text-[#64748B] mt-0.5 truncate">{opt.sub}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
+
                     <div>
-                      <label className="block font-bold text-[#111827] mb-1">Trial Validity Duration</label>
-                      <select
-                        value={newBizForm.trialDays}
-                        onChange={(e) => setNewBizForm({ ...newBizForm, trialDays: Number(e.target.value) })}
-                        className="w-full rounded-xl border border-[#CBD5E1] bg-white p-2.5 text-sm"
-                      >
-                        <option value={15}>15 Days Free Trial</option>
-                        <option value={30}>30 Days Free Trial</option>
-                        <option value={60}>60 Days Extended Trial</option>
-                        <option value={365}>365 Days Full License</option>
-                      </select>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="block font-bold text-[#111827] text-xs">
+                          Trial Validity & License Duration
+                        </label>
+                        <span className="text-[11px] font-semibold text-[#00845F]">
+                          Selected: {newBizForm.trialDays} Days
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                        {[
+                          { value: 15, label: "15 Days", sub: "Quick Demo" },
+                          { value: 30, label: "30 Days", sub: "Standard Trial", recommended: true },
+                          { value: 60, label: "60 Days", sub: "Extended Pilot" },
+                          { value: 365, label: "365 Days", sub: "Full Annual License" },
+                        ].map((opt) => {
+                          const active = newBizForm.trialDays === opt.value;
+                          return (
+                            <div
+                              key={opt.value}
+                              onClick={() => setNewBizForm({ ...newBizForm, trialDays: opt.value })}
+                              className={`cursor-pointer rounded-xl border p-2 text-center transition ${
+                                active
+                                  ? "border-[#00845F] bg-emerald-50/50 shadow-xs ring-1 ring-[#00845F]"
+                                  : "border-[#E2E8F0] bg-white hover:border-[#CBD5E1] hover:bg-[#F8FAFC]"
+                              }`}
+                            >
+                              <div className="flex items-center justify-center gap-1">
+                                <span className={`font-bold text-xs ${active ? "text-[#00845F]" : "text-[#111827]"}`}>
+                                  {opt.label}
+                                </span>
+                                {opt.recommended && (
+                                  <span className="rounded bg-[#00845F] px-1 py-0.2 text-[8px] font-black uppercase text-white">
+                                    Std
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-[10px] text-[#64748B] mt-0.5 truncate">{opt.sub}</div>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -3659,16 +3800,75 @@ export function SuperAdminDashboard() {
                 />
               </div>
               <div>
-                <label className="block font-bold text-[#111827] mb-1">Role Permission *</label>
-                <select
-                  value={newAdminForm.role}
-                  onChange={(e) => setNewAdminForm({ ...newAdminForm, role: e.target.value })}
-                  className="w-full rounded-xl border border-[#CBD5E1] bg-white p-2.5 text-sm"
-                >
-                  <option value="SUPER_ADMIN">Super Administrator (Full Platform Root)</option>
-                  <option value="ADMIN">Mandi Store Administrator</option>
-                  <option value="BUSINESS_USER">Staff / Cashier Operator</option>
-                </select>
+                <label className="block font-bold text-[#111827] mb-1.5 text-xs">Role Permission & Access Tier *</label>
+                <div className="space-y-2">
+                  {[
+                    {
+                      id: "SUPER_ADMIN",
+                      title: "Super Administrator",
+                      badge: "Full Platform Root",
+                      badgeColor: "bg-purple-50 text-purple-800 border-purple-200",
+                      desc: "Full administrative root access across all registered Mandi shops, pricing tier matrix, and cryptographic audit logs.",
+                      icon: ShieldCheck,
+                    },
+                    {
+                      id: "ADMIN",
+                      title: "Mandi Store Administrator",
+                      badge: "Shop Master (Seat 1)",
+                      badgeColor: "bg-emerald-50 text-[#00845F] border-emerald-200",
+                      desc: "Assigned Mandi owner: manages arrival lots, auction charts, staff handhelds, customer credit ledgers, and cash tallies.",
+                      icon: Store,
+                    },
+                    {
+                      id: "BUSINESS_USER",
+                      title: "Staff / Cashier Operator",
+                      badge: "Floor Handheld (Seats 2-3)",
+                      badgeColor: "bg-blue-50 text-blue-700 border-blue-200",
+                      desc: "Weighment scale recorder and desk cashier: prints thermal slips, enters bag gross/tare weights, and records collections.",
+                      icon: Smartphone,
+                    },
+                  ].map((r) => {
+                    const active = newAdminForm.role === r.id;
+                    const Icon = r.icon;
+                    return (
+                      <div
+                        key={r.id}
+                        onClick={() => setNewAdminForm({ ...newAdminForm, role: r.id })}
+                        className={`cursor-pointer rounded-2xl border p-3 transition flex items-start gap-3 ${
+                          active
+                            ? "border-[#00845F] bg-emerald-50/40 ring-1 ring-[#00845F] shadow-xs"
+                            : "border-[#E2E8F0] bg-white hover:border-[#CBD5E1] hover:bg-[#F8FAFC]"
+                        }`}
+                      >
+                        <div
+                          className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl transition ${
+                            active ? "bg-[#00845F] text-white shadow-xs" : "bg-[#F1F5F9] text-[#64748B]"
+                          }`}
+                        >
+                          <Icon className="h-4 w-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center justify-between gap-1.5">
+                            <span className="font-bold text-[#111827] text-xs">{r.title}</span>
+                            <span className={`rounded-md px-1.5 py-0.2 text-[10px] font-bold border ${r.badgeColor}`}>
+                              {r.badge}
+                            </span>
+                          </div>
+                          <p className="mt-0.5 text-[11px] text-[#64748B] leading-relaxed">{r.desc}</p>
+                        </div>
+                        <div className="mt-1">
+                          <div
+                            className={`flex h-4 w-4 items-center justify-center rounded-full border transition ${
+                              active ? "border-[#00845F] bg-[#00845F] text-white" : "border-[#CBD5E1] bg-white"
+                            }`}
+                          >
+                            {active && <Check className="h-2.5 w-2.5 stroke-[3]" />}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
               <div>
                 <label className="block font-bold text-[#111827] mb-1">Temporary Password *</label>
