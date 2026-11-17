@@ -5,7 +5,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { PublicNavbar, PublicFooter } from "@/components/PublicLayout";
 import { apiFetch } from "@/lib/api";
-import { Building2, CheckCircle2 } from "lucide-react";
+import {
+  ArrowRight,
+  BarChart3,
+  Building2,
+  CheckCircle2,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
 
 export default function RegisterBusinessPage() {
   const router = useRouter();
@@ -16,7 +23,7 @@ export default function RegisterBusinessPage() {
     password: "",
     email: "",
     phone: "",
-    city: "",
+    city: "Tamil Nadu",
     gstNumber: "",
     planCode: "PROFESSIONAL_SAAS",
   });
@@ -42,184 +49,194 @@ export default function RegisterBusinessPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col bg-slate-50">
       <PublicNavbar />
 
-      <main className="mx-auto flex w-full max-w-2xl flex-1 items-center px-6 py-12">
-        <div className="w-full rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white">
-              <Building2 className="h-5 w-5" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900">
-                Register Multi-Tenant Business Workspace
-              </h1>
-              <p className="text-xs text-slate-500">
-                Instant tenant provisioning with 14-day trial subscription
-              </p>
-            </div>
-          </div>
-
-          {error && (
-            <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
-              {error}
-            </div>
-          )}
-
+      <main className="mx-auto flex w-full max-w-2xl flex-1 items-center px-6 py-14">
+        <div className="w-full rounded-3xl border border-slate-200 bg-white p-8 sm:p-10 shadow-xl shadow-slate-200/50">
           {successData ? (
-            <div className="mt-6 rounded-xl border border-emerald-200 bg-emerald-50 p-6 text-emerald-950">
-              <div className="flex items-center gap-2 font-bold text-emerald-800">
-                <CheckCircle2 className="h-5 w-5" />
-                Workspace Provisioned Successfully!
+            <div className="space-y-6 text-center py-6">
+              <div className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+                <CheckCircle2 className="h-8 w-8" />
               </div>
-              <p className="mt-2 text-sm">
-                Tenant Code: <strong>{successData.tenantCode}</strong> ({successData.businessName})
-              </p>
-              <p className="mt-1 text-sm">
-                Admin Username: <strong>{successData.username}</strong>
-              </p>
-              <button
-                onClick={() => router.push("/login")}
-                className="mt-5 rounded-lg bg-slate-900 px-5 py-2.5 text-xs font-semibold text-white hover:bg-slate-800"
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Shop Provisioned Successfully!
+                </h2>
+                <p className="mt-1 text-xs text-slate-500">
+                  Your tenant workspace, Store Admin credentials, and 30-Day Free Trial License are ready.
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-left font-mono text-xs space-y-1.5">
+                <p><strong>Shop Code:</strong> {successData.tenant?.code}</p>
+                <p><strong>Business:</strong> {successData.tenant?.name}</p>
+                <p><strong>Admin Login:</strong> {successData.admin?.username}</p>
+                <p><strong>License Limit:</strong> Max 3 Users (1 Admin + 2 Staff)</p>
+                <p className="text-emerald-700"><strong>Status:</strong> 30-Day Free Trial Active (All Features)</p>
+              </div>
+
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-xs font-bold text-white shadow hover:from-blue-700 hover:to-indigo-700 transition"
               >
-                Proceed to Admin Login
-              </button>
+                <span>Proceed to Sign In</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Business / Trading Firm Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={form.businessName}
-                  onChange={(e) => setForm({ ...form, businessName: e.target.value })}
-                  placeholder="e.g., Sri Lakshmi Commodity Traders"
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
+            <div>
+              <div className="flex items-center gap-3">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
+                  <Building2 className="h-5 w-5" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-slate-900">
+                    Register Mandi Shop Workspace
+                  </h1>
+                  <p className="text-xs text-slate-500">
+                    Instant tenant provisioning with 30-day trial and 3-seat license
+                  </p>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Owner / Admin Full Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={form.ownerFullName}
-                  onChange={(e) => setForm({ ...form, ownerFullName: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
-              </div>
+              {error && (
+                <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs font-semibold text-red-700">
+                  {error}
+                </div>
+              )}
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Admin Login Username *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={form.username}
-                  onChange={(e) => setForm({ ...form, username: e.target.value })}
-                  placeholder="lakshmi_admin"
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
-              </div>
+              <form onSubmit={handleSubmit} className="mt-6 space-y-4 text-xs">
+                <div>
+                  <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1 text-[11px]">
+                    Shop / Store Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. BSG Trading Corp / Lakshmi Vegetable Mandi"
+                    value={form.businessName}
+                    onChange={(e) => setForm({ ...form, businessName: e.target.value })}
+                    className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Password *
-                </label>
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  value={form.password}
-                  onChange={(e) => setForm({ ...form, password: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
-              </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1 text-[11px]">
+                      Owner Full Name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Ramanathan Kannan"
+                      value={form.ownerFullName}
+                      onChange={(e) => setForm({ ...form, ownerFullName: e.target.value })}
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1 text-[11px]">
+                      City / Mandi Location *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Coimbatore / Oddanchatram"
+                      value={form.city}
+                      onChange={(e) => setForm({ ...form, city: e.target.value })}
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Mobile / WhatsApp Number *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                  placeholder="+91 98450 00000"
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
-              </div>
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1 text-[11px]">
+                      Owner Phone *
+                    </label>
+                    <input
+                      type="tel"
+                      required
+                      placeholder="10-digit mobile number"
+                      value={form.phone}
+                      onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-bold text-slate-700 uppercase tracking-wider mb-1 text-[11px]">
+                      Owner Email *
+                    </label>
+                    <input
+                      type="email"
+                      required
+                      placeholder="owner@bsg.com"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm focus:border-blue-600 focus:outline-none"
+                    />
+                  </div>
+                </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Business Email *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
-              </div>
+                <div className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4 space-y-3">
+                  <span className="font-bold text-slate-800 uppercase tracking-wider text-[11px] block">
+                    Store Admin Credentials
+                  </span>
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div>
+                      <label className="block font-semibold text-slate-600 mb-1 text-[11px]">
+                        Admin Username *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g. raman_admin"
+                        value={form.username}
+                        onChange={(e) => setForm({ ...form, username: e.target.value })}
+                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-semibold text-slate-600 mb-1 text-[11px]">
+                        Initial Password *
+                      </label>
+                      <input
+                        type="password"
+                        required
+                        placeholder="At least 6 characters"
+                        value={form.password}
+                        onChange={(e) => setForm({ ...form, password: e.target.value })}
+                        className="w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2 text-sm focus:border-blue-600 focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Market Yard / City
-                </label>
-                <input
-                  type="text"
-                  value={form.city}
-                  onChange={(e) => setForm({ ...form, city: e.target.value })}
-                  placeholder="Yeshwanthpur APMC"
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
-              </div>
+                <div className="rounded-xl border border-blue-200 bg-blue-50/60 p-3 flex items-start gap-2.5 text-xs text-blue-900">
+                  <ShieldCheck className="h-4 w-4 text-blue-600 shrink-0 mt-0.5" />
+                  <span>
+                    Includes 30-Day Free Trial with 3 Authorized Login Seats (1 Store Admin + 2 Staff/Cashiers) and all 10 Mandi features unlocked.
+                  </span>
+                </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  GSTIN (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={form.gstNumber}
-                  onChange={(e) => setForm({ ...form, gstNumber: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase text-slate-700">
-                  Subscription Plan
-                </label>
-                <select
-                  value={form.planCode}
-                  onChange={(e) => setForm({ ...form, planCode: e.target.value })}
-                  className="mt-1 w-full rounded-lg border border-slate-300 px-3.5 py-2 text-sm"
-                >
-                  <option value="STARTER_MANDI">Starter Mandi Plan (₹1,499/mo)</option>
-                  <option value="PROFESSIONAL_SAAS">Professional Smart Chart Suite (₹2,999/mo)</option>
-                  <option value="ENTERPRISE_MULTI">Enterprise Trade Network (₹5,999/mo)</option>
-                </select>
-              </div>
-
-              <div className="sm:col-span-2 pt-2">
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                  className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 py-3 text-sm font-bold text-white shadow-md shadow-blue-600/25 hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50"
                 >
-                  {loading ? "Provisioning Tenant Workspace..." : "Create Business Workspace"}
+                  <span>{loading ? "Provisioning Shop..." : "Create Shop Workspace"}</span>
+                  <ArrowRight className="h-4 w-4" />
                 </button>
+              </form>
+
+              <div className="mt-6 text-center text-xs text-slate-500">
+                Already registered?{" "}
+                <Link href="/login" className="font-bold text-blue-600 hover:underline">
+                  Sign In to Workspace
+                </Link>
               </div>
-            </form>
+            </div>
           )}
         </div>
       </main>
