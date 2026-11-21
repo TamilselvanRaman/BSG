@@ -314,51 +314,6 @@ class _BagsGoodsStepState extends State<BagsGoodsStep> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Product / Grade Description & Bag/Item Number
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 3,
-                                child: TextField(
-                                  controller: entry.titleController,
-                                  onChanged: (_) => widget.onChanged(),
-                                  style: TextStyle(fontSize: 13, color: theme.text),
-                                  decoration: InputDecoration(
-                                    labelText: 'Grade / Description',
-                                    labelStyle: TextStyle(fontSize: 11, color: theme.textSecondary),
-                                    hintText: 'e.g. Grade A Premium',
-                                    hintStyle: TextStyle(fontSize: 11, color: theme.textMuted),
-                                    filled: true,
-                                    fillColor: theme.background,
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                flex: 2,
-                                child: TextField(
-                                  controller: entry.itemNumberController,
-                                  onChanged: (_) => widget.onChanged(),
-                                  style: TextStyle(fontSize: 13, color: theme.text),
-                                  decoration: InputDecoration(
-                                    labelText: 'Item / Lot #',
-                                    labelStyle: TextStyle(fontSize: 11, color: theme.textSecondary),
-                                    hintText: 'e.g. B-${index + 1}',
-                                    hintStyle: TextStyle(fontSize: 11, color: theme.textMuted),
-                                    filled: true,
-                                    fillColor: theme.background,
-                                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 12),
-
                           // Bags Count, Weight Per Bag, Unit - Perfectly Height-Aligned
                           Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -403,7 +358,7 @@ class _BagsGoodsStepState extends State<BagsGoodsStep> {
                                     SizedBox(
                                       height: 18,
                                       child: Text(
-                                        'Weight/Bag *',
+                                        'Weight/Bag',
                                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: theme.textSecondary),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,

@@ -223,14 +223,6 @@ class _CreateLotScreenState extends ConsumerState<CreateLotScreen> {
           _showSnackbar('Please enter at least 1 bag/package count');
           return false;
         }
-        if (netWeight <= 0) {
-          _showSnackbar('Please enter or calculate a valid net weight');
-          return false;
-        }
-        if (purchaseRate <= 0) {
-          _showSnackbar('Please enter a purchase cost rate');
-          return false;
-        }
         return true;
       case 2:
         return true;

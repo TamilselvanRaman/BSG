@@ -122,7 +122,7 @@ class _WeightDetailsStepState extends State<WeightDetailsStep> {
               const SizedBox(height: 16),
 
               Text(
-                'Calculated Net Agricultural Weight * [Kg]',
+                'Calculated Net Agricultural Weight [Kg]',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

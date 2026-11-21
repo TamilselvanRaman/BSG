@@ -135,7 +135,7 @@ class RatePricingStep extends StatelessWidget {
 
                 // Purchase Rate
                 Text(
-                  'Purchase Cost Rate * (₹ per ${_getBasisUnitName()})',
+                  'Purchase Cost Rate (₹ per ${_getBasisUnitName()})',
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
