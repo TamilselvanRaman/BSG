@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.bsg.app.bsg_mobile"
-    compileSdk = 35
+    compileSdk = 36
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
