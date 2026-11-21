@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/theme/theme_extension.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_spacing.dart';
@@ -117,7 +118,12 @@ class _DailySummaryScreenState extends ConsumerState<DailySummaryScreen> {
             // Interactive Clickable 6-Card Summary Grid
             _buildInteractiveSummaryGrid(report, theme),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 14),
+
+            // Daily Expense Direct Navigation & Total Display Card
+            _buildDailyExpenseDirectCard(report, theme),
+
+            const SizedBox(height: 16),
 
             // Filter status & active records list
             _buildFilteredList(report, theme),
@@ -215,6 +221,118 @@ class _DailySummaryScreenState extends ConsumerState<DailySummaryScreen> {
     );
   }
 
+  Widget _buildDailyExpenseDirectCard(DailySummaryReport report, AppThemeColors theme) {
+    return Material(
+      color: theme.surface,
+      borderRadius: BorderRadius.circular(14),
+      elevation: 0.5,
+      child: InkWell(
+        onTap: () => context.push('/expenses'),
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: theme.border),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFEF4444).withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: const Icon(
+                  Icons.receipt_long_rounded,
+                  color: Color(0xFFDC2626),
+                  size: 22,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Daily Expenses',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w700,
+                            color: theme.text,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: theme.accent,
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Text(
+                            '${report.expensesCount} Entries',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w700,
+                              color: theme.primary,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      'Tap to view & manage in Expenses',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: theme.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    AppFormatters.currency(report.totalExpenses),
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFFDC2626),
+                    ),
+                  ),
+                  const SizedBox(height: 3),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Open',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.w700,
+                          color: theme.primary,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Icon(
+                        Icons.arrow_forward_ios_rounded,
+                        size: 10,
+                        color: theme.primary,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Widget _buildFilteredList(DailySummaryReport report, AppThemeColors theme) {
     if (_selectedType == DailySummaryType.allSummary) {
       return Column(
@@ -245,6 +363,38 @@ class _DailySummaryScreenState extends ConsumerState<DailySummaryScreen> {
           _buildFilterHeader('Total Paid (Purchases & Expenses)', Icons.call_made_rounded, AppColors.error, report.paidItems.length),
           const SizedBox(height: 10),
           _buildPaidItemsList(report.paidItems, theme),
+        ],
+      );
+    }
+
+    if (_selectedType == DailySummaryType.dailyExpenses) {
+      final items = report.paidItems
+          .where((p) =>
+              !p.category.toLowerCase().contains('goods purchase') &&
+              !p.paymentMode.toLowerCase().contains('inward purchase'))
+          .toList();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildFilterHeader('Daily Operating Expenses', Icons.receipt_long_rounded, const Color(0xFFDC2626), items.length),
+              TextButton.icon(
+                onPressed: () => context.push('/expenses'),
+                icon: const Icon(Icons.open_in_new_rounded, size: 14),
+                label: const Text('Open Expenses', style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700)),
+                style: TextButton.styleFrom(
+                  foregroundColor: theme.primary,
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          items.isEmpty
+              ? _buildEmptyState('No daily operating expenses recorded for this date.')
+              : _buildPaidItemsList(items, theme),
         ],
       );
     }

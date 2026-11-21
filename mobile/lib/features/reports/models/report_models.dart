@@ -9,6 +9,7 @@ enum DailySummaryType {
   purchaseSummary,
   totalReceived,
   totalPaid,
+  dailyExpenses,
   transportation,
   totalCoolie,
   rent,
@@ -28,6 +29,8 @@ extension DailySummaryTypeExt on DailySummaryType {
         return 'Total Received';
       case DailySummaryType.totalPaid:
         return 'Total Paid';
+      case DailySummaryType.dailyExpenses:
+        return 'Daily Expenses';
       case DailySummaryType.transportation:
         return 'Transportation';
       case DailySummaryType.totalCoolie:
@@ -51,6 +54,8 @@ extension DailySummaryTypeExt on DailySummaryType {
         return Icons.arrow_downward_rounded;
       case DailySummaryType.totalPaid:
         return Icons.arrow_upward_rounded;
+      case DailySummaryType.dailyExpenses:
+        return Icons.receipt_long_rounded;
       case DailySummaryType.transportation:
         return Icons.local_shipping_outlined;
       case DailySummaryType.totalCoolie:
@@ -115,6 +120,8 @@ class DailySummaryReport {
   final double totalCoolie;
   final double rent;
   final double salesCommission;
+  final double totalExpenses;
+  final int expensesCount;
   final List<DailyReceivedItem> receivedItems;
   final List<DailyPaidItem> paidItems;
 
@@ -130,6 +137,8 @@ class DailySummaryReport {
     required this.totalCoolie,
     required this.rent,
     required this.salesCommission,
+    this.totalExpenses = 0.0,
+    this.expensesCount = 0,
     required this.receivedItems,
     required this.paidItems,
   });

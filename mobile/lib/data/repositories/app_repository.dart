@@ -1330,6 +1330,9 @@ class AppRepository {
     // Sales Commission / Handling Fee
     final double salesCommission = dayBills.fold(0.0, (acc, b) => acc + b.otherCharges);
 
+    // Total Operating Expenses for the day
+    final double totalExpenses = dayExpenses.fold(0.0, (acc, e) => acc + e.amount);
+
     return DailySummaryReport(
       date: date,
       totalReceived: totalReceived,
@@ -1342,6 +1345,8 @@ class AppRepository {
       totalCoolie: totalCoolie,
       rent: rent,
       salesCommission: salesCommission,
+      totalExpenses: totalExpenses,
+      expensesCount: dayExpenses.length,
       receivedItems: receivedItems,
       paidItems: paidItems,
     );
