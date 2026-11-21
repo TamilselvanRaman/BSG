@@ -4,19 +4,41 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { performDirectLogin, saveStoredSession } from "@/lib/api";
-import { Lock, Eye, EyeOff, ShieldCheck, ArrowRight } from "lucide-react";
+import { useTheme } from "@/components/ThemeProvider";
+import { BsgIcon } from "@/components/BsgLogo";
+import {
+  Lock,
+  Eye,
+  EyeOff,
+  ShieldCheck,
+  ArrowRight,
+  Store,
+  Sun,
+  Moon,
+  Sparkles,
+} from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("superadmin");
+  const { theme, toggleTheme } = useTheme();
+  const isDark = theme === "dark";
+
+  const [portalMode, setPortalMode] = useState<"STORE_ADMIN" | "SUPER_ADMIN">("STORE_ADMIN");
+  const [username, setUsername] = useState("vinayaka_admin");
   const [password, setPassword] = useState("Admin@123");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  function handleAutofillSuperAdmin() {
-    setUsername("superadmin");
-    setPassword("Admin@123");
+  function handleSwitchPortal(mode: "STORE_ADMIN" | "SUPER_ADMIN") {
+    setPortalMode(mode);
+    if (mode === "STORE_ADMIN") {
+      setUsername("vinayaka_admin");
+      setPassword("Admin@123");
+    } else {
+      setUsername("superadmin");
+      setPassword("Admin@123");
+    }
   }
 
   async function handleLogin(e?: React.FormEvent) {
@@ -24,7 +46,8 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      // 1. Optional background sync attempt with fast timeout (never block or show error if offline)
+      const targetRoute = portalMode === "STORE_ADMIN" ? "/workspace/dashboard" : "/super-admin/dashboard";
+
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 800);
@@ -39,63 +62,122 @@ export default function LoginPage() {
           const payload = await res.json();
           if (payload?.data?.accessToken) {
             saveStoredSession(payload.data.accessToken, payload.data.refreshToken, payload.data.user);
-            router.push("/super-admin/dashboard");
+            router.push(targetRoute);
             return;
           }
         }
       } catch {
-        // Backend offline or unreachable — silently proceed with instant client-side session
+        // Backend offline or unreachable — proceed with instant client-side session
       }
 
-      // 2. Direct login to Super Admin Governance Dashboard
-      performDirectLogin("superadmin");
-      router.push("/super-admin/dashboard");
+      performDirectLogin(portalMode === "STORE_ADMIN" ? "vinayaka_admin" : "superadmin");
+      router.push(targetRoute);
     } catch {
-      // Guaranteed safe direct fallback
-      performDirectLogin("superadmin");
-      router.push("/super-admin/dashboard");
+      router.push(portalMode === "STORE_ADMIN" ? "/workspace/dashboard" : "/super-admin/dashboard");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F4FAF5] p-4 sm:p-6 font-sans">
-      <div className="w-full max-w-[460px] rounded-3xl border border-[#CDE8D5] bg-white p-7 sm:p-9 shadow-xl shadow-[#063D2E]/5">
-        {/* Header Icon & Title */}
-        <div className="flex items-center gap-3.5 mb-6">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#063D2E] text-[#10A66A] shadow-xs shrink-0">
-            <ShieldCheck className="h-6 w-6" />
-          </div>
-          <div>
-            <h1 className="text-xl font-bold tracking-tight text-[#063D2E]">
-              Super Admin Sign In
-            </h1>
-            <p className="text-xs text-[#47785C]">
-              Enterprise platform governance & multi-tenant SaaS master control
-            </p>
-          </div>
+    <div
+      className={`min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 font-sans nexi-ambient-bg transition-colors duration-300 ${
+        isDark ? "bg-[#080516] text-[#F8F5FF]" : "bg-[#F8F7FC] text-[#211936]"
+      }`}
+    >
+      {/* Top Controls Bar */}
+      <div className="w-full max-w-md flex items-center justify-between mb-4">
+        <Link href="/" className="flex items-center gap-2 group">
+          <BsgIcon size={32} />
+          <span className="font-black text-sm tracking-tight">Click Smart Chart</span>
+        </Link>
+        <button
+          onClick={toggleTheme}
+          className={`flex items-center justify-center rounded-xl p-2 transition-all border ${
+            isDark
+              ? "border-[#30264B] bg-[#15102B] text-[#B49AFF] hover:border-[#9475F5]"
+              : "border-[#E9E3F4] bg-white text-[#7955DF] hover:border-[#7955DF]"
+          }`}
+          title={`Switch to ${isDark ? "Light" : "Dark"} Mode`}
+        >
+          {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        </button>
+      </div>
+
+      {/* Main Login Card */}
+      <div
+        className={`w-full max-w-md rounded-3xl border p-7 sm:p-8 shadow-2xl transition-all ${
+          isDark
+            ? "border-[#30264B] bg-[#15102B] shadow-glow-card"
+            : "border-[#E9E3F4] bg-white shadow-xl shadow-purple-500/5"
+        }`}
+      >
+        {/* Portal Mode Switcher */}
+        <div className="flex rounded-2xl p-1 mb-6 border border-[#30264B] bg-opacity-40 bg-black">
+          <button
+            type="button"
+            onClick={() => handleSwitchPortal("STORE_ADMIN")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
+              portalMode === "STORE_ADMIN"
+                ? "bg-gradient-to-r from-[#9475F5] to-[#7955DF] text-white shadow-glow"
+                : isDark
+                ? "text-[#B7ADC9] hover:text-white"
+                : "text-[#777086] hover:text-[#211936]"
+            }`}
+          >
+            <Store className="h-3.5 w-3.5" />
+            <span>Mandi Yard Store</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => handleSwitchPortal("SUPER_ADMIN")}
+            className={`flex-1 flex items-center justify-center gap-2 py-2 rounded-xl text-xs font-bold transition-all ${
+              portalMode === "SUPER_ADMIN"
+                ? "bg-gradient-to-r from-[#9475F5] to-[#7955DF] text-white shadow-glow"
+                : isDark
+                ? "text-[#B7ADC9] hover:text-white"
+                : "text-[#777086] hover:text-[#211936]"
+            }`}
+          >
+            <ShieldCheck className="h-3.5 w-3.5" />
+            <span>Super Admin</span>
+          </button>
+        </div>
+
+        {/* Title & Description */}
+        <div className="mb-6">
+          <h1 className="text-xl font-bold tracking-tight">
+            {portalMode === "STORE_ADMIN" ? "Sign In to Mandi Workspace" : "Super Admin Master Sign In"}
+          </h1>
+          <p className={`text-xs mt-1 ${isDark ? "text-[#B7ADC9]" : "text-[#777086]"}`}>
+            {portalMode === "STORE_ADMIN"
+              ? "Access Multi-Product Lots, Electronic Weighment & Buyer Bill Book"
+              : "Enterprise SaaS multi-tenant governance & license allocation"}
+          </p>
         </div>
 
         {/* Login Form */}
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-[#123B29] mb-1.5">
-              USERNAME
+            <label className="block text-[11px] font-bold uppercase tracking-wider mb-1.5 opacity-80">
+              Username
             </label>
             <input
               type="text"
               required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="superadmin"
-              className="w-full rounded-xl border border-[#CDE8D5] bg-white px-3.5 py-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:ring-1 focus:ring-[#10A66A] focus:outline-none transition"
+              className={`w-full rounded-xl border px-3.5 py-2.5 text-xs outline-none transition ${
+                isDark
+                  ? "border-[#30264B] bg-[#0D0920] text-white focus:border-[#9475F5] focus:ring-1 focus:ring-[#9475F5]"
+                  : "border-[#E9E3F4] bg-white text-[#211936] focus:border-[#7955DF] focus:ring-1 focus:ring-[#7955DF]"
+              }`}
             />
           </div>
 
           <div>
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-[#123B29] mb-1.5">
-              PASSWORD
+            <label className="block text-[11px] font-bold uppercase tracking-wider mb-1.5 opacity-80">
+              Password
             </label>
             <div className="relative">
               <input
@@ -103,34 +185,33 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full rounded-xl border border-[#CDE8D5] bg-white px-3.5 py-2.5 pr-10 text-sm text-[#123B29] focus:border-[#10A66A] focus:ring-1 focus:ring-[#10A66A] focus:outline-none transition"
+                className={`w-full rounded-xl border px-3.5 py-2.5 pr-10 text-xs outline-none transition ${
+                  isDark
+                    ? "border-[#30264B] bg-[#0D0920] text-white focus:border-[#9475F5] focus:ring-1 focus:ring-[#9475F5]"
+                    : "border-[#E9E3F4] bg-white text-[#211936] focus:border-[#7955DF] focus:ring-1 focus:ring-[#7955DF]"
+                }`}
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-[#71917B] hover:text-[#123B29] transition"
-                aria-label="Toggle password visibility"
+                className="absolute right-3 top-2.5 opacity-60 hover:opacity-100 transition"
               >
                 {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs pt-0.5">
-            <label className="flex items-center gap-2 cursor-pointer text-[#47785C]">
+          <div className="flex items-center justify-between text-xs pt-1">
+            <label className="flex items-center gap-2 cursor-pointer opacity-80">
               <input
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
-                className="rounded border-[#CDE8D5] text-[#087A50] focus:ring-[#087A50] h-4 w-4"
+                className="rounded accent-[#9475F5] h-4 w-4"
               />
-              <span>Remember me for 30 days</span>
+              <span>Remember me</span>
             </label>
-            <Link
-              href="/forgot-password"
-              className="font-medium text-[#087A50] hover:text-[#063D2E] hover:underline"
-            >
+            <Link href="/forgot-password" className="text-[#9475F5] font-semibold hover:underline">
               Forgot password?
             </Link>
           </div>
@@ -138,44 +219,48 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-2 rounded-xl bg-[#087A50] hover:bg-[#063D2E] py-3 text-sm font-bold text-white shadow-md active:scale-[0.99] transition disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full mt-2 rounded-xl bg-gradient-to-r from-[#9475F5] to-[#7955DF] py-3 text-xs font-bold text-white shadow-glow hover:brightness-110 active:scale-[0.99] transition disabled:opacity-50 flex items-center justify-center gap-2"
           >
-            <span>{loading ? "Authenticating Master..." : "Sign In to Super Admin"}</span>
+            <span>
+              {loading
+                ? "Verifying Session..."
+                : portalMode === "STORE_ADMIN"
+                ? "Enter Mandi Workspace"
+                : "Sign In as Super Admin"}
+            </span>
             <ArrowRight className="h-4 w-4" />
           </button>
         </form>
 
-        {/* Super Admin Quick Autofill Card (Only Super Admin) */}
-        <div className="mt-6 rounded-2xl border border-[#CDE8D5] bg-[#E8F5EC]/60 p-4">
+        {/* Demo Credentials Quick-Filler */}
+        <div
+          className={`mt-6 rounded-2xl border p-3.5 text-xs ${
+            isDark ? "border-[#30264B] bg-[#0D0920]" : "border-[#E9E3F4] bg-[#F2EEFA]"
+          }`}
+        >
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#063D2E] text-[#10A66A] shrink-0">
-                <ShieldCheck className="h-4 w-4" />
-              </div>
-              <div>
-                <span className="text-xs font-bold text-[#063D2E]">Super Admin Master Credentials</span>
-                <p className="text-[11px] text-[#47785C]">
-                  User: <span className="font-mono font-bold text-[#087A50]">superadmin</span> • Pass: <span className="font-mono font-bold text-[#087A50]">Admin@123</span>
-                </p>
-              </div>
+            <div>
+              <p className="font-bold text-[#9475F5]">
+                {portalMode === "STORE_ADMIN" ? "Mandi Store Admin Demo" : "Super Admin Master Demo"}
+              </p>
+              <p className={`text-[10px] mt-0.5 ${isDark ? "text-[#B7ADC9]" : "text-[#777086]"}`}>
+                User: <span className="font-mono font-bold">{username}</span> • Pass: <span className="font-mono font-bold">Admin@123</span>
+              </p>
             </div>
             <button
               type="button"
-              onClick={handleAutofillSuperAdmin}
-              className="rounded-xl bg-[#087A50] hover:bg-[#063D2E] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition"
+              onClick={() => handleLogin()}
+              className="rounded-lg bg-[#9475F5] px-3 py-1 text-[11px] font-bold text-white shadow-xs hover:brightness-110 transition"
             >
-              Autofill
+              1-Click Demo
             </button>
           </div>
         </div>
 
-        {/* Bottom Back Link */}
-        <div className="mt-5 text-center text-xs text-[#47785C]">
-          <Link
-            href="/"
-            className="font-bold text-[#087A50] hover:text-[#063D2E] hover:underline"
-          >
-            &larr; Back to BSG Platform Home
+        {/* Home Link */}
+        <div className="mt-5 text-center text-xs opacity-70">
+          <Link href="/" className="font-semibold hover:text-[#9475F5] transition">
+            &larr; Back to Public Website
           </Link>
         </div>
       </div>

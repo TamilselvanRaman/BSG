@@ -79,29 +79,29 @@ export default function PricingPage() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
+    <div className="flex min-h-screen flex-col bg-[var(--bg-main)] text-[var(--text-primary)] font-sans">
       <PublicNavbar />
 
       {/* Hero Header */}
-      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-white via-[#F4FAF5] to-[#E8F5EC]/60 py-16 lg:py-20">
+      <section className="border-b border-[var(--border-color)] bg-gradient-to-b from-white via-[var(--bg-main)] to-[var(--bg-card-hover)]/60 py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[#063D2E] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[var(--text-primary)] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
             Simple, Predictable Plans for Every Mandi Business
           </h1>
-          <p className="mt-4 text-sm sm:text-base text-[#47785C] max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
             Every plan includes our strict multi-user license protection, digital bag weighment tables, and instant WhatsApp billing. Zero hidden commissions.
           </p>
 
           {/* Billing Cycle Segmented Control */}
           <div className="mt-8 flex flex-col items-center justify-center gap-4">
-            <div className="inline-flex items-center rounded-full border border-[#CDE8D5] bg-white p-1.5 shadow-xs">
+            <div className="inline-flex items-center rounded-full border border-[var(--border-color)] bg-white p-1.5 shadow-xs">
               <button
                 type="button"
                 onClick={() => setAnnualBilling(false)}
                 className={`rounded-full px-5 py-2 text-xs font-bold transition-all ${
                   !annualBilling
-                    ? "bg-[#087A50] text-white shadow-xs"
-                    : "text-[#47785C] hover:text-[#063D2E]"
+                    ? "bg-[#9475F5] text-white shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 Monthly Billing
@@ -111,16 +111,16 @@ export default function PricingPage() {
                 onClick={() => setAnnualBilling(true)}
                 className={`rounded-full px-5 py-2 text-xs font-bold transition-all flex items-center gap-2 ${
                   annualBilling
-                    ? "bg-[#087A50] text-white shadow-xs"
-                    : "text-[#47785C] hover:text-[#063D2E]"
+                    ? "bg-[#9475F5] text-white shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                 }`}
               >
                 <span>Annual Billing</span>
                 <span
                   className={`rounded-full px-2 py-0.5 text-[10px] font-extrabold tracking-wide ${
                     annualBilling
-                      ? "bg-[#063D2E] text-[#DDF2E4]"
-                      : "bg-[#E8F5EC] text-[#087A50]"
+                      ? "bg-[var(--text-primary)] text-[var(--border-subtle)]"
+                      : "bg-[var(--bg-card-hover)] text-[#9475F5]"
                   }`}
                 >
                   Save 20%
@@ -128,17 +128,17 @@ export default function PricingPage() {
               </button>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-5 text-xs font-semibold text-[#47785C]">
+            <div className="flex flex-wrap items-center justify-center gap-5 text-xs font-semibold text-[var(--text-secondary)]">
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A]" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#B49AFF]" />
                 30-Day Free Trial
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A]" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#B49AFF]" />
                 No Credit Card Required
               </span>
               <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A]" />
+                <CheckCircle2 className="h-3.5 w-3.5 text-[#B49AFF]" />
                 3-Seat License Included
               </span>
             </div>
@@ -158,40 +158,40 @@ export default function PricingPage() {
                   key={plan.id}
                   className={`relative flex flex-col justify-between rounded-3xl p-8 sm:p-9 transition-all ${
                     plan.popular
-                      ? "border-2 border-[#10A66A] bg-white shadow-xl lg:-translate-y-2"
-                      : "border border-[#CDE8D5] bg-[#F4FAF5] shadow-xs hover:border-[#10A66A]"
+                      ? "border-2 border-[#B49AFF] bg-white shadow-xl lg:-translate-y-2"
+                      : "border border-[var(--border-color)] bg-[var(--bg-main)] shadow-xs hover:border-[#B49AFF]"
                   }`}
                 >
                   {plan.popular && (
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[#10A66A] px-4 py-1 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-sm">
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full bg-[#B49AFF] px-4 py-1 text-[11px] font-extrabold uppercase tracking-wider text-white shadow-sm">
                       Recommended for Mandis
                     </div>
                   )}
 
                   <div>
                     <div className="space-y-1">
-                      <h3 className="text-xl font-bold text-[#063D2E]">{plan.name}</h3>
-                      <p className="text-xs text-[#47785C] min-h-[32px]">{plan.tagline}</p>
+                      <h3 className="text-xl font-bold text-[var(--text-primary)]">{plan.name}</h3>
+                      <p className="text-xs text-[var(--text-secondary)] min-h-[32px]">{plan.tagline}</p>
                     </div>
 
                     <div className="mt-6 flex items-baseline gap-1">
-                      <span className="text-4xl font-black text-[#063D2E]">₹{price.toLocaleString("en-IN")}</span>
-                      <span className="text-xs font-semibold text-[#71917B]">/ month</span>
+                      <span className="text-4xl font-black text-[var(--text-primary)]">₹{price.toLocaleString("en-IN")}</span>
+                      <span className="text-xs font-semibold text-[var(--text-secondary)]">/ month</span>
                     </div>
                     {annualBilling && (
-                      <p className="mt-1 text-[11px] font-semibold text-[#087A50]">
+                      <p className="mt-1 text-[11px] font-semibold text-[#9475F5]">
                         Billed annually at ₹{plan.annualPrice.toLocaleString("en-IN")} / year
                       </p>
                     )}
 
                     <div className="mt-8 space-y-3 border-t border-[#DCEEE1] pt-6">
-                      <p className="text-xs font-bold uppercase tracking-wider text-[#47785C]">
+                      <p className="text-xs font-bold uppercase tracking-wider text-[var(--text-secondary)]">
                         Included Features
                       </p>
-                      <ul className="space-y-2.5 text-xs text-[#123B29]">
+                      <ul className="space-y-2.5 text-xs text-[var(--text-primary)]">
                         {plan.features.map((f) => (
                           <li key={f} className="flex items-start gap-2.5">
-                            <CheckCircle2 className="h-4 w-4 text-[#10A66A] shrink-0 mt-0.5" />
+                            <CheckCircle2 className="h-4 w-4 text-[#B49AFF] shrink-0 mt-0.5" />
                             <span>{f}</span>
                           </li>
                         ))}
@@ -204,13 +204,13 @@ export default function PricingPage() {
                       href={plan.id === "ENTERPRISE" ? "/contact" : "/register"}
                       className={`block w-full text-center rounded-xl py-3 text-xs font-bold transition shadow-xs ${
                         plan.popular
-                          ? "bg-[#087A50] hover:bg-[#063D2E] text-white"
-                          : "border border-[#CDE8D5] bg-white hover:bg-[#E8F5EC] text-[#063D2E]"
+                          ? "bg-[#9475F5] hover:bg-[var(--text-primary)] text-white"
+                          : "border border-[var(--border-color)] bg-white hover:bg-[var(--bg-card-hover)] text-[var(--text-primary)]"
                       }`}
                     >
                       {plan.buttonLabel}
                     </Link>
-                    <p className="mt-2 text-center text-[10px] text-[#71917B]">
+                    <p className="mt-2 text-center text-[10px] text-[var(--text-secondary)]">
                       {plan.id === "ENTERPRISE" ? "Custom multi-branch quote" : "30-day free trial • No credit card required"}
                     </p>
                   </div>
@@ -222,28 +222,28 @@ export default function PricingPage() {
       </section>
 
       {/* Feature Comparison Matrix */}
-      <section className="py-20 bg-white border-t border-[#CDE8D5]">
+      <section className="py-20 bg-white border-t border-[var(--border-color)]">
         <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#063D2E]">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
               Detailed Plan Capabilities Comparison
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-[#47785C]">
+            <p className="mt-2 text-xs sm:text-sm text-[var(--text-secondary)]">
               Compare all features and limits across the Starter, Professional, and Enterprise plans.
             </p>
           </div>
 
-          <div className="overflow-x-auto rounded-2xl border border-[#CDE8D5]">
+          <div className="overflow-x-auto rounded-2xl border border-[var(--border-color)]">
             <table className="w-full text-left text-xs">
-              <thead className="bg-[#E8F5EC] text-[#063D2E] font-bold border-b border-[#CDE8D5]">
+              <thead className="bg-[var(--bg-card-hover)] text-[var(--text-primary)] font-bold border-b border-[var(--border-color)]">
                 <tr>
                   <th className="px-4 py-3">Platform Capability</th>
                   <th className="px-4 py-3 text-center">Starter</th>
-                  <th className="px-4 py-3 text-center bg-[#DDF2E4]">Professional</th>
+                  <th className="px-4 py-3 text-center bg-[var(--border-subtle)]">Professional</th>
                   <th className="px-4 py-3 text-center">Enterprise</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#DCEEE1] text-[#123B29]">
+              <tbody className="divide-y divide-[#DCEEE1] text-[var(--text-primary)]">
                 {[
                   { name: "Concurrent User Seats", starter: "2 Seats", pro: "3 Seats", ent: "Up to 10 Seats" },
                   { name: "Multi-Product Inward Lots", starter: "Yes", pro: "Yes", ent: "Yes" },
@@ -257,11 +257,11 @@ export default function PricingPage() {
                   { name: "Weighbridge Serial Hook", starter: "—", pro: "—", ent: "Yes" },
                   { name: "Database Context", starter: "Schema Isolated", pro: "Schema Isolated", ent: "Dedicated Schema / DB" },
                 ].map((row) => (
-                  <tr key={row.name} className="hover:bg-[#F4FAF5]">
-                    <td className="px-4 py-3 font-semibold text-[#063D2E]">{row.name}</td>
-                    <td className="px-4 py-3 text-center text-[#47785C]">{row.starter}</td>
-                    <td className="px-4 py-3 text-center font-bold text-[#087A50] bg-[#DDF2E4]/40">{row.pro}</td>
-                    <td className="px-4 py-3 text-center font-bold text-[#063D2E]">{row.ent}</td>
+                  <tr key={row.name} className="hover:bg-[var(--bg-main)]">
+                    <td className="px-4 py-3 font-semibold text-[var(--text-primary)]">{row.name}</td>
+                    <td className="px-4 py-3 text-center text-[var(--text-secondary)]">{row.starter}</td>
+                    <td className="px-4 py-3 text-center font-bold text-[#9475F5] bg-[var(--border-subtle)]/40">{row.pro}</td>
+                    <td className="px-4 py-3 text-center font-bold text-[var(--text-primary)]">{row.ent}</td>
                   </tr>
                 ))}
               </tbody>
@@ -271,8 +271,8 @@ export default function PricingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#15102B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#B49AFF]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-4xl px-4 text-center space-y-6">
           <h2 className="text-3xl font-black sm:text-5xl">
             Test Drive BSG in Your Mandi for 30 Days
@@ -283,7 +283,7 @@ export default function PricingPage() {
           <div className="pt-2">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#B49AFF] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
             >
               <span>Start 30-Day Free Trial</span>
               <ArrowRight className="h-4 w-4" />

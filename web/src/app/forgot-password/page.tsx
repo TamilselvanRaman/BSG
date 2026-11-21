@@ -44,17 +44,17 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
+    <div className="flex min-h-screen flex-col bg-[var(--bg-main)] text-[var(--text-primary)] font-sans">
       <PublicNavbar />
       <main className="mx-auto flex w-full max-w-md flex-1 items-center px-4 sm:px-6 py-14">
-        <div className="w-full rounded-3xl border border-[#CDE8D5] bg-white p-8 sm:p-9 shadow-xl shadow-[#063D2E]/5">
-          <h1 className="text-xl font-bold text-[#063D2E]">Account Password Recovery</h1>
-          <p className="mt-1 text-xs text-[#47785C]">
+        <div className="w-full rounded-3xl border border-[var(--border-color)] bg-white p-8 sm:p-9 shadow-xl shadow-[var(--text-primary)]/5">
+          <h1 className="text-xl font-bold text-[var(--text-primary)]">Account Password Recovery</h1>
+          <p className="mt-1 text-xs text-[var(--text-secondary)]">
             Request a reset token or complete password recovery
           </p>
 
           {message && (
-            <div className="mt-4 rounded-xl bg-[#E8F5EC] border border-[#CDE8D5] p-3 text-xs font-semibold text-[#087A50]">
+            <div className="mt-4 rounded-xl bg-[var(--bg-card-hover)] border border-[var(--border-color)] p-3 text-xs font-semibold text-[#9475F5]">
               {message}
             </div>
           )}
@@ -65,7 +65,7 @@ export default function ForgotPasswordPage() {
           )}
 
           <form onSubmit={handleRequestReset} className="mt-5 space-y-3">
-            <label className="block text-xs font-bold uppercase text-[#123B29]">
+            <label className="block text-xs font-bold uppercase text-[var(--text-primary)]">
               Username or Registered Email
             </label>
             <input
@@ -73,18 +73,18 @@ export default function ForgotPasswordPage() {
               required
               value={usernameOrEmail}
               onChange={(e) => setUsernameOrEmail(e.target.value)}
-              className="w-full rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] px-3.5 py-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] focus:border-[#B49AFF] focus:outline-none"
             />
             <button
               type="submit"
-              className="w-full rounded-xl bg-[#087A50] hover:bg-[#063D2E] py-2.5 text-xs font-bold text-white shadow-xs transition"
+              className="w-full rounded-xl bg-[#9475F5] hover:bg-[var(--text-primary)] py-2.5 text-xs font-bold text-white shadow-xs transition"
             >
               Request Password Reset Token
             </button>
           </form>
 
           <form onSubmit={handleResetPassword} className="mt-6 space-y-3 border-t border-[#DCEEE1] pt-6">
-            <label className="block text-xs font-bold uppercase text-[#123B29]">
+            <label className="block text-xs font-bold uppercase text-[var(--text-primary)]">
               Reset Token
             </label>
             <input
@@ -93,9 +93,9 @@ export default function ForgotPasswordPage() {
               value={token}
               onChange={(e) => setToken(e.target.value)}
               placeholder="Paste generated token"
-              className="w-full rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] px-3.5 py-2.5 text-sm font-mono text-[#123B29] focus:border-[#10A66A] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] px-3.5 py-2.5 text-sm font-mono text-[var(--text-primary)] focus:border-[#B49AFF] focus:outline-none"
             />
-            <label className="block text-xs font-bold uppercase text-[#123B29]">
+            <label className="block text-xs font-bold uppercase text-[var(--text-primary)]">
               New Password
             </label>
             <input
@@ -104,18 +104,18 @@ export default function ForgotPasswordPage() {
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               placeholder="At least 6 characters"
-              className="w-full rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] px-3.5 py-2.5 text-sm text-[#123B29] focus:border-[#10A66A] focus:outline-none"
+              className="w-full rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] px-3.5 py-2.5 text-sm text-[var(--text-primary)] focus:border-[#B49AFF] focus:outline-none"
             />
             <button
               type="submit"
-              className="w-full rounded-xl bg-[#063D2E] hover:bg-[#0A503B] py-2.5 text-xs font-bold text-white shadow-xs transition"
+              className="w-full rounded-xl bg-[var(--text-primary)] hover:bg-[#15102B] py-2.5 text-xs font-bold text-white shadow-xs transition"
             >
               Update Password
             </button>
           </form>
 
-          <div className="mt-6 text-center text-xs text-[#47785C]">
-            <Link href="/login" className="font-bold text-[#087A50] hover:text-[#063D2E] hover:underline">
+          <div className="mt-6 text-center text-xs text-[var(--text-secondary)]">
+            <Link href="/login" className="font-bold text-[#9475F5] hover:text-[var(--text-primary)] hover:underline">
               Return to Workspace Login
             </Link>
           </div>
