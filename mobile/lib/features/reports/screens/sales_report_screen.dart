@@ -14,6 +14,13 @@ import '../models/report_models.dart';
 import '../widgets/report_filter_bar.dart';
 import '../widgets/report_summary_card.dart';
 
+enum SalesSummaryFilter {
+  allBills,
+  receivedBills,
+  outstandingBills,
+  cropQuantities,
+}
+
 class SalesReportScreen extends ConsumerStatefulWidget {
   final int initialTabIndex;
   final String? initialBuyerId;
@@ -43,6 +50,7 @@ class _SalesReportScreenState extends ConsumerState<SalesReportScreen> with Sing
   // Selected filters for drill-down views
   String? _selectedBuyerId;
   String? _selectedCropName;
+  SalesSummaryFilter? _summaryFilter = SalesSummaryFilter.allBills;
 
   @override
   void initState() {
@@ -198,6 +206,7 @@ class _SalesReportScreenState extends ConsumerState<SalesReportScreen> with Sing
   // 1. Sales Summary
   Widget _buildSalesSummaryView(SalesReportData report) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           children: [
@@ -208,6 +217,10 @@ class _SalesReportScreenState extends ConsumerState<SalesReportScreen> with Sing
                 subtitle: '${report.totalBills} bills issued',
                 icon: Icons.trending_up_rounded,
                 accentColor: theme.primary,
+                isSelected: _summaryFilter == SalesSummaryFilter.allBills,
+                onTap: () => setState(() {
+                  _summaryFilter = _summaryFilter == SalesSummaryFilter.allBills ? null : SalesSummaryFilter.allBills;
+                }),
               ),
             ),
             const SizedBox(width: 10),
@@ -218,6 +231,10 @@ class _SalesReportScreenState extends ConsumerState<SalesReportScreen> with Sing
                 subtitle: 'Cash collections',
                 icon: Icons.check_circle_outline_rounded,
                 accentColor: theme.primary,
+                isSelected: _summaryFilter == SalesSummaryFilter.receivedBills,
+                onTap: () => setState(() {
+                  _summaryFilter = _summaryFilter == SalesSummaryFilter.receivedBills ? null : SalesSummaryFilter.receivedBills;
+                }),
               ),
             ),
           ],
@@ -233,6 +250,10 @@ class _SalesReportScreenState extends ConsumerState<SalesReportScreen> with Sing
                 icon: Icons.schedule_rounded,
                 accentColor: AppColors.warning,
                 iconBg: AppColors.warningBg,
+                isSelected: _summaryFilter == SalesSummaryFilter.outstandingBills,
+                onTap: () => setState(() {
+                  _summaryFilter = _summaryFilter == SalesSummaryFilter.outstandingBills ? null : SalesSummaryFilter.outstandingBills;
+                }),
               ),
             ),
             const SizedBox(width: 10),
@@ -242,10 +263,251 @@ class _SalesReportScreenState extends ConsumerState<SalesReportScreen> with Sing
                 amount: AppFormatters.quantity(report.totalQuantity, 'units'),
                 subtitle: 'Weight: ${report.totalWeight.toInt()} Kg',
                 icon: Icons.scale_outlined,
+                isSelected: _summaryFilter == SalesSummaryFilter.cropQuantities,
+                onTap: () => setState(() {
+                  _summaryFilter = _summaryFilter == SalesSummaryFilter.cropQuantities ? null : SalesSummaryFilter.cropQuantities;
+                }),
               ),
             ),
           ],
         ),
+        const SizedBox(height: 20),
+        _buildSalesSummaryFilteredSection(report),
+      ],
+    );
+  }
+
+  Widget _buildSalesSummaryFilteredSection(SalesReportData report) {
+    if (_summaryFilter == SalesSummaryFilter.cropQuantities) {
+      final crops = report.byCrop;
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSummaryHeader('Crop & Commodity Volumes', Icons.eco_outlined, theme.primary, crops.length),
+          const SizedBox(height: 10),
+          if (crops.isEmpty)
+            _buildEmptyCard('No crop sales recorded.')
+          else
+            ListView.separated(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: crops.length,
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemBuilder: (context, index) {
+                final c = crops[index];
+                return InkWell(
+                  onTap: () => setState(() {
+                    _selectedCropName = c.cropName;
+                    _tabController.animateTo(2); // Jump to By Crop tab
+                  }),
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: theme.surface,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: theme.border),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 18,
+                              backgroundColor: theme.primary.withValues(alpha: 0.12),
+                              child: Icon(Icons.eco_rounded, size: 16, color: theme.primary),
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(c.cropName, style: AppTypography.cardTitle.copyWith(fontSize: 14)),
+                                Text('${c.totalQuantity.toInt()} ${c.unit} • ${c.totalWeight.toInt()} Kg', style: AppTypography.labelMuted),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              AppFormatters.currency(c.totalSales),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: theme.primary),
+                            ),
+                            Text(
+                              '₹${c.averageRate.toStringAsFixed(1)} / ${c.unit}',
+                              style: AppTypography.labelMuted,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+        ],
+      );
+    }
+
+    // Default or bill filters
+    List<Bill> bills;
+    String title;
+    IconData icon;
+    Color color;
+
+    if (_summaryFilter == SalesSummaryFilter.receivedBills) {
+      bills = report.bills.where((b) => b.amountReceived > 0).toList();
+      title = 'Received Collections';
+      icon = Icons.check_circle_outline_rounded;
+      color = theme.primary;
+    } else if (_summaryFilter == SalesSummaryFilter.outstandingBills) {
+      bills = report.bills.where((b) => b.balanceDue > 0).toList();
+      title = 'Pending Outstanding Dues';
+      icon = Icons.schedule_rounded;
+      color = AppColors.warning;
+    } else {
+      bills = report.bills;
+      title = 'All Sales Invoices';
+      icon = Icons.receipt_long_rounded;
+      color = theme.primary;
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSummaryHeader(title, icon, color, bills.length),
+        const SizedBox(height: 10),
+        if (bills.isEmpty)
+          _buildEmptyCard('No sales invoices found for this selection.')
+        else
+          ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: bills.length,
+            separatorBuilder: (context, index) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              final b = bills[index];
+              return InkWell(
+                onTap: () => context.push('/bills/${b.id}'),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: theme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: theme.border),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(b.billNumber, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: b.type == BillType.cash
+                                      ? AppColors.successBg
+                                      : AppColors.warningBg,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  b.type == BillType.cash ? 'Cash' : 'Credit',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: b.type == BillType.cash ? AppColors.success : AppColors.warning,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Text(b.customerName, style: AppTypography.cardTitle.copyWith(fontSize: 13)),
+                          Text(AppFormatters.date(b.date), style: AppTypography.labelMuted),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            AppFormatters.currency(b.totalAmount),
+                            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 2),
+                          if (b.balanceDue > 0)
+                            Text(
+                              'Due: ${AppFormatters.currency(b.balanceDue)}',
+                              style: const TextStyle(fontSize: 12, color: AppColors.warning, fontWeight: FontWeight.w600),
+                            )
+                          else
+                            Text(
+                              'Paid in Full',
+                              style: TextStyle(fontSize: 11, color: theme.primary, fontWeight: FontWeight.w600),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+      ],
+    );
+  }
+
+  Widget _buildSummaryHeader(String title, IconData icon, Color color, int count) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(icon, size: 16, color: color),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '$title ($count)',
+              style: AppTypography.sectionHeading.copyWith(fontSize: 15, color: theme.text),
+            ),
+          ],
+        ),
+        if (_summaryFilter != null)
+          InkWell(
+            onTap: () => setState(() => _summaryFilter = SalesSummaryFilter.allBills),
+            borderRadius: BorderRadius.circular(16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: theme.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: theme.border),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.clear_rounded, size: 12, color: theme.textMuted),
+                  const SizedBox(width: 4),
+                  Text(
+                    'Reset',
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: theme.textSecondary),
+                  ),
+                ],
+              ),
+            ),
+          ),
       ],
     );
   }

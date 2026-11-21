@@ -1250,6 +1250,52 @@ class AppRepository {
         category: 'Goods Purchase',
         time: l.date,
       ));
+      if (l.transportCharge > 0) {
+        paidItems.add(DailyPaidItem(
+          id: 'paid_lot_transp_${l.id}',
+          sellerName: '${l.supplierName} (Lot Transport)',
+          refNumber: '${l.lotNumber}-TRP',
+          amount: l.transportCharge,
+          paymentMode: 'CASH / FREIGHT',
+          category: 'Transportation',
+          time: l.date,
+        ));
+      }
+      if (l.labourCharge > 0) {
+        paidItems.add(DailyPaidItem(
+          id: 'paid_lot_labour_${l.id}',
+          sellerName: '${l.supplierName} (Lot Hamali)',
+          refNumber: '${l.lotNumber}-LBR',
+          amount: l.labourCharge,
+          paymentMode: 'CASH / LABOUR',
+          category: 'Labour',
+          time: l.date,
+        ));
+      }
+    }
+    for (final b in dayBills) {
+      if (b.labourCharge > 0) {
+        paidItems.add(DailyPaidItem(
+          id: 'paid_bill_labour_${b.id}',
+          sellerName: '${b.customerName} (Bill Coolie)',
+          refNumber: '${b.billNumber}-LBR',
+          amount: b.labourCharge,
+          paymentMode: 'CASH / HAMALI',
+          category: 'Labour',
+          time: b.date,
+        ));
+      }
+      if (b.otherCharges > 0) {
+        paidItems.add(DailyPaidItem(
+          id: 'paid_bill_comm_${b.id}',
+          sellerName: '${b.customerName} (Commission / Cess)',
+          refNumber: '${b.billNumber}-CMS',
+          amount: b.otherCharges,
+          paymentMode: 'COMMISSION',
+          category: 'Commission',
+          time: b.date,
+        ));
+      }
     }
 
     final double totalReceived = receivedItems.fold(0.0, (acc, item) => acc + item.amount);

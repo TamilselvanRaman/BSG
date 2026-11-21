@@ -22,6 +22,16 @@ class _DailySummaryScreenState extends ConsumerState<DailySummaryScreen> {
   DateTime _selectedDate = DateTime.now();
   DailySummaryType _selectedType = DailySummaryType.allSummary;
 
+  void _selectFilter(DailySummaryType type) {
+    setState(() {
+      if (_selectedType == type) {
+        _selectedType = DailySummaryType.allSummary;
+      } else {
+        _selectedType = type;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = context.appTheme;
@@ -104,306 +114,379 @@ class _DailySummaryScreenState extends ConsumerState<DailySummaryScreen> {
 
             const SizedBox(height: 16),
 
-            // Dynamic Data Cards based on selected type
-            _buildDataCards(report),
+            // Interactive Clickable 6-Card Summary Grid
+            _buildInteractiveSummaryGrid(report, theme),
 
             const SizedBox(height: 20),
 
-            // Received & Paid Tables
-            _buildTables(report),
+            // Filter status & active records list
+            _buildFilteredList(report, theme),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDataCards(DailySummaryReport report) {
-    final theme = context.appTheme;
-
-    switch (_selectedType) {
-      case DailySummaryType.allSummary:
-        return Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Total Received',
-                    amount: AppFormatters.currency(report.totalReceived),
-                    subtitle: '${report.receivedItems.length} Collections',
-                    icon: Icons.call_received_rounded,
-                    accentColor: theme.primary,
-                    iconBg: theme.accent,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Total Paid',
-                    amount: AppFormatters.currency(report.totalPaid),
-                    subtitle: '${report.paidItems.length} Payments',
-                    icon: Icons.call_made_rounded,
-                    accentColor: AppColors.error,
-                    iconBg: AppColors.errorBg,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Transportation',
-                    amount: AppFormatters.currency(report.transportation),
-                    icon: Icons.local_shipping_outlined,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Total Coolie',
-                    amount: AppFormatters.currency(report.totalCoolie),
-                    icon: Icons.handshake_outlined,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Rent',
-                    amount: AppFormatters.currency(report.rent),
-                    icon: Icons.home_work_outlined,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Sales Commission',
-                    amount: AppFormatters.currency(report.salesCommission),
-                    icon: Icons.percent_rounded,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-
-      case DailySummaryType.salesSummary:
-        return Column(
-          children: [
-            ReportSummaryCard(
-              title: 'Total Sales Collection',
-              amount: AppFormatters.currency(report.totalReceived),
-              subtitle: 'Counter cash and customer ledger clearance',
-              icon: Icons.shopping_bag_outlined,
-              accentColor: theme.primary,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Sales Commission',
-                    amount: AppFormatters.currency(report.salesCommission),
-                    icon: Icons.percent_rounded,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Loading / Coolie',
-                    amount: AppFormatters.currency(report.totalCoolie),
-                    icon: Icons.handshake_outlined,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-
-      case DailySummaryType.purchaseSummary:
-        return Column(
-          children: [
-            ReportSummaryCard(
-              title: 'Total Purchase Outflow',
-              amount: AppFormatters.currency(report.totalPaid),
-              subtitle: 'Farmer settlements and lot purchase payouts',
-              icon: Icons.inventory_2_outlined,
-              accentColor: AppColors.error,
-            ),
-            const SizedBox(height: 10),
-            Row(
-              children: [
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Inward Freight / Transp.',
-                    amount: AppFormatters.currency(report.transportation),
-                    icon: Icons.local_shipping_outlined,
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: ReportSummaryCard(
-                    title: 'Unloading Hamali',
-                    amount: AppFormatters.currency(report.totalCoolie),
-                    icon: Icons.pan_tool_outlined,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        );
-
-      case DailySummaryType.totalReceived:
-        return ReportSummaryCard(
-          title: 'Total Received (Collections)',
-          amount: AppFormatters.currency(report.totalReceived),
-          subtitle: '${report.receivedItems.length} Collections',
-          icon: Icons.call_received_rounded,
-          accentColor: theme.primary,
-          iconBg: theme.accent,
-        );
-
-      case DailySummaryType.totalPaid:
-        return ReportSummaryCard(
-          title: 'Total Paid (Payments)',
-          amount: AppFormatters.currency(report.totalPaid),
-          subtitle: '${report.paidItems.length} Payments',
-          icon: Icons.call_made_rounded,
-          accentColor: AppColors.error,
-          iconBg: AppColors.errorBg,
-        );
-
-      case DailySummaryType.transportation:
-        return ReportSummaryCard(
-          title: 'Transportation',
-          amount: AppFormatters.currency(report.transportation),
-          icon: Icons.local_shipping_outlined,
-        );
-
-      case DailySummaryType.totalCoolie:
-        return ReportSummaryCard(
-          title: 'Total Coolie / Hamali',
-          amount: AppFormatters.currency(report.totalCoolie),
-          icon: Icons.handshake_outlined,
-        );
-
-      case DailySummaryType.rent:
-        return ReportSummaryCard(
-          title: 'Shop / Warehouse Rent',
-          amount: AppFormatters.currency(report.rent),
-          icon: Icons.home_work_outlined,
-        );
-
-      case DailySummaryType.salesCommission:
-        return ReportSummaryCard(
-          title: 'Sales Commission',
-          amount: AppFormatters.currency(report.salesCommission),
-          icon: Icons.percent_rounded,
-        );
-    }
-  }
-
-  Widget _buildTables(DailySummaryReport report) {
-    final theme = context.appTheme;
-    final showReceived = _selectedType == DailySummaryType.allSummary ||
-        _selectedType == DailySummaryType.salesSummary ||
-        _selectedType == DailySummaryType.totalReceived;
-    final showPaid = _selectedType == DailySummaryType.allSummary ||
-        _selectedType == DailySummaryType.purchaseSummary ||
-        _selectedType == DailySummaryType.totalPaid;
-
+  Widget _buildInteractiveSummaryGrid(DailySummaryReport report, AppThemeColors theme) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (showReceived) ...[
-          _buildSectionHeader('Total Received (Collections)', Icons.arrow_downward_rounded, theme.primary),
-          const SizedBox(height: 8),
-          if (report.receivedItems.isEmpty)
-            _buildEmptyState('No received collections recorded for this date.')
-          else
-            Container(
-              decoration: BoxDecoration(
-                color: theme.surface,
-                borderRadius: AppSpacing.borderRadiusMd,
-                border: Border.all(color: theme.border),
-              ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: report.receivedItems.length,
-                separatorBuilder: (context, index) => Divider(height: 1, color: theme.border),
-                itemBuilder: (context, index) {
-                  final item = report.receivedItems[index];
-                  return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                    title: Text(item.buyerName, style: AppTypography.cardTitle.copyWith(fontSize: 14, color: theme.text)),
-                    subtitle: Text(
-                      '${item.refNumber} • ${item.paymentMode}',
-                      style: AppTypography.labelMuted.copyWith(color: theme.textMuted),
-                    ),
-                    trailing: Text(
-                      AppFormatters.currency(item.amount),
-                      style: AppTypography.cardTitle.copyWith(color: theme.primary),
-                    ),
-                  );
-                },
+        Row(
+          children: [
+            Expanded(
+              child: ReportSummaryCard(
+                title: 'Total Received',
+                amount: AppFormatters.currency(report.totalReceived),
+                subtitle: '${report.receivedItems.length} Collections',
+                icon: Icons.call_received_rounded,
+                accentColor: theme.primary,
+                iconBg: theme.accent,
+                isSelected: _selectedType == DailySummaryType.totalReceived,
+                onTap: () => _selectFilter(DailySummaryType.totalReceived),
               ),
             ),
-          const SizedBox(height: 20),
-        ],
-
-        if (showPaid) ...[
-          _buildSectionHeader('Total Paid (Purchases & Expenses)', Icons.arrow_upward_rounded, AppColors.error),
-          const SizedBox(height: 8),
-          if (report.paidItems.isEmpty)
-            _buildEmptyState('No paid vouchers recorded for this date.')
-          else
-            Container(
-              decoration: BoxDecoration(
-                color: theme.surface,
-                borderRadius: AppSpacing.borderRadiusMd,
-                border: Border.all(color: theme.border),
-              ),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: report.paidItems.length,
-                separatorBuilder: (context, index) => Divider(height: 1, color: theme.border),
-                itemBuilder: (context, index) {
-                  final item = report.paidItems[index];
-                  return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-                    title: Text(item.sellerName, style: AppTypography.cardTitle.copyWith(fontSize: 14, color: theme.text)),
-                    subtitle: Text(
-                      '${item.refNumber} • ${item.category} • ${item.paymentMode}',
-                      style: AppTypography.labelMuted.copyWith(color: theme.textMuted),
-                    ),
-                    trailing: Text(
-                      AppFormatters.currency(item.amount),
-                      style: AppTypography.cardTitle.copyWith(color: AppColors.error),
-                    ),
-                  );
-                },
+            const SizedBox(width: 10),
+            Expanded(
+              child: ReportSummaryCard(
+                title: 'Total Paid',
+                amount: AppFormatters.currency(report.totalPaid),
+                subtitle: '${report.paidItems.length} Payments',
+                icon: Icons.call_made_rounded,
+                accentColor: AppColors.error,
+                iconBg: AppColors.errorBg,
+                isSelected: _selectedType == DailySummaryType.totalPaid,
+                onTap: () => _selectFilter(DailySummaryType.totalPaid),
               ),
             ),
-        ],
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: ReportSummaryCard(
+                title: 'Transportation',
+                amount: AppFormatters.currency(report.transportation),
+                icon: Icons.local_shipping_outlined,
+                accentColor: const Color(0xFFD97706),
+                isSelected: _selectedType == DailySummaryType.transportation,
+                onTap: () => _selectFilter(DailySummaryType.transportation),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ReportSummaryCard(
+                title: 'Total Coolie',
+                amount: AppFormatters.currency(report.totalCoolie),
+                icon: Icons.handshake_outlined,
+                accentColor: const Color(0xFF0284C7),
+                isSelected: _selectedType == DailySummaryType.totalCoolie,
+                onTap: () => _selectFilter(DailySummaryType.totalCoolie),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            Expanded(
+              child: ReportSummaryCard(
+                title: 'Rent',
+                amount: AppFormatters.currency(report.rent),
+                icon: Icons.home_work_outlined,
+                accentColor: const Color(0xFF7C3AED),
+                isSelected: _selectedType == DailySummaryType.rent,
+                onTap: () => _selectFilter(DailySummaryType.rent),
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: ReportSummaryCard(
+                title: 'Sales Commission',
+                amount: AppFormatters.currency(report.salesCommission),
+                icon: Icons.percent_rounded,
+                accentColor: const Color(0xFF0D9488),
+                isSelected: _selectedType == DailySummaryType.salesCommission,
+                onTap: () => _selectFilter(DailySummaryType.salesCommission),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
 
-  Widget _buildSectionHeader(String title, IconData icon, Color color) {
+  Widget _buildFilteredList(DailySummaryReport report, AppThemeColors theme) {
+    if (_selectedType == DailySummaryType.allSummary) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildReceivedSection(report.receivedItems, theme),
+          const SizedBox(height: 20),
+          _buildPaidSection(report.paidItems, theme),
+        ],
+      );
+    }
+
+    if (_selectedType == DailySummaryType.totalReceived || _selectedType == DailySummaryType.salesSummary) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildFilterHeader('Total Received (Collections)', Icons.call_received_rounded, theme.primary, report.receivedItems.length),
+          const SizedBox(height: 10),
+          _buildReceivedItemsList(report.receivedItems, theme),
+        ],
+      );
+    }
+
+    if (_selectedType == DailySummaryType.totalPaid || _selectedType == DailySummaryType.purchaseSummary) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildFilterHeader('Total Paid (Purchases & Expenses)', Icons.call_made_rounded, AppColors.error, report.paidItems.length),
+          const SizedBox(height: 10),
+          _buildPaidItemsList(report.paidItems, theme),
+        ],
+      );
+    }
+
+    if (_selectedType == DailySummaryType.transportation) {
+      final items = report.paidItems.where((p) => p.category.toLowerCase().contains('transport')).toList();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildFilterHeader('Transportation & Freight Expenses', Icons.local_shipping_outlined, const Color(0xFFD97706), items.length),
+          const SizedBox(height: 10),
+          items.isEmpty
+              ? _buildEmptyState('No transportation expenses recorded for this date.')
+              : _buildPaidItemsList(items, theme),
+        ],
+      );
+    }
+
+    if (_selectedType == DailySummaryType.totalCoolie) {
+      final items = report.paidItems
+          .where((p) =>
+              p.category.toLowerCase().contains('labour') ||
+              p.category.toLowerCase().contains('coolie') ||
+              p.category.toLowerCase().contains('hamali'))
+          .toList();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildFilterHeader('Total Coolie & Hamali Charges', Icons.handshake_outlined, const Color(0xFF0284C7), items.length),
+          const SizedBox(height: 10),
+          items.isEmpty
+              ? _buildEmptyState('No coolie or hamali charges recorded for this date.')
+              : _buildPaidItemsList(items, theme),
+        ],
+      );
+    }
+
+    if (_selectedType == DailySummaryType.rent) {
+      final items = report.paidItems.where((p) => p.category.toLowerCase().contains('rent')).toList();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildFilterHeader('Shop & Warehouse Rent Vouchers', Icons.home_work_outlined, const Color(0xFF7C3AED), items.length),
+          const SizedBox(height: 10),
+          items.isEmpty
+              ? _buildEmptyState('No shop or warehouse rent vouchers recorded for this date.')
+              : _buildPaidItemsList(items, theme),
+        ],
+      );
+    }
+
+    if (_selectedType == DailySummaryType.salesCommission) {
+      final items = report.paidItems.where((p) => p.category.toLowerCase().contains('commission')).toList();
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildFilterHeader('Sales Commission & Mandi Cess', Icons.percent_rounded, const Color(0xFF0D9488), items.length),
+          const SizedBox(height: 10),
+          items.isEmpty
+              ? _buildEmptyState('No commission deductions recorded for this date.')
+              : _buildPaidItemsList(items, theme),
+        ],
+      );
+    }
+
+    return const SizedBox.shrink();
+  }
+
+  Widget _buildFilterHeader(String title, IconData icon, Color color, int count) {
     final theme = context.appTheme;
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Icon(icon, size: 18, color: color),
-        const SizedBox(width: 8),
-        Text(title, style: AppTypography.sectionHeading.copyWith(fontSize: 15, color: theme.text)),
+        Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: color.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: Icon(icon, size: 16, color: color),
+            ),
+            const SizedBox(width: 8),
+            Text(
+              '$title ($count)',
+              style: AppTypography.sectionHeading.copyWith(fontSize: 15, color: theme.text),
+            ),
+          ],
+        ),
+        InkWell(
+          onTap: () => setState(() => _selectedType = DailySummaryType.allSummary),
+          borderRadius: BorderRadius.circular(16),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: theme.surface,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: theme.border),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.clear_rounded, size: 12, color: theme.textMuted),
+                const SizedBox(width: 4),
+                Text(
+                  'Show All',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: theme.textSecondary),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget _buildReceivedSection(List<DailyReceivedItem> items, AppThemeColors theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.arrow_downward_rounded, size: 18, color: theme.primary),
+            const SizedBox(width: 8),
+            Text(
+              'Total Received (Collections)',
+              style: AppTypography.sectionHeading.copyWith(fontSize: 15, color: theme.text),
+            ),
+            const Spacer(),
+            Text(
+              '${items.length} records',
+              style: TextStyle(fontSize: 12, color: theme.textMuted, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (items.isEmpty)
+          _buildEmptyState('No received collections recorded for this date.')
+        else
+          _buildReceivedItemsList(items, theme),
+      ],
+    );
+  }
+
+  Widget _buildPaidSection(List<DailyPaidItem> items, AppThemeColors theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(Icons.arrow_upward_rounded, size: 18, color: AppColors.error),
+            const SizedBox(width: 8),
+            Text(
+              'Total Paid (Purchases & Expenses)',
+              style: AppTypography.sectionHeading.copyWith(fontSize: 15, color: theme.text),
+            ),
+            const Spacer(),
+            Text(
+              '${items.length} records',
+              style: TextStyle(fontSize: 12, color: theme.textMuted, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        if (items.isEmpty)
+          _buildEmptyState('No paid vouchers recorded for this date.')
+        else
+          _buildPaidItemsList(items, theme),
+      ],
+    );
+  }
+
+  Widget _buildReceivedItemsList(List<DailyReceivedItem> items, AppThemeColors theme) {
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.surface,
+        borderRadius: AppSpacing.borderRadiusMd,
+        border: Border.all(color: theme.border),
+      ),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: items.length,
+        separatorBuilder: (context, index) => Divider(height: 1, color: theme.border),
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+            leading: CircleAvatar(
+              radius: 18,
+              backgroundColor: theme.primary.withValues(alpha: 0.12),
+              child: Icon(Icons.call_received_rounded, size: 16, color: theme.primary),
+            ),
+            title: Text(item.buyerName, style: AppTypography.cardTitle.copyWith(fontSize: 14, color: theme.text)),
+            subtitle: Text(
+              '${item.refNumber} • ${item.paymentMode}',
+              style: AppTypography.labelMuted.copyWith(color: theme.textMuted),
+            ),
+            trailing: Text(
+              AppFormatters.currency(item.amount),
+              style: AppTypography.cardTitle.copyWith(color: theme.primary, fontSize: 15),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPaidItemsList(List<DailyPaidItem> items, AppThemeColors theme) {
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.surface,
+        borderRadius: AppSpacing.borderRadiusMd,
+        border: Border.all(color: theme.border),
+      ),
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: items.length,
+        separatorBuilder: (context, index) => Divider(height: 1, color: theme.border),
+        itemBuilder: (context, index) {
+          final item = items[index];
+          return ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+            leading: CircleAvatar(
+              radius: 18,
+              backgroundColor: AppColors.error.withValues(alpha: 0.12),
+              child: Icon(Icons.call_made_rounded, size: 16, color: AppColors.error),
+            ),
+            title: Text(item.sellerName, style: AppTypography.cardTitle.copyWith(fontSize: 14, color: theme.text)),
+            subtitle: Text(
+              '${item.refNumber} • ${item.category} • ${item.paymentMode}',
+              style: AppTypography.labelMuted.copyWith(color: theme.textMuted),
+            ),
+            trailing: Text(
+              AppFormatters.currency(item.amount),
+              style: AppTypography.cardTitle.copyWith(color: AppColors.error, fontSize: 15),
+            ),
+          );
+        },
+      ),
     );
   }
 

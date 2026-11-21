@@ -30,6 +30,11 @@ class _GrossProfitScreenState extends ConsumerState<GrossProfitScreen> with Sing
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -111,6 +116,8 @@ class _GrossProfitScreenState extends ConsumerState<GrossProfitScreen> with Sing
                           icon: Icons.auto_graph_rounded,
                           accentColor: report.grossProfit >= 0 ? theme.primary : AppColors.error,
                           iconBg: report.grossProfit >= 0 ? theme.accent : AppColors.errorBg,
+                          isSelected: _tabController.index == 0,
+                          onTap: () => setState(() => _tabController.animateTo(0)),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -121,6 +128,8 @@ class _GrossProfitScreenState extends ConsumerState<GrossProfitScreen> with Sing
                           subtitle: 'ROI on Goods Sold',
                           icon: Icons.percent_rounded,
                           accentColor: theme.primary,
+                          isSelected: _tabController.index == 0,
+                          onTap: () => setState(() => _tabController.animateTo(0)),
                         ),
                       ),
                     ],
@@ -134,6 +143,8 @@ class _GrossProfitScreenState extends ConsumerState<GrossProfitScreen> with Sing
                           amount: AppFormatters.currency(report.totalSalesAmount),
                           subtitle: '${report.transactions.length} sales bills',
                           icon: Icons.trending_up_rounded,
+                          isSelected: _tabController.index == 1,
+                          onTap: () => setState(() => _tabController.animateTo(1)),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -143,6 +154,8 @@ class _GrossProfitScreenState extends ConsumerState<GrossProfitScreen> with Sing
                           amount: AppFormatters.currency(report.totalPurchaseCost),
                           subtitle: 'Base purchase cost',
                           icon: Icons.shopping_bag_outlined,
+                          isSelected: _tabController.index == 1,
+                          onTap: () => setState(() => _tabController.animateTo(1)),
                         ),
                       ),
                     ],

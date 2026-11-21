@@ -32,6 +32,11 @@ class _StockReportScreenState extends ConsumerState<StockReportScreen> with Sing
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this, initialIndex: widget.initialTabIndex);
+    _tabController.addListener(() {
+      if (!_tabController.indexIsChanging) {
+        setState(() {});
+      }
+    });
   }
 
   @override
@@ -109,6 +114,8 @@ class _StockReportScreenState extends ConsumerState<StockReportScreen> with Sing
                           subtitle: 'Current in warehouse',
                           icon: Icons.inventory_2_outlined,
                           accentColor: theme.primary,
+                          isSelected: _tabController.index == 0,
+                          onTap: () => setState(() => _tabController.animateTo(0)),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -118,6 +125,8 @@ class _StockReportScreenState extends ConsumerState<StockReportScreen> with Sing
                           amount: AppFormatters.currency(report.totalStockValuation),
                           subtitle: 'Estimated inventory value',
                           icon: Icons.account_balance_wallet_outlined,
+                          isSelected: _tabController.index == 0,
+                          onTap: () => setState(() => _tabController.animateTo(0)),
                         ),
                       ),
                     ],
@@ -131,6 +140,8 @@ class _StockReportScreenState extends ConsumerState<StockReportScreen> with Sing
                           amount: AppFormatters.quantity(report.totalPurchased, 'units'),
                           subtitle: 'Incoming arrivals',
                           icon: Icons.arrow_downward_rounded,
+                          isSelected: _tabController.index == 1,
+                          onTap: () => setState(() => _tabController.animateTo(1)),
                         ),
                       ),
                       const SizedBox(width: 10),
@@ -141,6 +152,8 @@ class _StockReportScreenState extends ConsumerState<StockReportScreen> with Sing
                           subtitle: 'Billed sales',
                           icon: Icons.arrow_upward_rounded,
                           accentColor: AppColors.warning,
+                          isSelected: _tabController.index == 2,
+                          onTap: () => setState(() => _tabController.animateTo(2)),
                         ),
                       ),
                     ],
