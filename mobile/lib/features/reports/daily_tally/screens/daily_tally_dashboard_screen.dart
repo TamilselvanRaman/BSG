@@ -19,6 +19,7 @@ class DailyTallyDashboardScreen extends ConsumerStatefulWidget {
 
 class _DailyTallyDashboardScreenState extends ConsumerState<DailyTallyDashboardScreen> {
   DateTime _selectedDate = DateTime.now();
+  bool _isExpensesExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -156,22 +157,28 @@ class _DailyTallyDashboardScreenState extends ConsumerState<DailyTallyDashboardS
           const SizedBox(height: 20),
 
           if (latestTally != null) ...[
-            // Breakdown Sections
-            Text(
-              'Cash Receipts & Inflows',
-              style: AppTypography.sectionHeading.copyWith(color: theme.text),
-            ),
-            const SizedBox(height: 8),
-            _buildReceiptsCard(latestTally, theme),
+            // Traditional Mandi Cash Tally Slip (Image 2 format)
+            _buildTraditionalMandiSlip(latestTally, theme),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
+            // Operating Expenses (Collapsed by default, only Total Expenses displayed with Full View option)
             Text(
               'Operating Expenses',
               style: AppTypography.sectionHeading.copyWith(color: theme.text),
             ),
             const SizedBox(height: 8),
             _buildExpensesCard(latestTally, theme),
+
+            const SizedBox(height: 16),
+
+            // Breakdown Sections
+            Text(
+              'Cash Receipts & Inflows Breakdown',
+              style: AppTypography.sectionHeading.copyWith(color: theme.text),
+            ),
+            const SizedBox(height: 8),
+            _buildReceiptsCard(latestTally, theme),
 
             const SizedBox(height: 16),
 
@@ -403,26 +410,471 @@ class _DailyTallyDashboardScreenState extends ConsumerState<DailyTallyDashboardS
     );
   }
 
+  Widget _buildTraditionalMandiSlip(DailyTally tally, AppThemeColors theme) {
+    final inwardCashSubtotal = tally.cashSales + tally.outstandingReceived + tally.openingCash;
+    final totalOverallCash = tally.actualCashCounted + tally.gpay1Received + tally.gpay2Received;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: theme.surface,
+        borderRadius: AppSpacing.borderRadiusMd,
+        border: Border.all(color: theme.border, width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Slip Top Header
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: BoxDecoration(
+              color: theme.primary.withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+              border: Border(bottom: BorderSide(color: theme.border)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.receipt_rounded, size: 18, color: theme.primary),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Daily Cash Tally Slip',
+                      style: AppTypography.cardTitle.copyWith(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: theme.text,
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: theme.surface,
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: theme.border),
+                  ),
+                  child: Text(
+                    AppFormatters.date(tally.date),
+                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: theme.primary),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // 10 Exact Mandi Slip Rows (Matching Traditional Mandi Cash Sheet)
+          _buildSlipRow('Cash Sales', AppFormatters.currency(tally.cashSales), theme),
+          _buildSlipRow('Outstanding Received', AppFormatters.currency(tally.outstandingReceived), theme),
+          _buildSlipRow('Yesterday Cash', AppFormatters.currency(tally.openingCash), theme),
+          _buildSlipRow(
+            'Total Cash',
+            AppFormatters.currency(inwardCashSubtotal),
+            theme,
+            isHighlight: true,
+            highlightColor: theme.success,
+          ),
+          _buildSlipExpenseRow('Expense', AppFormatters.currency(tally.totalCashExpenses), tally, theme),
+          _buildSlipRow('G-Pay 1', AppFormatters.currency(tally.gpay1Received), theme),
+          _buildSlipRow('G-Pay 2', AppFormatters.currency(tally.gpay2Received), theme),
+          _buildSlipRow(
+            'Cash In Hand',
+            AppFormatters.currency(tally.actualCashCounted),
+            theme,
+            isBold: true,
+          ),
+          _buildSlipRow(
+            'Total Cash',
+            AppFormatters.currency(totalOverallCash),
+            theme,
+            isHighlight: true,
+            highlightColor: theme.primary,
+          ),
+          _buildSlipRow(
+            'Petti Cash in Hand',
+            AppFormatters.currency(tally.pettyCashInHand),
+            theme,
+            isLast: true,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSlipRow(
+    String title,
+    String amount,
+    AppThemeColors theme, {
+    bool isHighlight = false,
+    Color? highlightColor,
+    bool isBold = false,
+    bool isLast = false,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      decoration: BoxDecoration(
+        color: isHighlight
+            ? (highlightColor ?? theme.primary).withValues(alpha: 0.08)
+            : Colors.transparent,
+        border: isLast ? null : Border(bottom: BorderSide(color: theme.border.withValues(alpha: 0.6))),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: isHighlight || isBold ? 14 : 13.5,
+              fontWeight: isHighlight || isBold ? FontWeight.bold : FontWeight.w600,
+              color: isHighlight ? (highlightColor ?? theme.primary) : theme.text,
+            ),
+          ),
+          Text(
+            amount,
+            style: TextStyle(
+              fontSize: isHighlight || isBold ? 14.5 : 14,
+              fontWeight: isHighlight || isBold ? FontWeight.w800 : FontWeight.w700,
+              color: isHighlight ? (highlightColor ?? theme.primary) : theme.text,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSlipExpenseRow(String title, String amount, DailyTally tally, AppThemeColors theme) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: theme.error.withValues(alpha: 0.04),
+        border: Border(bottom: BorderSide(color: theme.border.withValues(alpha: 0.6))),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: theme.error,
+                ),
+              ),
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: () => _showFullExpenseModal(tally, theme),
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: theme.surface,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: theme.error.withValues(alpha: 0.4)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Full View',
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: theme.error,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Icon(Icons.arrow_forward_ios_rounded, size: 9, color: theme.error),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Text(
+            '-$amount',
+            style: TextStyle(
+              fontSize: 14.5,
+              fontWeight: FontWeight.w800,
+              color: theme.error,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildExpensesCard(DailyTally tally, AppThemeColors theme) {
     return AppCard(
       padding: const EdgeInsets.all(14),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildItemRow('Labour Charges', AppFormatters.currency(tally.labourExpense), theme),
-          _buildItemRow('Transport / Freight', AppFormatters.currency(tally.transportExpense), theme),
-          _buildItemRow('Store Rent', AppFormatters.currency(tally.rentExpense), theme),
-          _buildItemRow('Utilities / Power', AppFormatters.currency(tally.utilitiesExpense), theme),
-          _buildItemRow('Tea & Refreshments', AppFormatters.currency(tally.teaRefreshmentsExpense), theme),
-          _buildItemRow('Other Operating Expenses', AppFormatters.currency(tally.otherExpense), theme),
-          Divider(color: theme.border),
-          _buildItemRow(
-            'Total Cash Expenses',
-            AppFormatters.currency(tally.totalCashExpenses),
-            theme,
-            isBold: true,
-            color: theme.error,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: theme.error.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Icon(Icons.outbox_rounded, color: theme.error, size: 20),
+                  ),
+                  const SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Today's Total Expenses",
+                        style: AppTypography.cardTitle.copyWith(
+                          fontSize: 14.5,
+                          fontWeight: FontWeight.w700,
+                          color: theme.text,
+                        ),
+                      ),
+                      Text(
+                        'Total Cash Expenses',
+                        style: AppTypography.labelMuted.copyWith(color: theme.textMuted, fontSize: 11),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    AppFormatters.currency(tally.totalCashExpenses),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                      color: theme.error,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  InkWell(
+                    onTap: () {
+                      setState(() {
+                        _isExpensesExpanded = !_isExpensesExpanded;
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: theme.accent,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: theme.primary.withValues(alpha: 0.3)),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            _isExpensesExpanded ? 'Hide Details' : 'Full View',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: theme.primary,
+                            ),
+                          ),
+                          Icon(
+                            _isExpensesExpanded
+                                ? Icons.keyboard_arrow_up_rounded
+                                : Icons.keyboard_arrow_down_rounded,
+                            size: 14,
+                            color: theme.primary,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
+          if (_isExpensesExpanded) ...[
+            const SizedBox(height: 12),
+            Divider(color: theme.border, height: 1),
+            const SizedBox(height: 10),
+            _buildItemRow('Labour Charges', AppFormatters.currency(tally.labourExpense), theme),
+            _buildItemRow('Transport / Freight', AppFormatters.currency(tally.transportExpense), theme),
+            _buildItemRow('Store Rent', AppFormatters.currency(tally.rentExpense), theme),
+            _buildItemRow('Utilities / Power', AppFormatters.currency(tally.utilitiesExpense), theme),
+            _buildItemRow('Tea & Refreshments', AppFormatters.currency(tally.teaRefreshmentsExpense), theme),
+            if (tally.otherExpense > 0)
+              _buildItemRow('Other Operating Expenses', AppFormatters.currency(tally.otherExpense), theme),
+            const SizedBox(height: 10),
+            InkWell(
+              onTap: () => _showFullExpenseModal(tally, theme),
+              borderRadius: AppSpacing.borderRadiusSm,
+              child: Container(
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: theme.accent,
+                  borderRadius: AppSpacing.borderRadiusSm,
+                  border: Border.all(color: theme.primary.withValues(alpha: 0.2)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.receipt_long_outlined, size: 14, color: theme.primary),
+                    const SizedBox(width: 6),
+                    Text(
+                      'View All Expense Vouchers',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: theme.primary,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ],
+      ),
+    );
+  }
+
+  void _showFullExpenseModal(DailyTally tally, AppThemeColors theme) {
+    final allExpenses = ref.read(appRepositoryProvider).getExpenses().where((e) =>
+        e.date.year == tally.date.year &&
+        e.date.month == tally.date.month &&
+        e.date.day == tally.date.day).toList();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => DraggableScrollableSheet(
+        initialChildSize: 0.65,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (_, scrollCtrl) => SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+            child: ListView(
+              controller: scrollCtrl,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: theme.error.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(Icons.outbox_rounded, color: theme.error, size: 20),
+                        ),
+                        const SizedBox(width: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Today's Expense Breakdown",
+                              style: AppTypography.cardTitle.copyWith(color: theme.text, fontSize: 16),
+                            ),
+                            Text(
+                              'Total: ${AppFormatters.currency(tally.totalCashExpenses)}',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: theme.error),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.close, color: theme.textSecondary),
+                      onPressed: () => Navigator.pop(ctx),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(14),
+                  decoration: BoxDecoration(
+                    color: theme.background,
+                    borderRadius: AppSpacing.borderRadiusMd,
+                    border: Border.all(color: theme.border),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildItemRow('Labour Charges', AppFormatters.currency(tally.labourExpense), theme),
+                      _buildItemRow('Transport / Freight', AppFormatters.currency(tally.transportExpense), theme),
+                      _buildItemRow('Store Rent', AppFormatters.currency(tally.rentExpense), theme),
+                      _buildItemRow('Utilities / Power', AppFormatters.currency(tally.utilitiesExpense), theme),
+                      _buildItemRow('Tea & Refreshments', AppFormatters.currency(tally.teaRefreshmentsExpense), theme),
+                      _buildItemRow('Other Operating Expenses', AppFormatters.currency(tally.otherExpense), theme),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Text(
+                  'Itemized Expense Vouchers (${allExpenses.length})',
+                  style: AppTypography.sectionHeading.copyWith(color: theme.text, fontSize: 14),
+                ),
+                const SizedBox(height: 8),
+                if (allExpenses.isEmpty)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Center(
+                      child: Text(
+                        'No voucher records logged for today.',
+                        style: TextStyle(color: theme.textMuted),
+                      ),
+                    ),
+                  )
+                else
+                  ...allExpenses.map((exp) => Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: theme.surface,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: theme.border),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(exp.title, style: TextStyle(fontWeight: FontWeight.bold, color: theme.text, fontSize: 13.5)),
+                                Text('${exp.category}${exp.paidTo != null ? " • ${exp.paidTo}" : ""}', style: TextStyle(fontSize: 11.5, color: theme.textSecondary)),
+                              ],
+                            ),
+                            Text(
+                              AppFormatters.currency(exp.amount),
+                              style: TextStyle(fontWeight: FontWeight.w700, color: theme.error, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      )),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

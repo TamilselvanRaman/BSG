@@ -551,6 +551,7 @@ class AppRepository {
     String? notes,
     List<double>? bagWeights,
     List<BillItem>? items,
+    List<BillExtraCharge>? extraCharges,
   }) async {
     final lot = getLot(lotId);
     if (lot == null) throw Exception('Selected lot does not exist');
@@ -573,7 +574,10 @@ class AppRepository {
         ? items.map((it) => it.productName).toSet().join(' + ')
         : lot.productName;
 
-    final totalAmount = grossAmount + labourCharge + otherCharges - discount;
+    final customChargesSum = extraCharges != null
+        ? extraCharges.fold<double>(0.0, (s, c) => s + c.amount)
+        : 0.0;
+    final totalAmount = grossAmount + labourCharge + otherCharges + customChargesSum - discount;
     final balanceDue = (totalAmount - amountReceived).clamp(0.0, double.infinity);
     final status = balanceDue <= 0 ? BillStatus.paid : BillStatus.partiallyPaid;
 
@@ -620,6 +624,7 @@ class AppRepository {
       notes: notes,
       bagItems: bagItems,
       items: hasItems ? items : const [],
+      extraCharges: extraCharges ?? const [],
       createdAt: DateTime.now(),
     );
 
@@ -758,6 +763,7 @@ class AppRepository {
     String? notes,
     List<double>? bagWeights,
     List<BillItem>? items,
+    List<BillExtraCharge>? extraCharges,
   }) async {
     final customer = getCustomer(customerId);
     if (customer == null) throw Exception('Selected customer does not exist');
@@ -782,7 +788,10 @@ class AppRepository {
         ? items.map((it) => it.productName).toSet().join(' + ')
         : lot.productName;
 
-    final totalAmount = grossAmount + labourCharge + otherCharges - discount;
+    final customChargesSum = extraCharges != null
+        ? extraCharges.fold<double>(0.0, (s, c) => s + c.amount)
+        : 0.0;
+    final totalAmount = grossAmount + labourCharge + otherCharges + customChargesSum - discount;
     final balanceDue = (totalAmount - amountReceived).clamp(0.0, double.infinity);
     final status = balanceDue <= 0
         ? BillStatus.paid
@@ -831,6 +840,7 @@ class AppRepository {
       notes: notes,
       bagItems: bagItems,
       items: hasItems ? items : const [],
+      extraCharges: extraCharges ?? const [],
       createdAt: DateTime.now(),
     );
 

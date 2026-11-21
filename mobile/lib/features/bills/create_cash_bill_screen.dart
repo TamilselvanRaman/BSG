@@ -50,6 +50,23 @@ class CashBillItemDraft {
   double get grossAmount => (weight > 0 ? weight : quantity) * sellRate;
 }
 
+class CustomChargeDraft {
+  final TextEditingController nameController;
+  final TextEditingController amountController;
+
+  CustomChargeDraft({String name = '', double amount = 0.0})
+      : nameController = TextEditingController(text: name),
+        amountController = TextEditingController(text: amount > 0 ? amount.toStringAsFixed(0) : '');
+
+  double get amount => double.tryParse(amountController.text.trim()) ?? 0.0;
+  String get name => nameController.text.trim();
+
+  void dispose() {
+    nameController.dispose();
+    amountController.dispose();
+  }
+}
+
 class CreateCashBillScreen extends ConsumerStatefulWidget {
   final String? initialLotId;
 
@@ -65,6 +82,7 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
   DateTime _billDate = DateTime.now();
 
   final List<CashBillItemDraft> _items = [];
+  final List<CustomChargeDraft> _customCharges = [];
   final _labourChargeController = TextEditingController(text: '0');
   final _otherChargesController = TextEditingController(text: '0');
   final _discountController = TextEditingController(text: '0');
@@ -87,6 +105,9 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
     for (final it in _items) {
       it.dispose();
     }
+    for (final c in _customCharges) {
+      c.dispose();
+    }
     _labourChargeController.dispose();
     _otherChargesController.dispose();
     _discountController.dispose();
@@ -108,7 +129,8 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
     final labour = double.tryParse(_labourChargeController.text) ?? 0;
     final other = double.tryParse(_otherChargesController.text) ?? 0;
     final discount = double.tryParse(_discountController.text) ?? 0;
-    return (_grossAmount + labour + other - discount).clamp(0.0, double.infinity);
+    final customTotal = _customCharges.fold<double>(0.0, (sum, c) => sum + c.amount);
+    return (_grossAmount + labour + other + customTotal - discount).clamp(0.0, double.infinity);
   }
 
   void _recalcReceived() {
@@ -249,6 +271,15 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
       }).toList();
 
       final firstLot = repo.getLot(billItems.first.lotId)!;
+      final customExtraCharges = _customCharges
+          .where((c) => c.name.isNotEmpty && c.amount > 0)
+          .map((c) => BillExtraCharge(
+                id: 'chg_${DateTime.now().millisecondsSinceEpoch}_${c.name.hashCode}',
+                name: c.name,
+                amount: c.amount,
+              ))
+          .toList();
+
       final bill = await repo.createCashBill(
         lotId: firstLot.id,
         customerId: null,
@@ -267,6 +298,7 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
         notes: _notesController.text.trim().isNotEmpty ? _notesController.text.trim() : null,
         bagWeights: _items.first.individualBagWeights.isNotEmpty ? _items.first.individualBagWeights : null,
         items: billItems,
+        extraCharges: customExtraCharges,
       );
 
       if (mounted) {
@@ -480,6 +512,101 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
                       keyboardType: const TextInputType.numberWithOptions(decimal: true),
                       onChanged: (_) => setState(() => _recalcReceived()),
                     ),
+                    const SizedBox(height: 14),
+                    Divider(color: theme.border, height: 1),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Custom Additional Charges',
+                          style: AppTypography.cardTitle.copyWith(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: theme.text,
+                          ),
+                        ),
+                        TextButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _customCharges.add(CustomChargeDraft());
+                              _recalcReceived();
+                            });
+                          },
+                          icon: Icon(Icons.add_circle_outline_rounded, size: 16, color: theme.primary),
+                          label: Text(
+                            'Add Custom Charge',
+                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: theme.primary),
+                          ),
+                          style: TextButton.styleFrom(
+                            foregroundColor: theme.primary,
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          ),
+                        ),
+                      ],
+                    ),
+                    if (_customCharges.isEmpty) ...[
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          'No custom extra charges added. Tap "+ Add Custom Charge" to add extra expenses (e.g. Weighbridge, Bag Stitching, Gate Pass).',
+                          style: TextStyle(fontSize: 11.5, color: theme.textMuted),
+                        ),
+                      ),
+                    ] else ...[
+                      ..._customCharges.asMap().entries.map((entry) {
+                        final idx = entry.key;
+                        final charge = entry.value;
+                        return Container(
+                          margin: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: theme.background,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: theme.border),
+                          ),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                flex: 3,
+                                child: AppTextField(
+                                  controller: charge.nameController,
+                                  label: 'Charge Name',
+                                  hint: 'e.g. Bag Stitching / Gate Fee',
+                                  onChanged: (_) => setState(() {}),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                flex: 2,
+                                child: AppTextField(
+                                  controller: charge.amountController,
+                                  label: 'Amount (₹)',
+                                  prefixText: '₹ ',
+                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  onChanged: (_) => setState(() => _recalcReceived()),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: IconButton(
+                                  icon: const Icon(Icons.delete_outline_rounded, color: Colors.red, size: 20),
+                                  tooltip: 'Remove',
+                                  onPressed: () {
+                                    setState(() {
+                                      charge.dispose();
+                                      _customCharges.removeAt(idx);
+                                      _recalcReceived();
+                                    });
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                    ],
                   ],
                 ),
               ),

@@ -25,6 +25,7 @@ class _CreateDailyTallyScreenState extends ConsumerState<CreateDailyTallyScreen>
   final _formKey = GlobalKey<FormState>();
 
   DateTime _date = DateTime.now();
+  bool _showExpenseBreakdown = false;
   final _openingCashCtrl = TextEditingController(text: '15000');
 
   // Cash Receipts
@@ -621,94 +622,165 @@ class _CreateDailyTallyScreenState extends ConsumerState<CreateDailyTallyScreen>
 
             const SizedBox(height: 16),
 
-            // Section 3: Operating Expenses
+            // Section 3: Operating Expenses (Compact by default with Full View option)
             _buildSectionHeader(
               '3. Operating Expenses',
               Icons.outbox_rounded,
               theme,
               trailing: InkWell(
-                onTap: () => _showExpenseTransactionsSheet(),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.receipt_long_outlined, size: 14, color: theme.primary),
-                    const SizedBox(width: 4),
-                    Text(
-                      'View Vouchers',
-                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: theme.primary),
-                    ),
-                  ],
+                onTap: () {
+                  setState(() {
+                    _showExpenseBreakdown = !_showExpenseBreakdown;
+                  });
+                },
+                borderRadius: BorderRadius.circular(12),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: theme.accent,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: theme.primary.withValues(alpha: 0.3)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _showExpenseBreakdown ? 'Hide Details' : 'Full View',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: theme.primary),
+                      ),
+                      Icon(
+                        _showExpenseBreakdown ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                        size: 14,
+                        color: theme.primary,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
             AppCard(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: AppTextField(
-                          controller: _labourCtrl,
-                          label: 'Labour (₹)',
-                          keyboardType: TextInputType.number,
-                          onChanged: (_) => setState(() {}),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Today's Total Expenses",
+                            style: AppTypography.cardTitle.copyWith(color: theme.text, fontSize: 14),
+                          ),
+                          Text(
+                            'Total cash deducted from counter',
+                            style: AppTypography.labelMuted.copyWith(color: theme.textMuted, fontSize: 11),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: AppTextField(
-                          controller: _transportCtrl,
-                          label: 'Transport (₹)',
-                          keyboardType: TextInputType.number,
-                          onChanged: (_) => setState(() {}),
+                      Text(
+                        AppFormatters.currency(totalExpenses),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
+                          color: theme.error,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AppTextField(
-                          controller: _rentCtrl,
-                          label: 'Store Rent (₹)',
-                          keyboardType: TextInputType.number,
-                          onChanged: (_) => setState(() {}),
+                  if (_showExpenseBreakdown) ...[
+                    const SizedBox(height: 12),
+                    Divider(color: theme.border, height: 1),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppTextField(
+                            controller: _labourCtrl,
+                            label: 'Labour (₹)',
+                            keyboardType: TextInputType.number,
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: AppTextField(
+                            controller: _transportCtrl,
+                            label: 'Transport (₹)',
+                            keyboardType: TextInputType.number,
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppTextField(
+                            controller: _rentCtrl,
+                            label: 'Store Rent (₹)',
+                            keyboardType: TextInputType.number,
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: AppTextField(
+                            controller: _utilitiesCtrl,
+                            label: 'Utilities (₹)',
+                            keyboardType: TextInputType.number,
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: AppTextField(
+                            controller: _teaCtrl,
+                            label: 'Tea & Refreshments (₹)',
+                            keyboardType: TextInputType.number,
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: AppTextField(
+                            controller: _otherExpCtrl,
+                            label: 'Other Expenses (₹)',
+                            keyboardType: TextInputType.number,
+                            onChanged: (_) => setState(() {}),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    InkWell(
+                      onTap: () => _showExpenseTransactionsSheet(),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: theme.accent,
+                          borderRadius: AppSpacing.borderRadiusSm,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.receipt_long_outlined, size: 14, color: theme.primary),
+                            const SizedBox(width: 6),
+                            Text(
+                              'View Itemized Expense Vouchers',
+                              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: theme.primary),
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: AppTextField(
-                          controller: _utilitiesCtrl,
-                          label: 'Utilities (₹)',
-                          keyboardType: TextInputType.number,
-                          onChanged: (_) => setState(() {}),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AppTextField(
-                          controller: _teaCtrl,
-                          label: 'Tea & Refreshments (₹)',
-                          keyboardType: TextInputType.number,
-                          onChanged: (_) => setState(() {}),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: AppTextField(
-                          controller: _otherExpCtrl,
-                          label: 'Other Expenses (₹)',
-                          keyboardType: TextInputType.number,
-                          onChanged: (_) => setState(() {}),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ],
               ),
             ),
