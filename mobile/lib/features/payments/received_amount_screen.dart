@@ -344,7 +344,7 @@ class _ReceivedAmountScreenState extends ConsumerState<ReceivedAmountScreen> {
                                 Icon(Icons.person_add_alt_1_rounded, size: 14, color: theme.primary),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '+ New Customer',
+                                  'New Customer',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,

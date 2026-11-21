@@ -317,7 +317,7 @@ class _AdditionalChargesScreenState extends State<AdditionalChargesScreen> {
               ),
               child: Center(
                 child: Text(
-                  'No extra charges added. Tap "+ Add Extra Charge" to include Packing, Loading, or Commission.',
+                  'No extra charges added. Tap "Add Extra Charge" to include Packing, Loading, or Commission.',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 12, color: theme.textMuted),
                 ),

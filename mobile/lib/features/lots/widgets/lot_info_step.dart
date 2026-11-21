@@ -429,7 +429,7 @@ class _LotInfoStepState extends ConsumerState<LotInfoStep> {
                     Icon(Icons.add_circle_outline_rounded, size: 17, color: theme.primary),
                     const SizedBox(width: 6),
                     Text(
-                      '+ Add More Products to this Inward Lot',
+                      'Add More Products to this Inward Lot',
                       style: TextStyle(
                         fontSize: 12.5,
                         fontWeight: FontWeight.w700,
@@ -513,7 +513,7 @@ class _LotInfoStepState extends ConsumerState<LotInfoStep> {
                             Icon(Icons.add_circle_outline, size: 13, color: theme.primary),
                             const SizedBox(width: 4),
                             Text(
-                              '+ New Supplier',
+                              'New Supplier',
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.w700,

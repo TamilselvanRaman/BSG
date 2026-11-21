@@ -201,7 +201,7 @@ class _BagsGoodsStepState extends State<BagsGoodsStep> {
                       Icon(Icons.add_circle_outline, size: 14, color: theme.primary),
                       const SizedBox(width: 4),
                       Text(
-                        '+ Add Bag Details',
+                        'Add Bag Details',
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,

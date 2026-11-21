@@ -248,7 +248,7 @@ class _CustomerPickerSheetState extends ConsumerState<CustomerPickerSheet> {
                       ),
                       icon: const Icon(Icons.person_add_alt_1_rounded, size: 16),
                       label: const Text(
-                        '+ New Customer',
+                        'New Customer',
                         style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ),

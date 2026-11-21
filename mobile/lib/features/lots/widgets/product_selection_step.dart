@@ -89,7 +89,7 @@ class _ProductSelectionStepState extends ConsumerState<ProductSelectionStep> {
                           Icon(Icons.add, size: 14, color: theme.primary),
                           const SizedBox(width: 4),
                           Text(
-                            '+ Add New Crop',
+                            'Add New Crop',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w700,

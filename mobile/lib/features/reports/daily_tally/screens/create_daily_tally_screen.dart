@@ -847,7 +847,8 @@ class _CreateDailyTallyScreenState extends ConsumerState<CreateDailyTallyScreen>
                     const SizedBox(height: 8),
                   ],
                   AppButton(
-                    text: '+ Add Party Payment',
+                    text: 'Add Party Payment',
+                    icon: Icons.add_circle_outline_rounded,
                     variant: ButtonVariant.outline,
                     height: 38,
                     onPressed: _addPartyPaymentDialog,

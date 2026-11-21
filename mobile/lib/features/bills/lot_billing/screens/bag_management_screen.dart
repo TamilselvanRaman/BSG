@@ -424,7 +424,7 @@ class _BagManagementScreenState extends State<BagManagementScreen> {
                     const SizedBox(height: 8),
                     Text('No bags in consignment', style: TextStyle(fontWeight: FontWeight.w700, color: theme.text)),
                     const SizedBox(height: 4),
-                    Text('Enter quantity above or tap "+ Add Bag"', style: TextStyle(fontSize: 12, color: theme.textSecondary)),
+                    Text('Enter quantity above or tap "Add Bag"', style: TextStyle(fontSize: 12, color: theme.textSecondary)),
                   ],
                 ),
               ),

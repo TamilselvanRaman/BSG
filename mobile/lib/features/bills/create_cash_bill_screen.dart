@@ -419,7 +419,7 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
                           Icon(Icons.add_rounded, size: 14, color: Colors.white),
                           SizedBox(width: 4),
                           Text(
-                            '+ Add Product',
+                            'Add Product',
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
@@ -460,7 +460,7 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
                       Icon(Icons.add_circle_outline_rounded, color: theme.primary, size: 18),
                       const SizedBox(width: 8),
                       Text(
-                        '+ Add More Products to this Bill',
+                        'Add More Products to this Bill',
                         style: TextStyle(
                           color: theme.primary,
                           fontWeight: FontWeight.w700,
@@ -549,7 +549,7 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Text(
-                          'No custom extra charges added. Tap "+ Add Custom Charge" to add extra expenses (e.g. Weighbridge, Bag Stitching, Gate Pass).',
+                          'No custom extra charges added. Tap "Add Custom Charge" to add extra expenses (e.g. Weighbridge, Bag Stitching, Gate Pass).',
                           style: TextStyle(fontSize: 11.5, color: theme.textMuted),
                         ),
                       ),
