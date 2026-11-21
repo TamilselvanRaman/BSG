@@ -319,25 +319,25 @@ export default function FaqPage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--bg-main)] text-[var(--text-primary)] font-sans">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* ============================================================
           1. HERO SECTION WITH INSTANT SEARCH
          ============================================================ */}
-      <section className="relative overflow-hidden border-b border-[var(--border-color)] bg-gradient-to-b from-white via-[var(--bg-main)] to-[var(--bg-card-hover)]/60 py-16 lg:py-20">
+      <section className="relative overflow-hidden border-b border-[#CDE8D5] bg-gradient-to-b from-white via-[#F4FAF5] to-[#E8F5EC]/60 py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[var(--text-primary)] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[#063D2E] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
             Frequently Asked Questions
           </h1>
-          <p className="mt-4 text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-[#47785C] max-w-2xl mx-auto leading-relaxed">
             Detailed operational answers regarding multi-user licensing, bag-by-bag scale weighments, offline mobile sync, double-entry ledgers, and APMC statutory compliance.
           </p>
 
           {/* Interactive Search Bar */}
           <div className="mt-8 mx-auto max-w-2xl">
             <div className="relative flex items-center">
-              <div className="absolute left-4 text-[#9475F5]">
+              <div className="absolute left-4 text-[#087A50]">
                 <Search className="h-5 w-5" />
               </div>
               <input
@@ -345,12 +345,12 @@ export default function FaqPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search questions (e.g., 3 seats, scale weighment, thermal printer, cash tally)..."
-                className="w-full rounded-2xl border-2 border-[var(--border-color)] bg-white py-3.5 pl-12 pr-10 text-sm font-medium text-[var(--text-primary)] placeholder-[var(--text-secondary)] shadow-sm transition focus:border-[#9475F5] focus:ring-2 focus:ring-[#9475F5]/20 focus:outline-none"
+                className="w-full rounded-2xl border-2 border-[#CDE8D5] bg-white py-3.5 pl-12 pr-10 text-sm font-medium text-[#063D2E] placeholder-[#71917B] shadow-sm transition focus:border-[#087A50] focus:ring-2 focus:ring-[#087A50]/20 focus:outline-none"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-4 rounded-full p-1 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition"
+                  className="absolute right-4 rounded-full p-1 text-[#71917B] hover:text-[#063D2E] transition"
                   aria-label="Clear search"
                 >
                   <X className="h-4 w-4" />
@@ -359,13 +359,13 @@ export default function FaqPage() {
             </div>
 
             {/* Quick search keywords */}
-            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs text-[var(--text-secondary)]">
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 text-xs text-[#47785C]">
               <span className="font-semibold">Common topics:</span>
               {["3 Seats Limit", "Digital Scale", "Offline Sync", "WhatsApp PDF", "APMC Cess"].map((term) => (
                 <button
                   key={term}
                   onClick={() => setSearchQuery(term)}
-                  className="rounded-full bg-white border border-[var(--border-color)] px-2.5 py-0.5 text-[11px] font-bold text-[#9475F5] hover:bg-[var(--bg-card-hover)] transition"
+                  className="rounded-full bg-white border border-[#CDE8D5] px-2.5 py-0.5 text-[11px] font-bold text-[#087A50] hover:bg-[#E8F5EC] transition"
                 >
                   {term}
                 </button>
@@ -384,8 +384,8 @@ export default function FaqPage() {
             {/* Left Sidebar: Categories & Support Desk Card */}
             <div className="lg:col-span-4 space-y-6 lg:sticky lg:top-24">
               {/* Category Pills Navigation */}
-              <div className="rounded-3xl border border-[var(--border-color)] bg-white p-5 shadow-xs space-y-1.5">
-                <h3 className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+              <div className="rounded-3xl border border-[#CDE8D5] bg-white p-5 shadow-xs space-y-1.5">
+                <h3 className="px-3 pb-2 text-[11px] font-bold uppercase tracking-wider text-[#47785C]">
                   Topic Categories
                 </h3>
                 {FAQ_CATEGORIES.map((cat) => {
@@ -402,19 +402,19 @@ export default function FaqPage() {
                       onClick={() => setSelectedCategory(cat.id)}
                       className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-xs font-bold transition-all text-left ${
                         active
-                          ? "bg-[#9475F5] text-white shadow-xs"
-                          : "text-[var(--text-secondary)] hover:bg-[var(--bg-card-hover)] hover:text-[var(--text-primary)]"
+                          ? "bg-[#087A50] text-white shadow-xs"
+                          : "text-[#47785C] hover:bg-[#E8F5EC] hover:text-[#063D2E]"
                       }`}
                     >
                       <div className="flex items-center gap-2.5">
-                        <Icon className={`h-4 w-4 shrink-0 ${active ? "text-white" : "text-[#9475F5]"}`} />
+                        <Icon className={`h-4 w-4 shrink-0 ${active ? "text-white" : "text-[#087A50]"}`} />
                         <span>{cat.label}</span>
                       </div>
                       <span
                         className={`rounded-full px-2 py-0.5 text-[10px] font-mono font-bold ${
                           active
-                            ? "bg-[var(--text-primary)] text-white"
-                            : "bg-[var(--bg-main)] border border-[var(--border-color)] text-[#9475F5]"
+                            ? "bg-[#063D2E] text-white"
+                            : "bg-[#F4FAF5] border border-[#CDE8D5] text-[#087A50]"
                         }`}
                       >
                         {count}
@@ -425,44 +425,44 @@ export default function FaqPage() {
               </div>
 
               {/* Direct Mandi Help Desk Card */}
-              <div className="rounded-3xl border border-[var(--border-color)] bg-[var(--bg-card-hover)]/60 p-6 shadow-xs space-y-4">
+              <div className="rounded-3xl border border-[#CDE8D5] bg-[#E8F5EC]/60 p-6 shadow-xs space-y-4">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#9475F5] text-white shrink-0">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#087A50] text-white shrink-0">
                     <PhoneCall className="h-5 w-5" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-bold text-[var(--text-primary)]">Mandi Floor Help Desk</h4>
-                    <p className="text-[11px] text-[var(--text-secondary)]">Active 4:00 AM – 8:00 PM IST</p>
+                    <h4 className="text-sm font-bold text-[#063D2E]">Mandi Floor Help Desk</h4>
+                    <p className="text-[11px] text-[#47785C]">Active 4:00 AM – 8:00 PM IST</p>
                   </div>
                 </div>
-                <p className="text-xs text-[var(--text-primary)] leading-relaxed">
+                <p className="text-xs text-[#123B29] leading-relaxed">
                   Have an urgent question during morning auction hours or setting up a new digital scale? Our specialists are available directly.
                 </p>
                 <div className="pt-1 space-y-2">
                   <a
                     href="tel:+919876543210"
-                    className="flex items-center justify-center gap-2 w-full rounded-xl bg-[#9475F5] hover:bg-[var(--text-primary)] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition"
+                    className="flex items-center justify-center gap-2 w-full rounded-xl bg-[#087A50] hover:bg-[#063D2E] px-4 py-2.5 text-xs font-bold text-white shadow-xs transition"
                   >
                     <PhoneCall className="h-3.5 w-3.5" />
                     <span>Call Mandi Helpline</span>
                   </a>
                   <Link
                     href="/contact"
-                    className="flex items-center justify-center gap-2 w-full rounded-xl border border-[var(--border-color)] bg-white hover:bg-[var(--bg-main)] px-4 py-2.5 text-xs font-bold text-[var(--text-primary)] transition"
+                    className="flex items-center justify-center gap-2 w-full rounded-xl border border-[#CDE8D5] bg-white hover:bg-[#F4FAF5] px-4 py-2.5 text-xs font-bold text-[#063D2E] transition"
                   >
-                    <MessageSquare className="h-3.5 w-3.5 text-[#9475F5]" />
+                    <MessageSquare className="h-3.5 w-3.5 text-[#087A50]" />
                     <span>Request Callback</span>
                   </Link>
                 </div>
               </div>
 
               {/* Strict License Reminder Card */}
-              <div className="rounded-3xl border border-[var(--border-color)] bg-white p-5 shadow-xs space-y-2 text-xs">
-                <div className="flex items-center gap-2 text-[#9475F5] font-bold">
+              <div className="rounded-3xl border border-[#CDE8D5] bg-white p-5 shadow-xs space-y-2 text-xs">
+                <div className="flex items-center gap-2 text-[#087A50] font-bold">
                   <ShieldCheck className="h-4 w-4" />
                   <span>Strict 3-Seat Standard</span>
                 </div>
-                <p className="text-[var(--text-secondary)] text-[11px] leading-relaxed">
+                <p className="text-[#47785C] text-[11px] leading-relaxed">
                   Every shop workspace includes 1 Store Admin + 2 Staff Cashier accounts. Need more seats? Contact enterprise sales.
                 </p>
               </div>
@@ -473,32 +473,32 @@ export default function FaqPage() {
               {/* Active Filter Header */}
               <div className="flex items-center justify-between border-b border-[#DCEEE1] pb-3">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold text-[var(--text-primary)]">
+                  <span className="text-xs font-bold text-[#063D2E]">
                     {selectedCategory === "ALL"
                       ? "All Operational Questions"
                       : FAQ_CATEGORIES.find((c) => c.id === selectedCategory)?.label}
                   </span>
                   {searchQuery && (
-                    <span className="text-xs text-[var(--text-secondary)]">
+                    <span className="text-xs text-[#47785C]">
                       matching &ldquo;{searchQuery}&rdquo;
                     </span>
                   )}
                 </div>
-                <span className="text-xs font-bold text-[#9475F5]">
+                <span className="text-xs font-bold text-[#087A50]">
                   {filteredFaqs.length} {filteredFaqs.length === 1 ? "Result" : "Results"}
                 </span>
               </div>
 
               {/* Empty Search State */}
               {filteredFaqs.length === 0 ? (
-                <div className="rounded-3xl border border-[var(--border-color)] bg-white p-12 text-center space-y-4">
-                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--bg-card-hover)] text-[#9475F5]">
+                <div className="rounded-3xl border border-[#CDE8D5] bg-white p-12 text-center space-y-4">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-[#E8F5EC] text-[#087A50]">
                     <Search className="h-6 w-6" />
                   </div>
-                  <h3 className="text-base font-bold text-[var(--text-primary)]">
+                  <h3 className="text-base font-bold text-[#063D2E]">
                     No questions found matching your search
                   </h3>
-                  <p className="text-xs text-[var(--text-secondary)] max-w-sm mx-auto">
+                  <p className="text-xs text-[#47785C] max-w-sm mx-auto">
                     Try searching for common keywords like &ldquo;scale&rdquo;, &ldquo;license&rdquo;, &ldquo;seats&rdquo;, &ldquo;printer&rdquo;, or reset your filters.
                   </p>
                   <button
@@ -506,7 +506,7 @@ export default function FaqPage() {
                       setSearchQuery("");
                       setSelectedCategory("ALL");
                     }}
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#9475F5] px-4 py-2 text-xs font-bold text-white hover:bg-[var(--text-primary)] transition"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-[#087A50] px-4 py-2 text-xs font-bold text-white hover:bg-[#063D2E] transition"
                   >
                     <span>Reset All Filters</span>
                   </button>
@@ -522,8 +522,8 @@ export default function FaqPage() {
                         key={faq.id}
                         className={`rounded-2xl border transition-all overflow-hidden ${
                           isOpen
-                            ? "border-[#9475F5] bg-white shadow-md"
-                            : "border-[var(--border-color)] bg-white hover:border-[#B49AFF] shadow-xs"
+                            ? "border-[#087A50] bg-white shadow-md"
+                            : "border-[#CDE8D5] bg-white hover:border-[#10A66A] shadow-xs"
                         }`}
                       >
                         {/* Question Header (Toggle Button) */}
@@ -535,21 +535,21 @@ export default function FaqPage() {
                             <div
                               className={`flex h-7 w-7 items-center justify-center rounded-lg text-xs font-bold shrink-0 transition-colors ${
                                 isOpen
-                                  ? "bg-[#9475F5] text-white"
-                                  : "bg-[var(--bg-card-hover)] text-[#9475F5]"
+                                  ? "bg-[#087A50] text-white"
+                                  : "bg-[#E8F5EC] text-[#087A50]"
                               }`}
                             >
                               ?
                             </div>
-                            <h3 className="text-sm font-bold text-[var(--text-primary)]">
+                            <h3 className="text-sm font-bold text-[#063D2E]">
                               {faq.question}
                             </h3>
                           </div>
                           <div
                             className={`flex h-7 w-7 items-center justify-center rounded-lg transition-transform shrink-0 ${
                               isOpen
-                                ? "rotate-180 bg-[var(--bg-card-hover)] text-[#9475F5]"
-                                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                                ? "rotate-180 bg-[#E8F5EC] text-[#087A50]"
+                                : "text-[#71917B] hover:text-[#063D2E]"
                             }`}
                           >
                             <ChevronDown className="h-4 w-4" />
@@ -558,21 +558,21 @@ export default function FaqPage() {
 
                         {/* Expandable Answer */}
                         {isOpen && (
-                          <div className="px-5 pb-6 pt-1 text-xs text-[var(--text-secondary)] leading-relaxed border-t border-[#DCEEE1]/60 space-y-4">
-                            <p className="text-xs text-[var(--text-primary)] leading-relaxed">
+                          <div className="px-5 pb-6 pt-1 text-xs text-[#47785C] leading-relaxed border-t border-[#DCEEE1]/60 space-y-4">
+                            <p className="text-xs text-[#123B29] leading-relaxed">
                               {faq.answer}
                             </p>
 
                             {/* Structured Highlights */}
                             {faq.highlights && (
-                              <div className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] p-3.5 space-y-2">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#9475F5]">
+                              <div className="rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] p-3.5 space-y-2">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#087A50]">
                                   Key Operational Takeaways
                                 </span>
-                                <ul className="space-y-1.5 text-xs text-[var(--text-primary)]">
+                                <ul className="space-y-1.5 text-xs text-[#123B29]">
                                   {faq.highlights.map((h, i) => (
                                     <li key={i} className="flex items-start gap-2">
-                                      <CheckCircle2 className="h-3.5 w-3.5 text-[#B49AFF] shrink-0 mt-0.5" />
+                                      <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A] shrink-0 mt-0.5" />
                                       <span>{h}</span>
                                     </li>
                                   ))}
@@ -585,7 +585,7 @@ export default function FaqPage() {
                               {faq.tags.map((tag) => (
                                 <span
                                   key={tag}
-                                  className="rounded-md bg-[var(--bg-card-hover)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-secondary)]"
+                                  className="rounded-md bg-[#E8F5EC] px-2 py-0.5 text-[10px] font-medium text-[#47785C]"
                                 >
                                   #{tag}
                                 </span>
@@ -606,8 +606,8 @@ export default function FaqPage() {
       {/* ============================================================
           3. STILL HAVE QUESTIONS (CONVERSION CTA)
          ============================================================ */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#15102B] via-[#08523D] to-[#074734] text-white text-center border-t border-[#0E6E50] border-b border-[#063423]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#B49AFF]/20 via-transparent to-transparent pointer-events-none" />
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white text-center border-t border-[#0E6E50] border-b border-[#063423]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-3xl px-4 space-y-6">
           <h2 className="text-3xl font-black sm:text-5xl tracking-tight leading-tight">
             Still Have Questions About Mandi Operations?
@@ -618,14 +618,14 @@ export default function FaqPage() {
           <div className="pt-2 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#B49AFF] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
             >
               <span>Connect with a Specialist</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/register"
-              className="rounded-xl border border-[#B49AFF]/40 bg-[var(--text-primary)] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white transition"
+              className="rounded-xl border border-[#10A66A]/40 bg-[#063D2E] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white transition"
             >
               Start 30-Day Free Trial
             </Link>

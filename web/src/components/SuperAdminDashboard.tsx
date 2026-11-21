@@ -2,8 +2,6 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useTheme } from "./ThemeProvider";
 import {
   apiFetch,
   clearStoredSession,
@@ -43,13 +41,11 @@ import {
   HelpCircle,
   Key,
   Layers,
-  LineChart,
   Lock,
   LogOut,
   Mail,
   MapPin,
   Maximize2,
-  Moon,
   Phone,
   Plus,
   Printer,
@@ -67,7 +63,6 @@ import {
   Smartphone,
   Sparkles,
   Store,
-  Sun,
   Trash2,
   TrendingUp,
   UserCheck,
@@ -137,8 +132,6 @@ function formatDateTime(d: any): string {
 
 export function SuperAdminDashboard() {
   const router = useRouter();
-  const { theme, toggleTheme } = useTheme();
-  const isDark = theme === "dark";
   const [activeTab, setActiveTab] = useState<SuperTab>("OVERVIEW");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -638,78 +631,48 @@ export function SuperAdminDashboard() {
   const totalAuditPages = Math.ceil(filteredAuditLogs.length / auditPageSize) || 1;
 
   return (
-    <div
-      className={`flex min-h-screen font-sans antialiased transition-colors duration-300 ${
-        isDark ? "bg-[#080516] text-[#F8F5FF]" : "bg-[#F8F7FC] text-[#211936]"
-      }`}
-    >
+    <div className="flex min-h-screen bg-[#F1F5F9] font-sans text-[#111827] antialiased">
       {/* Toast Notification Container */}
       {toastMessage && (
-        <div
-          className={`fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border px-4 py-3 shadow-lg text-xs font-semibold animate-in fade-in slide-in-from-bottom-2 ${
-            isDark ? "border-[#9475F5] bg-[#15102B] text-white shadow-glow" : "border-[#E9E3F4] bg-white text-[#211936]"
-          }`}
-        >
-          {toastMessage.type === "success" && <CheckCircle2 className="h-4 w-4 text-[#10B981]" />}
-          {toastMessage.type === "info" && <ShieldCheck className="h-4 w-4 text-[#9475F5]" />}
-          {toastMessage.type === "warn" && <AlertTriangle className="h-4 w-4 text-[#F59E0B]" />}
-          <span>{toastMessage.text}</span>
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2.5 rounded-xl border border-[#E2E8F0] bg-white px-4 py-3 shadow-lg text-xs font-semibold animate-in fade-in slide-in-from-bottom-2">
+          {toastMessage.type === "success" && <CheckCircle2 className="h-4 w-4 text-[#059669]" />}
+          {toastMessage.type === "info" && <ShieldCheck className="h-4 w-4 text-[#00845F]" />}
+          {toastMessage.type === "warn" && <AlertTriangle className="h-4 w-4 text-[#D97706]" />}
+          <span className="text-[#111827]">{toastMessage.text}</span>
         </div>
       )}
 
-      {/* Sidebar (Nexi Dark Purple #0D0920) */}
-      <aside
-        className={`w-68 shrink-0 flex flex-col border-r select-none transition-colors duration-300 ${
-          isDark ? "bg-[#0D0920] border-[#30264B] text-white" : "bg-white border-[#E9E3F4] text-[#211936]"
-        }`}
-      >
+      {/* Sidebar (Enterprise Dark Navy #050B1B) */}
+      <aside className="w-68 shrink-0 bg-[#050B1B] text-white flex flex-col border-r border-[#0A142D] select-none">
         {/* Brand Header */}
-        <div className={`flex items-center gap-3 px-5 py-4 border-b ${isDark ? "border-[#30264B]" : "border-[#E9E3F4]"}`}>
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-[#0D1B3E]">
           <BsgIcon size={36} className="shrink-0 rounded-xl" />
           <div className="flex flex-col">
-            <span className="font-extrabold text-base tracking-tight leading-tight">
-              Click Smart Chart
+            <span className="font-extrabold text-base tracking-tight text-white leading-tight">
+              BSG Platform
             </span>
-            <span className="text-[10px] font-bold text-[#9475F5] tracking-widest uppercase mt-0.5">
-              Super Admin Governance
+            <span className="text-[10px] font-bold text-[#00845F] tracking-widest uppercase mt-0.5">
+              Super Admin SaaS
             </span>
           </div>
         </div>
 
-        {/* Switch to Mandi Workspace Link */}
-        <div className={`p-3 border-b ${isDark ? "border-[#30264B]" : "border-[#E9E3F4]"}`}>
-          <Link
-            href="/workspace/dashboard"
-            className="flex items-center justify-between rounded-xl bg-gradient-to-r from-[#9475F5] to-[#7955DF] px-3.5 py-2.5 text-xs font-bold text-white shadow-glow hover:brightness-110 transition"
-          >
-            <div className="flex items-center gap-2">
-              <Store className="h-4 w-4" />
-              <span>Mandi Operations Workspace</span>
-            </div>
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Link>
-        </div>
-
         {/* Cluster / Shard Telemetry Indicator */}
-        <div
-          className={`mx-3.5 my-3 rounded-xl border p-3 space-y-1.5 text-[11px] ${
-            isDark ? "bg-[#15102B] border-[#30264B]" : "bg-[#F8F7FC] border-[#E9E3F4]"
-          }`}
-        >
+        <div className="mx-3.5 my-3 rounded-xl bg-[#081228] border border-[#0E204A] p-3 space-y-1.5 text-[11px]">
           <div className="flex items-center justify-between">
-            <span className={isDark ? "text-[#B7ADC9]" : "text-[#777086]"}>Cluster</span>
-            <span className="inline-flex items-center gap-1.5 text-[#10B981] font-bold">
-              <span className="h-1.5 w-1.5 rounded-full bg-[#10B981] animate-pulse" />
+            <span className="text-[#64748B] font-medium">Cluster</span>
+            <span className="inline-flex items-center gap-1.5 text-[#059669] font-bold">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#059669]" />
               ap-south-1 (Mumbai)
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className={isDark ? "text-[#B7ADC9]" : "text-[#777086]"}>Database</span>
-            <span className="font-mono font-semibold">PostgreSQL ACID</span>
+            <span className="text-[#64748B] font-medium">Database</span>
+            <span className="font-mono text-slate-300 font-semibold">PostgreSQL ACID</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className={isDark ? "text-[#B7ADC9]" : "text-[#777086]"}>License Engine</span>
-            <span className="font-bold text-[#9475F5]">Strict 3 Seats/Shop</span>
+            <span className="text-[#64748B] font-medium">License Engine</span>
+            <span className="font-bold text-emerald-400">Strict 3 Seats/Shop</span>
           </div>
         </div>
 
@@ -733,24 +696,18 @@ export function SuperAdminDashboard() {
                 onClick={() => setActiveTab(item.id as SuperTab)}
                 className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 transition-all text-left ${
                   active
-                    ? "bg-[#9475F5] text-white font-bold shadow-glow"
-                    : isDark
-                    ? "text-[#B7ADC9] hover:bg-[#15102B] hover:text-white"
-                    : "text-[#777086] hover:bg-[#F2EEFA] hover:text-[#211936]"
+                    ? "bg-[#00845F] text-white font-bold shadow-sm"
+                    : "text-slate-400 hover:bg-[#0A1736] hover:text-white"
                 }`}
               >
                 <div className="flex items-center gap-2.5 truncate">
-                  <Icon className={`h-4 w-4 shrink-0 ${active ? "text-white" : "text-[#9475F5]"}`} />
+                  <Icon className={`h-4 w-4 shrink-0 ${active ? "text-white" : "text-slate-400"}`} />
                   <span className="truncate">{item.label}</span>
                 </div>
                 {item.count !== null && (
                   <span
                     className={`rounded-md px-1.5 py-0.5 text-[10px] font-mono font-bold ${
-                      active
-                        ? "bg-white/20 text-white"
-                        : isDark
-                        ? "bg-[#15102B] text-[#B49AFF] border border-[#30264B]"
-                        : "bg-[#F2EEFA] text-[#7955DF] border border-[#E9E3F4]"
+                      active ? "bg-[#006B4D] text-white" : "bg-[#0E204A] text-slate-400"
                     }`}
                   >
                     {item.count}
@@ -762,23 +719,19 @@ export function SuperAdminDashboard() {
         </nav>
 
         {/* User Card & Sign Out */}
-        <div className={`border-t p-3 space-y-2 ${isDark ? "border-[#30264B]" : "border-[#E9E3F4]"}`}>
-          <div className={`flex items-center gap-2.5 rounded-xl p-2.5 ${isDark ? "bg-[#15102B]" : "bg-[#F8F7FC]"}`}>
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#9475F5] text-white text-xs font-bold shrink-0">
+        <div className="border-t border-[#0D1B3E] p-3 space-y-2">
+          <div className="flex items-center gap-2.5 rounded-xl bg-[#081228] p-2.5">
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#00845F] text-white text-xs font-bold shrink-0">
               SA
             </div>
             <div className="truncate">
-              <p className="text-xs font-bold leading-tight truncate">superadmin</p>
-              <p className="text-[10px] text-[#9475F5] font-semibold leading-tight">Platform Master</p>
+              <p className="text-xs font-bold text-white leading-tight truncate">superadmin</p>
+              <p className="text-[10px] text-[#00845F] font-semibold leading-tight">Platform Master</p>
             </div>
           </div>
           <button
             onClick={handleLogout}
-            className={`flex w-full items-center justify-center gap-2 rounded-xl border px-3.5 py-2 text-xs font-bold transition ${
-              isDark
-                ? "border-[#30264B] bg-[#15102B] text-slate-300 hover:bg-rose-950/40 hover:text-rose-300 hover:border-rose-900/40"
-                : "border-[#E9E3F4] bg-white text-slate-700 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200"
-            }`}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#081228] border border-[#0E204A] px-3.5 py-2 text-xs font-bold text-slate-300 hover:bg-red-950/40 hover:text-red-300 hover:border-red-900/40 transition"
           >
             <LogOut className="h-3.5 w-3.5" />
             <span>Sign Out Session</span>
@@ -789,49 +742,30 @@ export function SuperAdminDashboard() {
       {/* Main Content Workspace */}
       <div className="flex flex-1 flex-col overflow-x-hidden">
         {/* Top Navigation Bar with Breadcrumbs & Controls */}
-        <header
-          className={`sticky top-0 z-30 flex h-16 items-center justify-between border-b px-6 backdrop-blur-md transition-colors duration-300 ${
-            isDark ? "border-[#30264B] bg-[#080516]/90" : "border-[#E9E3F4] bg-white/90"
-          }`}
-        >
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#E2E8F0] bg-white px-6 shadow-xs">
           {/* Left: Breadcrumbs */}
-          <div className={`flex items-center gap-2 text-xs ${isDark ? "text-[#B7ADC9]" : "text-[#777086]"}`}>
-            <span className="font-semibold">Click Smart Chart</span>
+          <div className="flex items-center gap-2 text-xs text-[#64748B]">
+            <span className="font-semibold text-[#111827]">BSG Platform</span>
             <span>/</span>
-            <span>Super Admin</span>
+            <span>Governance</span>
             <span>/</span>
-            <span className="font-bold text-[#9475F5] capitalize">
+            <span className="font-bold text-[#00845F] capitalize">
               {activeTab.toLowerCase().replace("_", " ")}
             </span>
           </div>
 
-          {/* Right: Controls (Timeframe, Search, Refresh, Theme Toggle, Workspace link) */}
+          {/* Right: Controls (Timeframe, Search, Refresh, Actions) */}
           <div className="flex items-center gap-3">
-            {/* Quick Link to Mandi Workspace */}
-            <Link
-              href="/workspace/dashboard"
-              className="hidden sm:inline-flex items-center gap-1.5 rounded-xl border border-[#9475F5]/40 bg-[#9475F5]/10 px-3 py-1.5 text-xs font-bold text-[#9475F5] hover:bg-[#9475F5]/20 transition"
-            >
-              <Store className="h-3.5 w-3.5" />
-              <span>Mandi Workspace</span>
-            </Link>
-
             {/* Timeframe Filter */}
-            <div
-              className={`hidden lg:flex items-center rounded-lg p-0.5 border text-xs font-bold ${
-                isDark ? "bg-[#15102B] border-[#30264B] text-[#B7ADC9]" : "bg-[#F8F7FC] border-[#E9E3F4] text-[#777086]"
-              }`}
-            >
+            <div className="hidden lg:flex items-center bg-[#F1F5F9] rounded-lg p-0.5 border border-[#E2E8F0] text-xs font-bold text-[#64748B]">
               {(["TODAY", "7D", "30D", "90D", "ALL"] as const).map((tf) => (
                 <button
                   key={tf}
                   onClick={() => setTimeframe(tf)}
                   className={`px-2.5 py-1 rounded-md transition ${
                     timeframe === tf
-                      ? isDark
-                        ? "bg-[#9475F5] text-white"
-                        : "bg-white text-[#211936] shadow-xs"
-                      : "hover:text-white"
+                      ? "bg-white text-[#111827] shadow-xs"
+                      : "hover:text-[#111827]"
                   }`}
                 >
                   {tf}
@@ -839,31 +773,26 @@ export function SuperAdminDashboard() {
               ))}
             </div>
 
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              className={`flex items-center justify-center rounded-xl p-2 transition-all border ${
-                isDark
-                  ? "border-[#30264B] bg-[#15102B] text-[#B49AFF] hover:border-[#9475F5]"
-                  : "border-[#E9E3F4] bg-white text-[#7955DF] hover:border-[#7955DF]"
-              }`}
-              title={`Switch to ${isDark ? "Light" : "Dark"} Mode`}
-            >
-              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            </button>
+            {/* Global Search */}
+            <div className="relative hidden md:block">
+              <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-[#64748B]" />
+              <input
+                type="text"
+                placeholder="Search across all records..."
+                value={globalSearch}
+                onChange={(e) => setGlobalSearch(e.target.value)}
+                className="w-56 rounded-xl border border-[#E2E8F0] bg-[#F1F5F9] py-1.5 pl-8 pr-3 text-xs text-[#111827] focus:border-[#00845F] focus:bg-white focus:ring-1 focus:ring-[#00845F] focus:outline-none transition"
+              />
+            </div>
 
             {/* Refresh Button */}
             <button
               onClick={handleRefresh}
               disabled={refreshing}
               title="Refresh telemetry from backend"
-              className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
-                isDark
-                  ? "border-[#30264B] bg-[#15102B] text-[#F8F5FF] hover:border-[#9475F5]"
-                  : "border-[#E9E3F4] bg-white text-[#211936] hover:bg-[#F8F7FC]"
-              }`}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#E2E8F0] bg-white px-3 py-1.5 text-xs font-semibold text-[#111827] hover:bg-[#F1F5F9] transition shadow-xs"
             >
-              <RefreshCw className={`h-3.5 w-3.5 text-[#9475F5] ${refreshing ? "animate-spin" : ""}`} />
+              <RefreshCw className={`h-3.5 w-3.5 text-[#00845F] ${refreshing ? "animate-spin" : ""}`} />
               <span className="hidden sm:inline">Refresh</span>
             </button>
 
@@ -871,7 +800,7 @@ export function SuperAdminDashboard() {
             {activeTab === "AUDIT" && (
               <button
                 onClick={exportAuditLogsCSV}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-purple-400 bg-[#9475F5]/10 px-3.5 py-1.5 text-xs font-bold text-[#9475F5] hover:bg-[#9475F5]/20 transition shadow-xs"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-300 bg-emerald-50 px-3.5 py-1.5 text-xs font-bold text-[#00845F] hover:bg-emerald-100 transition shadow-xs"
               >
                 <ArrowDownToLine className="h-3.5 w-3.5" />
                 <span>Export CSV</span>
@@ -880,7 +809,7 @@ export function SuperAdminDashboard() {
 
             <button
               onClick={() => setShowNewBizModal(true)}
-              className="inline-flex items-center gap-1.5 rounded-xl bg-[#9475F5] hover:bg-[#8C6BEA] active:scale-[0.98] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition"
+              className="inline-flex items-center gap-1.5 rounded-xl bg-[#00845F] hover:bg-[#006B4D] active:scale-[0.98] px-3.5 py-1.5 text-xs font-bold text-white shadow-xs transition"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Provision Tenant</span>

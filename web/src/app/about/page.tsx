@@ -125,38 +125,38 @@ export default function AboutPage() {
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--bg-main)] text-[var(--text-primary)] font-sans">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* ============================================================
           1. HERO SECTION
          ============================================================ */}
-      <section className="relative overflow-hidden border-b border-[var(--border-color)] bg-gradient-to-b from-white via-[var(--bg-main)] to-[var(--bg-card-hover)]/60 py-16 lg:py-24">
+      <section className="relative overflow-hidden border-b border-[#CDE8D5] bg-gradient-to-b from-white via-[#F4FAF5] to-[#E8F5EC]/60 py-16 lg:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mx-auto max-w-4xl text-3xl font-black text-[var(--text-primary)] sm:text-5xl lg:text-6xl tracking-tight leading-[1.12]">
+          <h1 className="mx-auto max-w-4xl text-3xl font-black text-[#063D2E] sm:text-5xl lg:text-6xl tracking-tight leading-[1.12]">
             Building the Operating System for Agricultural Trade
           </h1>
-          <p className="mt-6 text-base sm:text-lg text-[var(--text-secondary)] max-w-3xl mx-auto leading-relaxed">
+          <p className="mt-6 text-base sm:text-lg text-[#47785C] max-w-3xl mx-auto leading-relaxed">
             BSG (Buyer Seller Goods) is the dedicated SaaS platform purpose-built for APMC mandis, wholesale commission agents, and agricultural trading enterprises. We replace error-prone paper slips and nocturnal ledger entry with high-velocity, verifiable digital commerce.
           </p>
 
           {/* Key Mission Metrics Ribbon */}
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
-            <div className="rounded-2xl border border-[var(--border-color)] bg-white p-5 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[var(--text-primary)]">₹250+ Cr</div>
-              <div className="text-xs font-semibold text-[var(--text-secondary)] mt-1">Tracked Trade Volume</div>
+            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 shadow-xs text-center">
+              <div className="text-2xl sm:text-3xl font-black text-[#063D2E]">₹250+ Cr</div>
+              <div className="text-xs font-semibold text-[#47785C] mt-1">Tracked Trade Volume</div>
             </div>
-            <div className="rounded-2xl border border-[var(--border-color)] bg-white p-5 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[#9475F5]">1.8M+ Bags</div>
-              <div className="text-xs font-semibold text-[var(--text-secondary)] mt-1">Digitally Weighed</div>
+            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 shadow-xs text-center">
+              <div className="text-2xl sm:text-3xl font-black text-[#087A50]">1.8M+ Bags</div>
+              <div className="text-xs font-semibold text-[#47785C] mt-1">Digitally Weighed</div>
             </div>
-            <div className="rounded-2xl border border-[var(--border-color)] bg-white p-5 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[var(--text-primary)]">99.98%</div>
-              <div className="text-xs font-semibold text-[var(--text-secondary)] mt-1">Peak 4 AM Uptime</div>
+            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 shadow-xs text-center">
+              <div className="text-2xl sm:text-3xl font-black text-[#063D2E]">99.98%</div>
+              <div className="text-xs font-semibold text-[#47785C] mt-1">Peak 4 AM Uptime</div>
             </div>
-            <div className="rounded-2xl border border-[var(--border-color)] bg-white p-5 shadow-xs text-center">
-              <div className="text-2xl sm:text-3xl font-black text-[#9475F5]">3 Seats</div>
-              <div className="text-xs font-semibold text-[var(--text-secondary)] mt-1">Strict License Isolation</div>
+            <div className="rounded-2xl border border-[#CDE8D5] bg-white p-5 shadow-xs text-center">
+              <div className="text-2xl sm:text-3xl font-black text-[#087A50]">3 Seats</div>
+              <div className="text-xs font-semibold text-[#47785C] mt-1">Strict License Isolation</div>
             </div>
           </div>
         </div>
@@ -165,18 +165,18 @@ export default function AboutPage() {
       {/* ============================================================
           2. THE MANDI REALITY: WHY WE BUILT BSG
          ============================================================ */}
-      <section className="py-20 border-b border-[var(--border-color)] bg-white">
+      <section className="py-20 border-b border-[#CDE8D5] bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-12 lg:grid-cols-12 items-center">
             {/* Story Content */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-[var(--border-color)] bg-[var(--bg-card-hover)] px-3.5 py-1 text-xs font-bold text-[#9475F5]">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#CDE8D5] bg-[#E8F5EC] px-3.5 py-1 text-xs font-bold text-[#087A50]">
                 <span>Our Founding Mission</span>
               </div>
-              <h2 className="text-3xl sm:text-4xl font-black text-[var(--text-primary)] tracking-tight leading-tight">
+              <h2 className="text-3xl sm:text-4xl font-black text-[#063D2E] tracking-tight leading-tight">
                 Engineered Directly from the Mandi Floor Up
               </h2>
-              <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+              <div className="space-y-4 text-sm text-[#47785C] leading-relaxed">
                 <p>
                   Wholesale agricultural mandis are India&apos;s commercial bedrock. Every single morning before dawn, thousands of farm vehicles roll into market yards carrying perishable harvests that must be weighed, auctioned, billed, and dispatched in a matter of hours.
                 </p>
@@ -190,18 +190,18 @@ export default function AboutPage() {
 
               {/* Concrete Mandi Proofpoints */}
               <div className="pt-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="flex items-start gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] p-3.5">
-                  <CheckCircle2 className="h-5 w-5 text-[#B49AFF] shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] p-3.5">
+                  <CheckCircle2 className="h-5 w-5 text-[#10A66A] shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-xs font-bold text-[var(--text-primary)]">Zero Math Shrinkage</h4>
-                    <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">Automated tare deductions eliminate weight disputes between farmers and buyers.</p>
+                    <h4 className="text-xs font-bold text-[#063D2E]">Zero Math Shrinkage</h4>
+                    <p className="text-[11px] text-[#47785C] mt-0.5">Automated tare deductions eliminate weight disputes between farmers and buyers.</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3 rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] p-3.5">
-                  <CheckCircle2 className="h-5 w-5 text-[#B49AFF] shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] p-3.5">
+                  <CheckCircle2 className="h-5 w-5 text-[#10A66A] shrink-0 mt-0.5" />
                   <div>
-                    <h4 className="text-xs font-bold text-[var(--text-primary)]">Sub-5s Counter Invoicing</h4>
-                    <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">Instant thermal bill printing clears yard queues and eliminates gate congestion.</p>
+                    <h4 className="text-xs font-bold text-[#063D2E]">Sub-5s Counter Invoicing</h4>
+                    <p className="text-[11px] text-[#47785C] mt-0.5">Instant thermal bill printing clears yard queues and eliminates gate congestion.</p>
                   </div>
                 </div>
               </div>
@@ -209,43 +209,43 @@ export default function AboutPage() {
 
             {/* Visual Highlight Card */}
             <div className="lg:col-span-5">
-              <div className="rounded-3xl border border-[var(--border-color)] bg-[var(--bg-main)] p-7 sm:p-9 shadow-md space-y-6">
+              <div className="rounded-3xl border border-[#CDE8D5] bg-[#F4FAF5] p-7 sm:p-9 shadow-md space-y-6">
                 <div className="flex items-center justify-between border-b border-[#DCEEE1] pb-4">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--text-primary)] text-[#B49AFF]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#063D2E] text-[#10A66A]">
                       <Compass className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="text-sm font-bold text-[var(--text-primary)]">The Mandi Operating Code</h3>
-                      <p className="text-[11px] text-[var(--text-secondary)]">Our Engineering Standards</p>
+                      <h3 className="text-sm font-bold text-[#063D2E]">The Mandi Operating Code</h3>
+                      <p className="text-[11px] text-[#47785C]">Our Engineering Standards</p>
                     </div>
                   </div>
-                  <span className="rounded-full bg-[var(--bg-card-hover)] border border-[var(--border-color)] px-2.5 py-0.5 text-[10px] font-extrabold text-[#9475F5]">
+                  <span className="rounded-full bg-[#E8F5EC] border border-[#CDE8D5] px-2.5 py-0.5 text-[10px] font-extrabold text-[#087A50]">
                     v1.1 Active
                   </span>
                 </div>
 
                 <div className="space-y-4">
-                  <div className="rounded-2xl border border-[var(--border-color)] bg-white p-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#9475F5]">Core Doctrine 01</span>
-                    <h4 className="text-xs font-bold text-[var(--text-primary)] mt-1">Software Must Never Slow Down Floor Auctions</h4>
-                    <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-relaxed">
+                  <div className="rounded-2xl border border-[#CDE8D5] bg-white p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#087A50]">Core Doctrine 01</span>
+                    <h4 className="text-xs font-bold text-[#063D2E] mt-1">Software Must Never Slow Down Floor Auctions</h4>
+                    <p className="text-[11px] text-[#47785C] mt-1 leading-relaxed">
                       Every keystroke is optimized. Weighment tables accept rapid numpad input, arrow key navigation, and direct scale serial data feeds.
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-[var(--border-color)] bg-white p-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#9475F5]">Core Doctrine 02</span>
-                    <h4 className="text-xs font-bold text-[var(--text-primary)] mt-1">Cryptographic & Financial Integrity Above All</h4>
-                    <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-relaxed">
+                  <div className="rounded-2xl border border-[#CDE8D5] bg-white p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#087A50]">Core Doctrine 02</span>
+                    <h4 className="text-xs font-bold text-[#063D2E] mt-1">Cryptographic & Financial Integrity Above All</h4>
+                    <p className="text-[11px] text-[#47785C] mt-1 leading-relaxed">
                       No phantom edits or unrecorded cash handovers. If a bill is cancelled or modified, strict audit logs record who, when, and why.
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-[var(--border-color)] bg-white p-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#9475F5]">Core Doctrine 03</span>
-                    <h4 className="text-xs font-bold text-[var(--text-primary)] mt-1">Respect the Mandi Ecosystem</h4>
-                    <p className="text-[11px] text-[var(--text-secondary)] mt-1 leading-relaxed">
+                  <div className="rounded-2xl border border-[#CDE8D5] bg-white p-4">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#087A50]">Core Doctrine 03</span>
+                    <h4 className="text-xs font-bold text-[#063D2E] mt-1">Respect the Mandi Ecosystem</h4>
+                    <p className="text-[11px] text-[#47785C] mt-1 leading-relaxed">
                       We support coolie/hamali labor allocations, pre-season farmer advance deductions, returnable crates, and local APMC cess rules out of the box.
                     </p>
                   </div>
@@ -259,13 +259,13 @@ export default function AboutPage() {
       {/* ============================================================
           3. CORE ENGINEERING COMMITMENTS (VALUES)
          ============================================================ */}
-      <section className="py-20 border-b border-[var(--border-color)] bg-[var(--bg-main)]">
+      <section className="py-20 border-b border-[#CDE8D5] bg-[#F4FAF5]">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-black text-[var(--text-primary)] sm:text-4xl tracking-tight">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl tracking-tight">
               Our Core Engineering Commitments
             </h2>
-            <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+            <p className="mt-3 text-sm text-[#47785C] leading-relaxed">
               Every design decision in BSG is governed by rigorous technical and operational principles built for heavy commercial duty.
             </p>
           </div>
@@ -277,15 +277,15 @@ export default function AboutPage() {
               return (
                 <div
                   key={val.title}
-                  className="rounded-2xl border border-[var(--border-color)] bg-white p-6 shadow-xs hover:border-[#B49AFF] hover:shadow-md transition-all group"
+                  className="rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-xs hover:border-[#10A66A] hover:shadow-md transition-all group"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--bg-card-hover)] text-[#9475F5] group-hover:bg-[#9475F5] group-hover:text-white transition-colors">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#E8F5EC] text-[#087A50] group-hover:bg-[#087A50] group-hover:text-white transition-colors">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-5 text-base font-bold text-[var(--text-primary)]">
+                  <h3 className="mt-5 text-base font-bold text-[#063D2E]">
                     {val.title}
                   </h3>
-                  <p className="mt-2 text-xs text-[var(--text-secondary)] leading-relaxed">
+                  <p className="mt-2 text-xs text-[#47785C] leading-relaxed">
                     {val.desc}
                   </p>
                 </div>
@@ -298,13 +298,13 @@ export default function AboutPage() {
       {/* ============================================================
           4. WHO WE BUILD FOR: THE MANDI ECOSYSTEM
          ============================================================ */}
-      <section className="py-20 border-b border-[var(--border-color)] bg-white">
+      <section className="py-20 border-b border-[#CDE8D5] bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-black text-[var(--text-primary)] sm:text-4xl tracking-tight">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl tracking-tight">
               Designed for Every Stakeholder in the Mandi
             </h2>
-            <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+            <p className="mt-3 text-sm text-[#47785C] leading-relaxed">
               A mandi functions as an interconnected commercial ecosystem. BSG creates immediate value for everyone on the yard.
             </p>
           </div>
@@ -316,23 +316,23 @@ export default function AboutPage() {
               return (
                 <div
                   key={p.role}
-                  className="rounded-3xl border border-[var(--border-color)] bg-[var(--bg-main)] p-7 sm:p-8 shadow-xs hover:border-[#B49AFF] transition-all space-y-4"
+                  className="rounded-3xl border border-[#CDE8D5] bg-[#F4FAF5] p-7 sm:p-8 shadow-xs hover:border-[#10A66A] transition-all space-y-4"
                 >
                   <div className="flex items-center gap-4 border-b border-[#DCEEE1] pb-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--bg-card-hover)] text-[#9475F5] border border-[var(--border-color)] shrink-0">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#E8F5EC] text-[#087A50] border border-[#CDE8D5] shrink-0">
                       <Icon className="h-6 w-6" />
                     </div>
                     <div>
-                      <h3 className="text-base font-bold text-[var(--text-primary)]">{p.role}</h3>
-                      <p className="text-xs text-[var(--text-secondary)] mt-0.5">{p.need}</p>
+                      <h3 className="text-base font-bold text-[#063D2E]">{p.role}</h3>
+                      <p className="text-xs text-[#47785C] mt-0.5">{p.need}</p>
                     </div>
                   </div>
 
                   <div className="space-y-1.5 pt-1">
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#9475F5]">
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#087A50]">
                       The BSG Impact
                     </span>
-                    <p className="text-xs text-[var(--text-primary)] leading-relaxed">
+                    <p className="text-xs text-[#123B29] leading-relaxed">
                       {p.outcome}
                     </p>
                   </div>
@@ -346,13 +346,13 @@ export default function AboutPage() {
       {/* ============================================================
           5. TECHNICAL ARCHITECTURE & INFRASTRUCTURE
          ============================================================ */}
-      <section className="py-20 border-b border-[var(--border-color)] bg-[var(--bg-card-hover)]/40">
+      <section className="py-20 border-b border-[#CDE8D5] bg-[#E8F5EC]/40">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-black text-[var(--text-primary)] sm:text-4xl tracking-tight">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl tracking-tight">
               Enterprise Technology Architecture
             </h2>
-            <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+            <p className="mt-3 text-sm text-[#47785C] leading-relaxed">
               Behind the simple interface lies enterprise-grade multi-tenant engineering designed for mission-critical reliability.
             </p>
           </div>
@@ -361,15 +361,15 @@ export default function AboutPage() {
             {TECHNICAL_PILLARS.map((col, idx) => (
               <div
                 key={col.title}
-                className="rounded-2xl border border-[var(--border-color)] bg-white p-6 shadow-xs space-y-2 hover:border-[#B49AFF] transition-all"
+                className="rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-xs space-y-2 hover:border-[#10A66A] transition-all"
               >
                 <div className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[var(--bg-card-hover)] text-xs font-bold text-[#9475F5]">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-[#E8F5EC] text-xs font-bold text-[#087A50]">
                     0{idx + 1}
                   </span>
-                  <h3 className="text-sm font-bold text-[var(--text-primary)]">{col.title}</h3>
+                  <h3 className="text-sm font-bold text-[#063D2E]">{col.title}</h3>
                 </div>
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed pt-1">
+                <p className="text-xs text-[#47785C] leading-relaxed pt-1">
                   {col.desc}
                 </p>
               </div>
@@ -377,18 +377,18 @@ export default function AboutPage() {
           </div>
 
           {/* Infrastructure Guarantee Banner */}
-          <div className="mt-10 rounded-2xl border border-[var(--border-color)] bg-white p-6 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="mt-10 rounded-2xl border border-[#CDE8D5] bg-white p-6 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[var(--text-primary)] text-[#B49AFF] shrink-0">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#063D2E] text-[#10A66A] shrink-0">
                 <ShieldCheck className="h-6 w-6" />
               </div>
               <div>
-                <h4 className="text-xs font-bold text-[var(--text-primary)]">Certified Security & Data Protection</h4>
-                <p className="text-[11px] text-[var(--text-secondary)] mt-0.5">TLS 1.3 in-transit encryption, AES-256 at-rest storage, and daily automated cloud snapshots.</p>
+                <h4 className="text-xs font-bold text-[#063D2E]">Certified Security & Data Protection</h4>
+                <p className="text-[11px] text-[#47785C] mt-0.5">TLS 1.3 in-transit encryption, AES-256 at-rest storage, and daily automated cloud snapshots.</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-xs font-bold text-[#9475F5] shrink-0">
-              <span className="h-2 w-2 rounded-full bg-[#B49AFF] animate-pulse" />
+            <div className="flex items-center gap-2 text-xs font-bold text-[#087A50] shrink-0">
+              <span className="h-2 w-2 rounded-full bg-[#10A66A] animate-pulse" />
               <span>All Systems Operational</span>
             </div>
           </div>
@@ -398,33 +398,33 @@ export default function AboutPage() {
       {/* ============================================================
           6. THE EVOLUTION ROADMAP (MILESTONES)
          ============================================================ */}
-      <section className="py-20 border-b border-[var(--border-color)] bg-white">
+      <section className="py-20 border-b border-[#CDE8D5] bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <h2 className="text-3xl font-black text-[var(--text-primary)] sm:text-4xl tracking-tight">
+            <h2 className="text-3xl font-black text-[#063D2E] sm:text-4xl tracking-tight">
               Our Journey & Mandi Evolution
             </h2>
-            <p className="mt-3 text-sm text-[var(--text-secondary)] leading-relaxed">
+            <p className="mt-3 text-sm text-[#47785C] leading-relaxed">
               From our first prototype on a wholesale vegetable scale to powering high-volume APMC mandis across India.
             </p>
           </div>
 
           <div className="mt-14 max-w-4xl mx-auto">
-            <div className="relative border-l-2 border-[var(--border-color)] ml-4 sm:ml-32 space-y-10 py-2">
+            <div className="relative border-l-2 border-[#CDE8D5] ml-4 sm:ml-32 space-y-10 py-2">
               {MILESTONES.map((m) => (
                 <div key={m.year} className="relative pl-8 sm:pl-10">
                   {/* Timeline Node */}
-                  <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full border-2 border-white bg-[#9475F5] shadow-sm" />
+                  <div className="absolute -left-[9px] top-1.5 h-4 w-4 rounded-full border-2 border-white bg-[#087A50] shadow-sm" />
 
                   {/* Year Tag on Left (Desktop) */}
-                  <div className="sm:absolute sm:-left-28 sm:top-1 text-sm font-black text-[#9475F5]">
+                  <div className="sm:absolute sm:-left-28 sm:top-1 text-sm font-black text-[#087A50]">
                     {m.year}
                   </div>
 
                   {/* Content Box */}
-                  <div className="rounded-2xl border border-[var(--border-color)] bg-[var(--bg-main)] p-5 shadow-xs space-y-1.5">
-                    <h3 className="text-sm font-bold text-[var(--text-primary)]">{m.title}</h3>
-                    <p className="text-xs text-[var(--text-secondary)] leading-relaxed">{m.desc}</p>
+                  <div className="rounded-2xl border border-[#CDE8D5] bg-[#F4FAF5] p-5 shadow-xs space-y-1.5">
+                    <h3 className="text-sm font-bold text-[#063D2E]">{m.title}</h3>
+                    <p className="text-xs text-[#47785C] leading-relaxed">{m.desc}</p>
                   </div>
                 </div>
               ))}
@@ -436,8 +436,8 @@ export default function AboutPage() {
       {/* ============================================================
           7. FINAL HIGH-CONTRAST CONVERSION CTA
          ============================================================ */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#15102B] via-[#08523D] to-[#074734] text-white text-center border-t border-[#0E6E50] border-b border-[#063423]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#B49AFF]/20 via-transparent to-transparent pointer-events-none" />
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white text-center border-t border-[#0E6E50] border-b border-[#063423]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-4xl px-4 space-y-6">
           <h2 className="text-3xl font-black sm:text-5xl tracking-tight leading-tight">
             Ready to Modernize Your Mandi Operations?
@@ -448,14 +448,14 @@ export default function AboutPage() {
           <div className="pt-2 flex flex-wrap justify-center gap-4">
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#B49AFF] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
             >
               <span>Start 30-Day Free Trial</span>
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
               href="/contact"
-              className="rounded-xl border border-[#B49AFF]/40 bg-[var(--text-primary)] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white transition"
+              className="rounded-xl border border-[#10A66A]/40 bg-[#063D2E] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white transition"
             >
               Schedule Mandi Consultation
             </Link>

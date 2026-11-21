@@ -220,16 +220,16 @@ const SOLUTIONS: SolutionVertical[] = [
 
 export default function SolutionsPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--bg-main)] text-[var(--text-primary)] font-sans">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* Hero Header */}
-      <section className="border-b border-[var(--border-color)] bg-gradient-to-b from-white via-[var(--bg-main)] to-[var(--bg-card-hover)]/60 py-16 lg:py-20">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-white via-[#F4FAF5] to-[#E8F5EC]/60 py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[var(--text-primary)] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[#063D2E] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
             Built for Your Specific Commodity Workflow
           </h1>
-          <p className="mt-4 text-sm sm:text-base text-[var(--text-secondary)] max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-4 text-sm sm:text-base text-[#47785C] max-w-2xl mx-auto leading-relaxed">
             Whether you trade perishable vegetables, graded fruits, or bulk grains, BSG adapts to your trade conventions, units, and credit cycles.
           </p>
         </div>
@@ -245,21 +245,21 @@ export default function SolutionsPage() {
               return (
                 <div
                   key={sol.id}
-                  className="rounded-3xl border border-[var(--border-color)] bg-white p-6 sm:p-8 lg:p-10 shadow-xs hover:border-[#B49AFF] transition-all"
+                  className="rounded-3xl border border-[#CDE8D5] bg-white p-6 sm:p-8 lg:p-10 shadow-xs hover:border-[#10A66A] transition-all"
                 >
                   {/* Card Header & Key Vertical Metrics */}
                   <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between border-b border-[#DCEEE1] pb-6">
                     <div className="flex items-start sm:items-center gap-4">
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[var(--bg-card-hover)] text-[#9475F5] border border-[var(--border-color)] shrink-0">
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-[#E8F5EC] text-[#087A50] border border-[#CDE8D5] shrink-0">
                         <Icon className="h-7 w-7" />
                       </div>
                       <div>
                         <div className="flex flex-wrap items-center gap-2">
-                          <h2 className="text-xl sm:text-2xl font-black text-[var(--text-primary)] tracking-tight">
+                          <h2 className="text-xl sm:text-2xl font-black text-[#063D2E] tracking-tight">
                             {sol.title}
                           </h2>
                         </div>
-                        <p className="text-xs sm:text-sm text-[var(--text-secondary)] mt-1 font-medium">
+                        <p className="text-xs sm:text-sm text-[#47785C] mt-1 font-medium">
                           {sol.tagline}
                         </p>
                       </div>
@@ -268,7 +268,7 @@ export default function SolutionsPage() {
                     <div className="flex flex-wrap items-center gap-3">
                       <Link
                         href="/register"
-                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#9475F5] hover:bg-[var(--text-primary)] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#087A50] hover:bg-[#063D2E] px-5 py-2.5 text-xs font-bold text-white shadow-xs transition"
                       >
                         <span>Start 30-Day Free Trial</span>
                         <ArrowRight className="h-3.5 w-3.5" />
@@ -281,10 +281,10 @@ export default function SolutionsPage() {
                     {sol.metrics.map((m) => (
                       <div
                         key={m.label}
-                        className="rounded-xl border border-[var(--border-color)] bg-[var(--bg-main)] p-3 flex items-center justify-between"
+                        className="rounded-xl border border-[#CDE8D5] bg-[#F4FAF5] p-3 flex items-center justify-between"
                       >
-                        <span className="text-[11px] font-bold text-[var(--text-secondary)]">{m.label}</span>
-                        <span className="text-xs font-black text-[var(--text-primary)]">{m.value}</span>
+                        <span className="text-[11px] font-bold text-[#47785C]">{m.label}</span>
+                        <span className="text-xs font-black text-[#063D2E]">{m.value}</span>
                       </div>
                     ))}
                   </div>
@@ -292,13 +292,13 @@ export default function SolutionsPage() {
                   {/* ============================================================
                       COMPARISON TABLE: PROBLEM VS OUTCOME MATRIX
                      ============================================================ */}
-                  <div className="mt-8 overflow-hidden rounded-2xl border border-[var(--border-color)] bg-white shadow-xs">
+                  <div className="mt-8 overflow-hidden rounded-2xl border border-[#CDE8D5] bg-white shadow-xs">
                     <div className="overflow-x-auto">
                       <table className="w-full text-left border-collapse min-w-[780px]">
                         <thead>
-                          <tr className="border-b border-[var(--border-color)] bg-[var(--bg-main)]">
+                          <tr className="border-b border-[#CDE8D5] bg-[#F4FAF5]">
                             {/* Column 1: Workflow */}
-                            <th className="w-1/4 px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-[var(--text-secondary)]">
+                            <th className="w-1/4 px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-[#47785C]">
                               Mandi Workflow Area
                             </th>
 
@@ -311,9 +311,9 @@ export default function SolutionsPage() {
                             </th>
 
                             {/* Column 3: Outcome (Subtle Emerald Tint Header) */}
-                            <th className="w-[37%] px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-[#9475F5] bg-[var(--bg-card-hover)]/70">
+                            <th className="w-[37%] px-5 py-3.5 text-[11px] font-bold uppercase tracking-wider text-[#087A50] bg-[#E8F5EC]/70">
                               <div className="flex items-center gap-2">
-                                <span className="h-2 w-2 rounded-full bg-[#B49AFF]" />
+                                <span className="h-2 w-2 rounded-full bg-[#10A66A]" />
                                 <span>BSG Platform Enterprise Outcome</span>
                               </div>
                             </th>
@@ -329,10 +329,10 @@ export default function SolutionsPage() {
                                 {/* Workflow Cell */}
                                 <td className="px-5 py-4 align-top">
                                   <div className="flex items-center gap-2.5">
-                                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[var(--bg-card-hover)] text-[#9475F5] shrink-0">
+                                    <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#E8F5EC] text-[#087A50] shrink-0">
                                       <RowIcon className="h-3.5 w-3.5" />
                                     </div>
-                                    <span className="font-bold text-xs text-[var(--text-primary)]">
+                                    <span className="font-bold text-xs text-[#063D2E]">
                                       {row.workflow}
                                     </span>
                                   </div>
@@ -357,18 +357,18 @@ export default function SolutionsPage() {
                                 </td>
 
                                 {/* BSG Enterprise Outcome Cell (Distinct Green Styling) */}
-                                <td className="px-5 py-4 align-top bg-[var(--bg-card-hover)]/20">
+                                <td className="px-5 py-4 align-top bg-[#E8F5EC]/20">
                                   <div className="space-y-1.5">
                                     <div className="flex items-center justify-between gap-2">
-                                      <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)]">
-                                        <CheckCircle2 className="h-3.5 w-3.5 text-[#B49AFF] shrink-0" />
+                                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#063D2E]">
+                                        <CheckCircle2 className="h-3.5 w-3.5 text-[#10A66A] shrink-0" />
                                         <span>{row.outcomeTitle}</span>
                                       </div>
-                                      <span className="shrink-0 rounded-full bg-[var(--border-subtle)] border border-[var(--border-color)] px-2.5 py-0.5 text-[10px] font-extrabold text-[#9475F5]">
+                                      <span className="shrink-0 rounded-full bg-[#DDF2E4] border border-[#CDE8D5] px-2.5 py-0.5 text-[10px] font-extrabold text-[#087A50]">
                                         {row.impactBadge}
                                       </span>
                                     </div>
-                                    <p className="text-xs text-[var(--text-primary)] leading-relaxed">
+                                    <p className="text-xs text-[#123B29] leading-relaxed">
                                       {row.outcomeDesc}
                                     </p>
                                   </div>
@@ -388,8 +388,8 @@ export default function SolutionsPage() {
       </section>
 
       {/* Conversion Banner */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#15102B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#B49AFF]/20 via-transparent to-transparent pointer-events-none" />
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-4xl px-4 text-center space-y-6">
           <h2 className="text-3xl font-black sm:text-5xl">
             Modernize Your Mandi Workflow in 24 Hours
@@ -400,13 +400,13 @@ export default function SolutionsPage() {
           <div className="pt-2 flex flex-wrap justify-center gap-4">
             <Link
               href="/register"
-              className="rounded-xl bg-[#B49AFF] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
+              className="rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
             >
               Start 30-Day Free Trial
             </Link>
             <Link
               href="/contact"
-              className="rounded-xl border border-[#B49AFF]/40 bg-[var(--text-primary)] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white transition"
+              className="rounded-xl border border-[#10A66A]/40 bg-[#063D2E] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white transition"
             >
               Schedule Mandi Consultation
             </Link>

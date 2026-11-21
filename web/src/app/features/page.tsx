@@ -148,28 +148,28 @@ const FEATURE_PILLARS = [
 
 export default function FeaturesPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[var(--bg-main)] text-[var(--text-primary)] font-sans">
+    <div className="flex min-h-screen flex-col bg-[#F4FAF5] text-[#123B29] font-sans">
       <PublicNavbar />
 
       {/* Header */}
-      <section className="border-b border-[var(--border-color)] bg-gradient-to-b from-white via-[var(--bg-main)] to-[var(--bg-card-hover)]/60 py-16 lg:py-20">
+      <section className="border-b border-[#CDE8D5] bg-gradient-to-b from-white via-[#F4FAF5] to-[#E8F5EC]/60 py-16 lg:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[var(--text-primary)] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
+          <h1 className="mx-auto max-w-3xl text-3xl font-black text-[#063D2E] sm:text-4xl lg:text-5xl tracking-tight leading-tight">
             Engineered for High-Volume Mandi Operations
           </h1>
-          <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-[var(--text-secondary)] leading-relaxed">
+          <p className="mx-auto mt-4 max-w-2xl text-sm sm:text-base text-[#47785C] leading-relaxed">
             Every module in BSG is purpose-built for the unique speed, weighment methods, and financial credit rituals of agricultural wholesale markets.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/register"
-              className="rounded-xl bg-[#9475F5] hover:bg-[var(--text-primary)] px-7 py-3.5 text-sm font-bold text-white shadow-md transition"
+              className="rounded-xl bg-[#087A50] hover:bg-[#063D2E] px-7 py-3.5 text-sm font-bold text-white shadow-md transition"
             >
               Start 30-Day Free Trial
             </Link>
             <Link
               href="/pricing"
-              className="rounded-xl border border-[var(--border-color)] bg-white hover:bg-[var(--bg-card-hover)] px-7 py-3.5 text-sm font-bold text-[var(--text-primary)] transition"
+              className="rounded-xl border border-[#CDE8D5] bg-white hover:bg-[#E8F5EC] px-7 py-3.5 text-sm font-bold text-[#063D2E] transition"
             >
               View Pricing Plans
             </Link>
@@ -186,44 +186,44 @@ export default function FeaturesPage() {
             return (
               <div
                 key={feat.id}
-                className={`grid gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[var(--border-color)] p-8 sm:p-10 shadow-xs transition ${
-                  isEven ? "bg-white" : "bg-[var(--bg-card-hover)]/50"
+                className={`grid gap-8 lg:grid-cols-12 items-center rounded-3xl border border-[#CDE8D5] p-8 sm:p-10 shadow-xs transition ${
+                  isEven ? "bg-white" : "bg-[#E8F5EC]/50"
                 }`}
               >
                 {/* Content */}
                 <div className={`space-y-4 lg:col-span-7 ${isEven ? "" : "lg:order-2"}`}>
                   <div className="flex items-center gap-2.5">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--border-subtle)] text-[#9475F5]">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#DDF2E4] text-[#087A50]">
                       <Icon className="h-5 w-5" />
                     </div>
-                    <span className="rounded-full bg-[var(--bg-card-hover)] border border-[var(--border-color)] px-3 py-0.5 text-[11px] font-bold text-[var(--text-primary)] uppercase tracking-wider">
+                    <span className="rounded-full bg-[#E8F5EC] border border-[#CDE8D5] px-3 py-0.5 text-[11px] font-bold text-[#063D2E] uppercase tracking-wider">
                       {feat.badge}
                     </span>
                   </div>
 
-                  <h2 className="text-2xl sm:text-3xl font-bold text-[var(--text-primary)]">
+                  <h2 className="text-2xl sm:text-3xl font-bold text-[#063D2E]">
                     {feat.title}
                   </h2>
-                  <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  <p className="text-sm text-[#47785C] leading-relaxed">
                     {feat.summary}
                   </p>
 
                   <div className="pt-2 grid gap-2.5 sm:grid-cols-2">
                     {feat.details.map((d) => (
-                      <div key={d} className="flex items-start gap-2 text-xs text-[var(--text-primary)]">
-                        <CheckCircle2 className="h-4 w-4 text-[#B49AFF] shrink-0 mt-0.5" />
+                      <div key={d} className="flex items-start gap-2 text-xs text-[#123B29]">
+                        <CheckCircle2 className="h-4 w-4 text-[#10A66A] shrink-0 mt-0.5" />
                         <span>{d}</span>
                       </div>
                     ))}
                   </div>
 
                   <div className="pt-4 flex items-center justify-between border-t border-[#DCEEE1]">
-                    <span className="font-bold text-xs text-[#9475F5]">
+                    <span className="font-bold text-xs text-[#087A50]">
                       {feat.metric}
                     </span>
                     <Link
                       href="/contact"
-                      className="inline-flex items-center gap-1 text-xs font-bold text-[var(--text-primary)] hover:text-[#9475F5] transition"
+                      className="inline-flex items-center gap-1 text-xs font-bold text-[#063D2E] hover:text-[#087A50] transition"
                     >
                       <span>Request Live Walkthrough</span>
                       <ArrowRight className="h-3.5 w-3.5" />
@@ -233,10 +233,10 @@ export default function FeaturesPage() {
 
                 {/* Right Interactive Mock Display */}
                 <div className={`lg:col-span-5 ${isEven ? "" : "lg:order-1"}`}>
-                  <div className="rounded-2xl border border-[#15102B] bg-[var(--text-primary)] p-6 text-[#C4E2CF] font-mono text-xs shadow-xl space-y-3">
-                    <div className="flex items-center justify-between border-b border-[#15102B] pb-2 text-[10px] text-[var(--text-secondary)]">
+                  <div className="rounded-2xl border border-[#0A503B] bg-[#063D2E] p-6 text-[#C4E2CF] font-mono text-xs shadow-xl space-y-3">
+                    <div className="flex items-center justify-between border-b border-[#0A503B] pb-2 text-[10px] text-[#71917B]">
                       <span>MANDI OS :: {feat.badge.toUpperCase()}</span>
-                      <span className="text-[#B49AFF] font-bold">ONLINE / LIVE</span>
+                      <span className="text-[#10A66A] font-bold">ONLINE / LIVE</span>
                     </div>
                     <div className="space-y-1.5 font-sans">
                       <div className="text-white font-bold text-sm">{feat.title}</div>
@@ -244,9 +244,9 @@ export default function FeaturesPage() {
                         Continuous ACID transactional integrity with automated tare verification and receipt generation.
                       </p>
                     </div>
-                    <div className="pt-3 border-t border-[#15102B] flex justify-between text-[11px]">
+                    <div className="pt-3 border-t border-[#0A503B] flex justify-between text-[11px]">
                       <span>Telemetry Health:</span>
-                      <span className="text-[#B49AFF] font-bold">SHA256:VERIFIED</span>
+                      <span className="text-[#10A66A] font-bold">SHA256:VERIFIED</span>
                     </div>
                   </div>
                 </div>
@@ -257,8 +257,8 @@ export default function FeaturesPage() {
       </section>
 
       {/* CTA Box */}
-      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#15102B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#B49AFF]/20 via-transparent to-transparent pointer-events-none" />
+      <section className="relative overflow-hidden py-24 bg-gradient-to-b from-[#0A503B] via-[#08523D] to-[#074734] text-white border-t border-[#0E6E50] border-b border-[#063423]">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_var(--tw-gradient-stops))] from-[#10A66A]/20 via-transparent to-transparent pointer-events-none" />
         <div className="relative mx-auto max-w-4xl px-4 text-center space-y-6">
           <h2 className="text-3xl font-black sm:text-5xl">
             Upgrade Your Mandi with Enterprise Software Today
@@ -269,13 +269,13 @@ export default function FeaturesPage() {
           <div className="pt-3 flex flex-wrap items-center justify-center gap-4">
             <Link
               href="/register"
-              className="rounded-xl bg-[#B49AFF] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
+              className="rounded-xl bg-[#10A66A] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white shadow-lg transition"
             >
               Start 30-Day Free Trial
             </Link>
             <Link
               href="/contact"
-              className="rounded-xl border border-[#B49AFF]/40 bg-[var(--text-primary)] hover:bg-[#9475F5] px-7 py-3.5 text-sm font-bold text-white transition"
+              className="rounded-xl border border-[#10A66A]/40 bg-[#063D2E] hover:bg-[#087A50] px-7 py-3.5 text-sm font-bold text-white transition"
             >
               Schedule Guided Demo
             </Link>

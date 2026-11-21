@@ -8,35 +8,6 @@
   :root {
     --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-
-    /* Light Mode Default Variables */
-    --bg-main: #F8F7FC;
-    --bg-sidebar: #FFFFFF;
-    --bg-card: #FFFFFF;
-    --bg-card-hover: #F2EEFA;
-    --primary-accent: #7955DF;
-    --secondary-accent: #8C6BEA;
-    --border-color: #E9E3F4;
-    --border-subtle: #F0EAF8;
-    --text-primary: #211936;
-    --text-secondary: #777086;
-    --glow-color: rgba(121, 85, 223, 0.15);
-  }
-
-  html.dark,
-  :root[data-theme="dark"] {
-    /* Dark Mode Variables (Default per Prompt) */
-    --bg-main: #080516;
-    --bg-sidebar: #0D0920;
-    --bg-card: #15102B;
-    --bg-card-hover: #1E173D;
-    --primary-accent: #9475F5;
-    --secondary-accent: #B49AFF;
-    --border-color: #30264B;
-    --border-subtle: #201938;
-    --text-primary: #F8F5FF;
-    --text-secondary: #B7ADC9;
-    --glow-color: rgba(148, 117, 245, 0.25);
   }
 
   html {
@@ -50,11 +21,10 @@
 
   body {
     font-family: var(--font-sans);
-    background-color: var(--bg-main);
-    color: var(--text-primary);
+    background-color: #F4FAF5;
+    color: #123B29;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -67,113 +37,49 @@
   }
 
   ::selection {
-    background-color: var(--primary-accent);
+    background-color: #10A66A;
     color: #FFFFFF;
   }
 }
 
-/* Nexi Glass & Ambient Effects */
-.nexi-ambient-bg {
-  position: relative;
-  overflow: hidden;
+/* Custom animations for agricultural SaaS enterprise feel */
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
 }
 
-.nexi-ambient-bg::before {
-  content: '';
-  position: absolute;
-  top: -150px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 900px;
-  height: 500px;
-  background: radial-gradient(ellipse, rgba(148, 117, 245, 0.18), transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+@keyframes gentlePulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
-html.light .nexi-ambient-bg::before {
-  background: radial-gradient(ellipse, rgba(121, 85, 223, 0.12), transparent 70%);
+.animate-subtle-float {
+  animation: subtleFloat 5s ease-in-out infinite;
 }
 
-.nexi-glass {
-  background: rgba(21, 16, 43, 0.7);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(48, 38, 75, 0.7);
+.animate-gentle-pulse {
+  animation: gentlePulse 4s ease-in-out infinite;
 }
 
-html.light .nexi-glass {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(233, 227, 244, 0.85);
+@keyframes shimmerWave {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
 }
 
-.nexi-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: 1rem;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nexi-card:hover {
-  border-color: rgba(148, 117, 245, 0.45);
-  box-shadow: 0 10px 30px -10px var(--glow-color);
-}
-
-html.light .nexi-card:hover {
-  border-color: rgba(121, 85, 223, 0.4);
-  box-shadow: 0 10px 25px -8px var(--glow-color);
-}
-
-.nexi-button-primary {
-  background: linear-gradient(135deg, var(--primary-accent) 0%, #7955DF 100%);
-  color: #FFFFFF;
-  font-weight: 600;
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 15px -2px rgba(148, 117, 245, 0.4);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nexi-button-primary:hover {
-  filter: brightness(1.1);
-  box-shadow: 0 6px 22px -2px rgba(148, 117, 245, 0.6);
-  transform: translateY(-1px);
-}
-
-.nexi-button-primary:active {
-  transform: translateY(0);
-}
-
-.nexi-button-secondary {
-  background-color: transparent;
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: 0.75rem;
-  font-weight: 600;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.nexi-button-secondary:hover {
-  background-color: var(--bg-card-hover);
-  border-color: var(--primary-accent);
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--bg-main);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--primary-accent);
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(16, 166, 106, 0.12), transparent);
+  background-size: 200% 100%;
+  animation: shimmerWave 3.5s ease-in-out infinite;
 }

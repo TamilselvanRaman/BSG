@@ -1,5 +1,5 @@
-import { ClickSmartChartApp } from "@/components/ClickSmartChartApp";
+import { redirect } from "next/navigation";
 
-export default function AdminDashboardPage() {
-  return <ClickSmartChartApp />;
+export default function AdminRedirect() {
+  redirect("/super-admin/dashboard");
 }
