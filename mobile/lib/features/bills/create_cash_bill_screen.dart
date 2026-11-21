@@ -12,8 +12,6 @@ import '../../core/widgets/app_card.dart';
 import '../../core/widgets/app_text_field.dart';
 import '../../core/widgets/app_dialog.dart';
 import '../../core/widgets/app_date_selector_banner.dart';
-import '../../core/widgets/customer_picker_sheet.dart';
-import '../../data/models/partner_models.dart';
 import '../../data/models/lot_model.dart';
 import '../../data/models/bill_model.dart';
 import '../../data/models/payment_model.dart';
@@ -64,9 +62,6 @@ class CreateCashBillScreen extends ConsumerStatefulWidget {
 class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  String? _selectedCustomerId = 'COUNTER_SALE';
-  final _customerNameController = TextEditingController();
-  final _customerPhoneController = TextEditingController();
   DateTime _billDate = DateTime.now();
 
   final List<CashBillItemDraft> _items = [];
@@ -84,7 +79,6 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
   @override
   void initState() {
     super.initState();
-    _customerNameController.text = 'Cash Customer';
     _items.add(CashBillItemDraft(lotId: widget.initialLotId));
   }
 
@@ -93,8 +87,6 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
     for (final it in _items) {
       it.dispose();
     }
-    _customerNameController.dispose();
-    _customerPhoneController.dispose();
     _labourChargeController.dispose();
     _otherChargesController.dispose();
     _discountController.dispose();
@@ -259,13 +251,9 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
       final firstLot = repo.getLot(billItems.first.lotId)!;
       final bill = await repo.createCashBill(
         lotId: firstLot.id,
-        customerId: (_selectedCustomerId != null && _selectedCustomerId != 'COUNTER_SALE')
-            ? _selectedCustomerId
-            : null,
-        customerName: _customerNameController.text.trim().isNotEmpty
-            ? _customerNameController.text.trim()
-            : 'Cash Customer',
-        customerPhone: _customerPhoneController.text.trim().isNotEmpty ? _customerPhoneController.text.trim() : null,
+        customerId: null,
+        customerName: 'Cash Customer',
+        customerPhone: null,
         date: _billDate,
         quantity: _totalBags,
         weight: _totalWeight,
@@ -290,129 +278,6 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _pickCustomer() async {
-    final result = await CustomerPickerSheet.show(
-      context,
-      allowCounterSale: true,
-      selectedCustomerId: _selectedCustomerId,
-    );
-
-    if (result == null) return;
-
-    if (result is Customer) {
-      setState(() {
-        _selectedCustomerId = result.id;
-        _customerNameController.text = result.name;
-        _customerPhoneController.text = result.phone;
-      });
-    } else if (result == 'COUNTER_SALE') {
-      setState(() {
-        _selectedCustomerId = 'COUNTER_SALE';
-        _customerNameController.text = 'Cash Customer';
-        _customerPhoneController.clear();
-      });
-    }
-  }
-
-  Future<void> _showNewCustomerDialog() async {
-    final nameCtrl = TextEditingController();
-    final phoneCtrl = TextEditingController();
-    final cityCtrl = TextEditingController();
-    final dialogFormKey = GlobalKey<FormState>();
-
-    final created = await showDialog<Customer>(
-      context: context,
-      builder: (ctx) {
-        final theme = context.appTheme;
-        return AlertDialog(
-          backgroundColor: theme.surface,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: Row(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: theme.primary.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(Icons.person_add_rounded, color: theme.primary, size: 20),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  'Add New Customer',
-                  style: AppTypography.cardTitle.copyWith(color: theme.text),
-                ),
-              ),
-            ],
-          ),
-          content: Form(
-            key: dialogFormKey,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppTextField(
-                    label: 'Customer / Buyer Name *',
-                    hint: 'e.g. Ramesh Traders',
-                    controller: nameCtrl,
-                    validator: (v) => AppValidators.required(v, 'Customer name is required'),
-                  ),
-                  const SizedBox(height: 12),
-                  AppTextField(
-                    label: 'Phone Number *',
-                    hint: '10-digit mobile number',
-                    controller: phoneCtrl,
-                    keyboardType: TextInputType.phone,
-                    validator: AppValidators.phone,
-                  ),
-                  const SizedBox(height: 12),
-                  AppTextField(
-                    label: 'City / Market Location (Optional)',
-                    hint: 'e.g. Madurai Market',
-                    controller: cityCtrl,
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: Text('Cancel', style: TextStyle(color: theme.textMuted)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.primary,
-                foregroundColor: Colors.white,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-              ),
-              onPressed: () async {
-                if (!dialogFormKey.currentState!.validate()) return;
-                final newCust = await ref.read(appRepositoryProvider).addCustomer(
-                  name: nameCtrl.text.trim(),
-                  phone: phoneCtrl.text.trim(),
-                  city: cityCtrl.text.trim().isNotEmpty ? cityCtrl.text.trim() : null,
-                );
-                if (ctx.mounted) Navigator.pop(ctx, newCust);
-              },
-              child: const Text('Save Customer'),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (created != null && mounted) {
-      setState(() {
-        _selectedCustomerId = created.id;
-        _customerNameController.text = created.name;
-        _customerPhoneController.text = created.phone;
-      });
-      AppDialog.showSnackBar(context, 'Customer "${created.name}" created and selected');
     }
   }
 
@@ -476,11 +341,6 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
   @override
   Widget build(BuildContext context) {
     final availableLots = ref.watch(availableLotsProvider);
-    final customers = ref.watch(customersProvider);
-    final selectedCustomer = (_selectedCustomerId != null && _selectedCustomerId != 'COUNTER_SALE')
-        ? customers.where((c) => c.id == _selectedCustomerId).firstOrNull
-        : null;
-
     final theme = context.appTheme;
 
     return Scaffold(
@@ -502,187 +362,14 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
                 onDateChanged: (d) => setState(() => _billDate = d),
               ),
 
-              // Customer Information
-              AppCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('1. Customer Information', style: AppTypography.sectionHeading.copyWith(color: theme.text)),
-                        InkWell(
-                          onTap: _showNewCustomerDialog,
-                          borderRadius: BorderRadius.circular(20),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                            decoration: BoxDecoration(
-                              color: theme.accent,
-                              borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: theme.primary),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.person_add, size: 14, color: theme.primary),
-                                const SizedBox(width: 4),
-                                Text(
-                                  '+ New Customer',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: theme.primary,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      'Customer Name / Counter Sale',
-                      style: AppTypography.label.copyWith(
-                        color: theme.textSecondary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    InkWell(
-                      onTap: _pickCustomer,
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
-                        decoration: BoxDecoration(
-                          color: theme.surface,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: theme.primary, width: 1.5),
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              _selectedCustomerId == 'COUNTER_SALE'
-                                  ? Icons.storefront_rounded
-                                  : Icons.person_outline_rounded,
-                              size: 20,
-                              color: theme.primary,
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                _selectedCustomerId == 'COUNTER_SALE'
-                                    ? 'Cash Customer (Counter / Walk-in)'
-                                    : (selectedCustomer?.name ?? _customerNameController.text),
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  color: theme.text,
-                                ),
-                              ),
-                            ),
-                            if (selectedCustomer != null && selectedCustomer.currentOutstanding > 0) ...[
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                decoration: BoxDecoration(
-                                  color: AppColors.errorBg,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                child: Text(
-                                  'Due: ${AppFormatters.currency(selectedCustomer.currentOutstanding)}',
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.error,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 6),
-                            ],
-                            Icon(Icons.keyboard_arrow_down_rounded, color: theme.textMuted),
-                          ],
-                        ),
-                      ),
-                    ),
-                    if (selectedCustomer != null) ...[
-                      const SizedBox(height: 10),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: theme.accent,
-                          borderRadius: AppSpacing.borderRadiusSm,
-                          border: Border.all(color: theme.border),
-                        ),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 18,
-                              backgroundColor: theme.primary.withValues(alpha: 0.15),
-                              child: Text(
-                                selectedCustomer.name.isNotEmpty ? selectedCustomer.name[0].toUpperCase() : '?',
-                                style: TextStyle(color: theme.primary, fontWeight: FontWeight.bold),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    selectedCustomer.name,
-                                    style: TextStyle(fontWeight: FontWeight.bold, color: theme.text, fontSize: 13),
-                                  ),
-                                  Text(
-                                    '${selectedCustomer.phone}${selectedCustomer.city != null ? ' • ${selectedCustomer.city}' : ''}',
-                                    style: TextStyle(fontSize: 11, color: theme.textSecondary),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text('Outstanding Balance', style: TextStyle(fontSize: 10, color: theme.textMuted)),
-                                Text(
-                                  AppFormatters.currency(selectedCustomer.currentOutstanding),
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold,
-                                    color: selectedCustomer.currentOutstanding > 0 ? AppColors.error : AppColors.success,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                    const SizedBox(height: 12),
-                    AppTextField(
-                      label: 'Customer / Buyer Display Name',
-                      hint: 'Cash Customer',
-                      controller: _customerNameController,
-                      validator: (v) => AppValidators.required(v, 'Customer name is required'),
-                    ),
-                    const SizedBox(height: 12),
-                    AppTextField(
-                      label: 'Contact Number (Optional)',
-                      hint: '10-digit mobile number',
-                      controller: _customerPhoneController,
-                      keyboardType: TextInputType.phone,
-                    ),
-                  ],
-                ),
-              ),
-
               const SizedBox(height: 16),
 
-              // Section 2: Products & Lots to Sell (Supports Multi-Product)
+              // Section 1: Products & Lots to Sell (Supports Multi-Product)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '2. Products & Lots to Sell (${_items.length})',
+                    '1. Products & Lots to Sell (${_items.length})',
                     style: AppTypography.sectionHeading.copyWith(color: theme.text),
                   ),
                   InkWell(
@@ -755,12 +442,12 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
 
               const SizedBox(height: 16),
 
-              // Section 3: Extra Charges & Discount
+              // Section 2: Extra Charges & Discount
               AppCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('3. Additional Mandi Charges', style: AppTypography.sectionHeading.copyWith(color: theme.text)),
+                    Text('2. Additional Mandi Charges', style: AppTypography.sectionHeading.copyWith(color: theme.text)),
                     const SizedBox(height: 12),
                     Row(
                       children: [
@@ -799,7 +486,7 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
 
               const SizedBox(height: 16),
 
-              // Section 4: Settlement & Amount Received
+              // Section 3: Settlement & Amount Received
               AppCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -807,7 +494,7 @@ class _CreateCashBillScreenState extends ConsumerState<CreateCashBillScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('4. Payment Settlement', style: AppTypography.sectionHeading),
+                        const Text('3. Payment Settlement', style: AppTypography.sectionHeading),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                           decoration: BoxDecoration(
