@@ -99,9 +99,7 @@ class _CreateLotScreenState extends ConsumerState<CreateLotScreen> {
     ));
 
     // Preset sample values for convenient rapid entry
-    _grossWeightController.text = '14500';
-    _tareWeightController.text = '9500';
-    _netWeightController.text = '5000';
+    _syncBagsWeight();
     _purchaseRateController.text = '32.00';
     _sellingRateController.text = '38.00';
     _labourController.text = '500';
@@ -148,6 +146,13 @@ class _CreateLotScreenState extends ConsumerState<CreateLotScreen> {
     _referenceController.dispose();
     _notesController.dispose();
     super.dispose();
+  }
+
+  void _syncBagsWeight() {
+    final total = _bagEntries.fold<double>(0.0, (acc, item) => acc + item.estimatedTotalWeight);
+    if (total > 0) {
+      _netWeightController.text = total.toStringAsFixed(1);
+    }
   }
 
   // Calculated values
@@ -542,15 +547,21 @@ class _CreateLotScreenState extends ConsumerState<CreateLotScreen> {
                               weightPerUnit: '50',
                               unit: _selectedProduct?.defaultUnit ?? 'Kg',
                             ));
+                            _syncBagsWeight();
                           });
                         },
                         onRemoveEntry: (index) {
                           setState(() {
                             final item = _bagEntries.removeAt(index);
                             item.dispose();
+                            _syncBagsWeight();
                           });
                         },
-                        onChanged: () => setState(() {}),
+                        onChanged: () {
+                          setState(() {
+                            _syncBagsWeight();
+                          });
+                        },
                         defaultUnit: _selectedProduct?.defaultUnit ?? 'Kg',
                       ),
 

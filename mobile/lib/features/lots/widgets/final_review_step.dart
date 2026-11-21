@@ -270,15 +270,7 @@ class FinalReviewStep extends StatelessWidget {
             theme: theme,
             content: Column(
               children: [
-                _buildRow(
-                  'Weighing Mode',
-                  weightMode == WeightEntryMode.fullWeighbridge ? 'Weighbridge Mode' : 'Direct Net Weight',
-                  theme,
-                ),
-                if (weightMode == WeightEntryMode.fullWeighbridge) ...[
-                  _buildRow('Gross Weight', '${grossWeight.toStringAsFixed(1)} Kg', theme),
-                  _buildRow('Tare Weight', '${tareWeight.toStringAsFixed(1)} Kg', theme),
-                ],
+                _buildRow('Weighing Method', 'Bags Weight Calculation', theme),
                 _buildRow('Net Inward Weight', '${netWeight.toStringAsFixed(1)} Kg', theme, isBold: true),
                 if (totalPackages > 0 && netWeight > 0)
                   _buildRow('Avg Weight per Bag', '${(netWeight / totalPackages).toStringAsFixed(2)} Kg/Bag', theme),
