@@ -27,15 +27,26 @@ class _UsersLandingScreenState extends ConsumerState<UsersLandingScreen> with Si
   late TabController _tabController;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
+  int _currentTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _tabController.addListener(_handleTabChange);
+  }
+
+  void _handleTabChange() {
+    if (_tabController.index != _currentTabIndex) {
+      setState(() {
+        _currentTabIndex = _tabController.index;
+      });
+    }
   }
 
   @override
   void dispose() {
+    _tabController.removeListener(_handleTabChange);
     _tabController.dispose();
     _searchController.dispose();
     super.dispose();
@@ -101,6 +112,13 @@ class _UsersLandingScreenState extends ConsumerState<UsersLandingScreen> with Si
                 const SizedBox(height: 12),
                 TabBar(
                   controller: _tabController,
+                  onTap: (index) {
+                    if (_currentTabIndex != index) {
+                      setState(() {
+                        _currentTabIndex = index;
+                      });
+                    }
+                  },
                   labelColor: AppColors.textPrimary,
                   unselectedLabelColor: AppColors.textSecondary,
                   indicatorColor: AppColors.primaryAction,
@@ -131,6 +149,7 @@ class _UsersLandingScreenState extends ConsumerState<UsersLandingScreen> with Si
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        key: ValueKey('fab_$_currentTabIndex'),
         backgroundColor: theme.primary,
         foregroundColor: Colors.white,
         elevation: 2,
@@ -142,7 +161,7 @@ class _UsersLandingScreenState extends ConsumerState<UsersLandingScreen> with Si
   }
 
   String _getAddButtonLabel() {
-    switch (_tabController.index) {
+    switch (_currentTabIndex) {
       case 0:
         return 'Add Supplier';
       case 1:
@@ -155,9 +174,9 @@ class _UsersLandingScreenState extends ConsumerState<UsersLandingScreen> with Si
   }
 
   void _openAddDialog(BuildContext context) {
-    if (_tabController.index == 0) {
+    if (_currentTabIndex == 0) {
       showDialog(context: context, builder: (_) => const AddSupplierDialog());
-    } else if (_tabController.index == 1) {
+    } else if (_currentTabIndex == 1) {
       showDialog(context: context, builder: (_) => const AddCustomerDialog());
     } else {
       showDialog(context: context, builder: (_) => const AddTransporterDialog());
